@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   hamBurger: {
     height: 200,
     width: 240,
+    marginLeft: 220
   },
 }));
 
