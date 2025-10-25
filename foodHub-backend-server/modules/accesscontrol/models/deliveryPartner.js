@@ -47,14 +47,6 @@ const DeliveryPartnerSchema = new mongoose.Schema({
     // Bạn có thể thêm regex để xác thực định dạng số điện thoại tại đây
   },
 
-  email: {
-    type: String,
-    unique: true, // Email phải là duy nhất
-    lowercase: true,
-    trim: true,
-    // Bạn nên thêm validation cho định dạng email ở đây
-  },
-
   password: {
     type: String,
     minlength: [6, "Mật khẩu phải có ít nhất 6 ký tự"],
