@@ -43,11 +43,13 @@ export default function AddDelivery() {
   const [licenseBackImages, setLicenseBackImages] = useState(null);
   let imageError;
 
-  const { loading, serverError, errorsSeller } = useSelector(
+  const { loading, serverError, errorDelivery } = useSelector(
     (state) => state.UI
   );
 
-  const { message, errors } = errorsSeller || {};
+  const { message, errors } = errorDelivery || {};
+  console.log("message : ",message);
+  console.log("errors : ", errors);
 
   if (message) {
     if (message.includes("Upload an image")) imageError = message;
@@ -89,12 +91,17 @@ export default function AddDelivery() {
         passwordError = error.msg;
       if (error.msg.includes("Passwords have to"))
         confirmPasswordError = error.msg;
-
-      // LOGIC XỬ LÝ LỖI MỚI CHO FIRSTNAME VÀ LASTNAME
-      if (error.param === "firstName") FirstNameError = error.msg;
-      if (error.param === "lastName") LastNameError = error.msg;
-      if (error.param === "phone") PhoneError = error.msg;
-      if (error.param === "CCCD") CCCDError = error.msg;
+      if(error.msg.includes("firstName Could not be")) FirstNameError = error.msg;
+      if(error.msg.includes("lastName Could not be")) LastNameError = error.msg;
+      if(error.msg.includes("Enter a valid 10"))PhoneError = error.msg;
+      if(error.msg.includes("The CCCD (Vietnamese Citizenship ID Card) number must consist of exactly 12 digits"))CCCDError = error.msg
+      if(error.msg.includes("The CCCD must not be"))CCCDError = error.msg
+      if(error.msg.includes("The CCCD must be 12"))CCCDError = error.msg
+      if(error.msg.includes("The CCCD must only contain numerical digits"))CCCDError = error.msg
+      if(error.msg.includes("The CCCD (National ID Card) already exists in the system"))CCCDError = error.msg
+      if(error.msg.includes("The province/city code in"))CCCDError = error.msg
+      if(error.msg.includes("The gender/century code in the CCCD"))CCCDError = error.msg
+      if(error.msg.includes("The year of birth in the CCCD"))CCCDError = error.msg
     }
   }
 

@@ -6,6 +6,7 @@ import {
   SIGNUP_SUCCESS,
   SET_ERROR,
   SET_ERRORS_SIGNUP_SELLER,
+  SET_ERRORS_SIGNUP_DELIVERY,
   SET_ERROR_ITEM,
 } from "../types";
 
@@ -15,6 +16,7 @@ const initialState = {
   errors: null,
   errorsSeller: null,
   signUpSuccess: false,
+  errorDelivery:null,
 };
 
 export default function (state = initialState, action) {
@@ -38,6 +40,13 @@ export default function (state = initialState, action) {
         ...state,
         loading: false,
         errors: action.payload,
+        serverError: false,
+      };
+    case SET_ERRORS_SIGNUP_DELIVERY:
+      return {
+        ...state,
+        loading: false,
+        errorDelivery: action.payload,
         serverError: false,
       };
     case SET_ERRORS_SIGNUP_SELLER:

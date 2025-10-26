@@ -18,7 +18,7 @@ export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SET_ERROR = "SET_ERROR";
 export const SET_ERRORS_SIGNUP_SELLER = "SET_ERRORS_SIGNUP_SELLER";
 export const SET_ERROR_ITEM = "SET_ERROR_ITEM";
-
+export const SET_ERRORS_SIGNUP_DELIVERY = "SET_ERRORS_SIGNUP_DELIVERY";
 //user reducers
 export const LOADING_USER = "LOADING_USER";
 export const SET_USER = "SET_USER";

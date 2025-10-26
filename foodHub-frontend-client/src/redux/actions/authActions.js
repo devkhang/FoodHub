@@ -11,7 +11,8 @@ import {
   SET_ERRORS_SIGNUP_SELLER,
   SET_DELIVERY_PortraitPhotoUrl,
   SET_DELIVERY_LicenseFrontPhotoUrl,
-  SET_DELIVERY_LicenseBackPhotoUrl
+  SET_DELIVERY_LicenseBackPhotoUrl,
+  SET_ERRORS_SIGNUP_DELIVERY
 } from "../types";
 import { useSelector } from "react-redux";
 import axios from "../../util/axios";
@@ -173,11 +174,10 @@ export const signupDelivery = (newDeliveryData, history) => (dispatch) => {
       history.push("/login"); // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
     })
     .catch((err) => {
-      console.log("Lỗi đăng ký Delivery:", err.response);
       if (err.response) {
         // Sử dụng SET_ERRORS_SIGNUP_SELLER hoặc tạo một type mới nếu cần phân biệt rõ ràng
         dispatch({
-          type: SET_ERRORS_SIGNUP_SELLER, 
+          type: SET_ERRORS_SIGNUP_DELIVERY, 
           payload: err.response.data,
         });
       } else {

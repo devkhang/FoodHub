@@ -111,13 +111,10 @@ exports.signUpDeliveryPartner = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     const error = new Error("Validation Failed, Incorrect data entered.");
-    console.log(errors.array());
-
     error.statusCode = 422; // Unprocessable Entity
     error.errors = errors.array();
-    return next(error);
+    throw error;
   }
-
   // 2. KIỂM TRA VÀ TRÍCH XUẤT DỮ LIỆU TỪ BODY VÀ FILES
 
   // Khi dùng upload.fields(), req.files là một object, không phải mảng.
@@ -147,7 +144,6 @@ exports.signUpDeliveryPartner = (req, res, next) => {
 
   let token;
   const role = "ROLE_DELIVERY"; // Đặt vai trò cố định cho Delivery Partner
-
   // 3. BĂM MẬT KHẨU VÀ LƯU DỮ LIỆU
   bcrypt
     .hash(password, 12)

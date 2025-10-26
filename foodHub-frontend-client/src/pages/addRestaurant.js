@@ -45,6 +45,7 @@ export default function AddRestaurant() {
   );
 
   const { message, errors } = errorsSeller || {};
+  console.log("error :",errors)
 
   if (message) {
     if (message.includes("Upload an image")) imageError = message;

@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 
 const User = require("../models/user");
 const Account = require("../models/account");
+const deliveryPartner = require("../models/deliveryPartner");
 const authController = require("../controllers/authController");
 const multer = require("multer");
 const router = express.Router();
@@ -148,19 +149,15 @@ router.post(
   "/signup-delivery-partner", // Đổi tên tuyến đường cho Delivery Partner
   uploadDeliveryFiles,
   [
-    (req, res, next) => {
-      console.log(req.body);
-      next();
-    },
     // Xác thực Email (Kiểm tra định dạng và tính duy nhất)
-    body("email", "Vui lòng nhập email hợp lệ.")
+    body("email", "Please enter a valid email to continue.")
       .isEmail()
       .custom((value, { req }) => {
         // Kiểm tra xem email đã tồn tại trong bảng Account chưa
         return Account.findOne({ email: value }).then((accountDoc) => {
           if (accountDoc) {
             return Promise.reject(
-              "Địa chỉ email đã tồn tại. Vui lòng thử lại với email khác."
+              "Email address already exists, please try again with another business email."
             );
           }
         });
@@ -168,16 +165,16 @@ router.post(
       .normalizeEmail(),
 
     // Xác thực Mật khẩu
-    body("password", "Mật khẩu phải dài ít nhất 6 ký tự.")
+    body("password", "Password should be at least 6 characters long")
       .trim()
       .isLength({ min: 6 }),
 
     // Xác thực Tên và Họ
-    body("firstName", "Tên không được để trống.").trim().not().isEmpty(),
-    body("lastName", "Họ không được để trống.").trim().not().isEmpty(),
+    body("firstName", "firstName Could not be empty").trim().not().isEmpty(),
+    body("lastName", "lastName Could not be empty").trim().not().isEmpty(),
 
     // Xác thực Số điện thoại
-    body("phone", "Vui lòng nhập số điện thoại hợp lệ (từ 10 đến 11 chữ số).")
+    body("phone", "Enter a valid 10 digit phone number")
       .trim()
       .isLength({ min: 10, max: 11 }), // Tùy chỉnh độ dài số điện thoại theo yêu cầu của bạn
 
@@ -186,24 +183,24 @@ router.post(
       .trim()
       .custom((value, { req }) => {
         if (value !== req.body.password) {
-          throw new Error("Mật khẩu xác nhận không khớp!");
+          throw new Error("Passwords have to match!");
         }
         return true;
       }),
-      body("CCCD", "CCCD phải là số gồm đúng 12 chữ số theo quy định Việt Nam.")
+      body("CCCD", "The CCCD (Vietnamese Citizenship ID Card) number must consist of exactly 12 digits, as stipulated by Vietnamese regulations.")
         .trim() // Loại bỏ khoảng trắng thừa ở đầu/cuối
         .not()
         .isEmpty()
-        .withMessage("CCCD không được để trống.") // Lỗi nếu rỗng
+        .withMessage("The CCCD must not be blank.") // Lỗi nếu rỗng
         .isLength({ min: 12, max: 12 })
-        .withMessage("CCCD phải đúng 12 chữ số (không phải CMND 9 số cũ).") // Lỗi nếu sai độ dài
+        .withMessage("The CCCD must be 12 digits long.") // Lỗi nếu sai độ dài
         .isNumeric()
-        .withMessage("CCCD chỉ được chứa chữ số (0-9), không chứa chữ cái hoặc ký tự đặc biệt.") // Lỗi nếu không phải số
+        .withMessage("The CCCD must only contain numerical digits (0-9) and no letters or special characters.") // Lỗi nếu không phải số
         .custom((value, { req }) => {
           // Kiểm tra tính duy nhất trong database (giả sử field 'CCCD' trong model User)
-          return User.findOne({ CCCD: value }).then((userDoc) => {
+          return deliveryPartner.findOne({ CCCD: value }).then((userDoc) => {
             if (userDoc) {
-              return Promise.reject("CCCD đã tồn tại trong hệ thống. Vui lòng sử dụng CCCD khác.");
+              return Promise.reject("The CCCD (National ID Card) already exists in the system. Please use a different CCCD.");
             }
           });
         })
@@ -213,18 +210,18 @@ router.post(
 
           const provinceCode = parseInt(value.substring(0, 3)); // 3 số đầu: Mã tỉnh (001-096)
           if (provinceCode < 1 || provinceCode > 96) {
-            throw new Error("Mã tỉnh/thành phố trong CCCD không hợp lệ (phải từ 001 đến 096).");
+            throw new Error("The province/city code in the CCCD (National ID Card) is invalid (it must be between 001 and 096).");
           }
 
           const genderCenturyCode = parseInt(value.substring(3, 4)); // 1 số: Mã giới tính/thế kỷ
           if (genderCenturyCode < 0 || genderCenturyCode > 3) { // Hiện tại chỉ 0-3 (thế kỷ 20-21)
-            throw new Error("Mã giới tính/thế kỷ trong CCCD không hợp lệ (phải từ 0 đến 3).");
+            throw new Error("The gender/century code in the CCCD (National ID Card) is invalid (it must be between 0 and 3).");
           }
 
           const birthYear = parseInt(value.substring(4, 6)); // 2 số: Năm sinh (00-99)
           const currentYear = new Date().getFullYear() % 100; // 2 chữ số cuối năm hiện tại (ví dụ: 2025 → 25)
           if (birthYear > currentYear + 1 || birthYear < 0) { // Không vượt quá năm hiện tại +1, và không âm
-            throw new Error("Năm sinh trong CCCD không hợp lệ (không thể vượt quá năm hiện tại).");
+            throw new Error("The year of birth in the CCCD (National ID Card) is invalid (it cannot exceed the current year).");
           }
           // Có thể thêm check tuổi tối thiểu, ví dụ: if ((currentYear - birthYear) < 18) throw new Error("Shipper phải đủ 18 tuổi.");
 
