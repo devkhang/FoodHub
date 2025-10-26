@@ -10,6 +10,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
+//socket
+import {initSocket, getSocket} from "../socket/socket"
+import {registerDeliveryPartnerSocket} from "../socket/deliveryHandler"
+
 import { logoutAction } from "../redux/actions/authActions";
 
 const useStyles = makeStyles(() => ({
@@ -48,7 +52,6 @@ export default function AppBarPrimary() {
   const handleLogout = () => {
     dispatch(logoutAction(history));
   };
-
   return (
     <AppBar position="static" className={classes.appBar}>
       <Toolbar>

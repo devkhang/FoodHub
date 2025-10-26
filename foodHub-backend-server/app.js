@@ -7,10 +7,16 @@ const multer = require("multer");
 const dotenv = require("dotenv");
 dotenv.config(path.join(__dirname, ".env"));
 
+//Socket
+const {init, getIO} = require("./util/socket");
+let io;
+const {registerDeliveryPartner, trackDeliveryPartnerLocation}=require("./socket/handlers/deliveryPartnerHandler");
+
+//Route
 const authRoutes = require("./modules/accesscontrol/route/auth");
 const itemRoutes = require("./modules/menu/route/item");
 const userRoutes = require("./modules/order/route/user");
-const deliveryRoutes = require("./modules/Delivery/route/delivery")
+const deliveryRoutes = require("./modules/Delivery/route/delivery");
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -90,13 +96,17 @@ mongoose
     const server = app.listen(process.env.PORT || 3001, () => {
       console.log(`Server starts at port ${process.env.PORT}`);
     });
-    const io = require("./util/socket").init(server);
+    
+    let io=init(server);
     io.on("connection", (socket) => {
       socket.on("add-user", (data) => {
         clients[data.userId] = {
           socket: socket.id,
         };
       });
+    
+      registerDeliveryPartner();
+      trackDeliveryPartnerLocation();
 
       //Removing the socket on disconnect
       socket.on("disconnect", () => {

@@ -45,6 +45,10 @@ import orders from "./pages/orders";
 import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
 
+//socket
+import {initSocket, getSocket} from "./socket/socket"
+const io=initSocket(process.env.REACT_APP_SERVER_URL);
+
 const theme = createMuiTheme(themeFile);
 
 const token = localStorage.jwt;

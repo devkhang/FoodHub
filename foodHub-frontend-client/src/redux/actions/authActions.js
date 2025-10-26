@@ -16,6 +16,7 @@ import {
 import { useSelector } from "react-redux";
 import axios from "../../util/axios";
 import axiosNewInstance from "axios";
+import {registerDeliveryPartnerSocket, updateDeliveryPartnerLocation} from "../../socket/deliveryHandler";
 
 export const signupUser = (newUserData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
@@ -81,6 +82,12 @@ export const getUserData = () => (dispatch) => {
         payload: res.data.result,
       });
       if(res.data.result.account.role == 'ROLE_DELIVERY'){
+
+        //configure socket for delivery partner
+        console.log("configure socket for delivery partner");
+        registerDeliveryPartnerSocket();
+        updateDeliveryPartnerLocation();
+
         dispatch({
           type: SET_DELIVERY_PortraitPhotoUrl,
           payload: res.data.result.portraitPhotoUrl

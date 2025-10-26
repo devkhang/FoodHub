@@ -44,6 +44,7 @@ export default function Login() {
       password: inputs.password,
     };
     dispatch(loginAction(userData, history));
+    
   };
 
   const { inputs, handleInputChange, handleSubmit } = useForm(

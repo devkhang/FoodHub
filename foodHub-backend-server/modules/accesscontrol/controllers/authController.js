@@ -4,6 +4,9 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 const jwt = require("jsonwebtoken");
+const dotevn=require("dotenv");
+const path=require("path");
+dotevn.config(path.join(__dirname, ".env"));
 
 const User = require("../models/user");
 const Account = require("../models/account");
@@ -251,7 +254,7 @@ exports.login = (req, res, next) => {
       }
       const token = jwt.sign(
         { accountId: loadedUser._id.toString() },
-        "supersecretkey-foodWebApp",
+        process.env.JWT_SECRET_KEY,
         { expiresIn: "10h" }
       );
       res.status(200).json({ message: "Logged-in successfully", token: token });
