@@ -59,5 +59,12 @@ const orderSchema = new Schema(
   },
   { timestamps: true }
 );
+orderSchema.virtual("totalItemMoney").get(function(){
+  let res=0;
+  for (let foodSelection of this.items){
+    totalItemMoney+=foodSelection.item.price*foodSelection.quantity;
+  }
+  return res;
+})
 
 module.exports = mongoose.model("Order", orderSchema);

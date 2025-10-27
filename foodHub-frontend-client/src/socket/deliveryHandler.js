@@ -58,7 +58,9 @@ export function JobNotification(){
             .then((response)=>{
                 //[not done] switch to delivery business process
                 console.log("job notification: response", response);
-                
+            })
+            .catch( (error)=>{
+                console.log("Fail:", error);  
             })
         }
         else{

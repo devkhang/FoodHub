@@ -36,8 +36,8 @@ exports.trackDeliveryPartnerLocation=()=>{
         socket.on("deliveryPartner:updateLocation", async ({jwt, location, socketId})=>{
             try {
                 // console.log("data",data1);
-                console.log("updateLocation()");
-                console.log("time", time++);
+                // console.log("updateLocation()");
+                // console.log("time", time++);
                 
                 const {status, data}=await verifyJWT(jwt);
                 if(status=="error")
@@ -47,7 +47,7 @@ exports.trackDeliveryPartnerLocation=()=>{
                 {
                     DeliveryPartnerSocketInfo["location"]=location;
                     DeliveryPartnerSocketInfo["socketId"]=socketId;
-                    console.log("deliveryPartnerMap", deliveryPartnerMap.get(data.accountId));
+                    // console.log("deliveryPartnerMap", deliveryPartnerMap.get(data.accountId));
                 }
             } catch (error) {
                 console.log("updateLocation", error);

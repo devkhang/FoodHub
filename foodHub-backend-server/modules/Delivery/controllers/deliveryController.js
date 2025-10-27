@@ -164,15 +164,30 @@ exports.acceptDeliveryJob=async (req, res, next)=>{
     }
     else{
       clearTimeout(deliveryAssignmentMap.get(orderId).timeout);
-      let deliveryDetail=DeliveryDetail.create({
+      let deliveryDetail=await DeliveryDetail.create({
         order:orderId,
-        endTime:new Date(),
-        deliveryCharge:0,//[not done: get actual delivery charge]
+        deliveryCharge:0,//[not done: get actual delivery charge in backend]
         DeliveryPartnerId:decodedJWT.accountId,
       });
+      await DeliveryDetail.populate(deliveryDetail, {
+        path:"order",
+        select:"user seller items",
+        populate:{
+          path:"seller.sellerId",
+          select:"address"
+        }
+      });
+      let totalItemMoney=0;
+      for (let foodSelection of deliveryDetail.order.items){
+        totalItemMoney+=foodSelection.item.price*foodSelection.quantity;
+      }
+      deliveryDetail=deliveryDetail.toObject();
+      deliveryDetail.order.items=null;
+      deliveryDetail.totalItemMoney=totalItemMoney;
+      // deliveryDetail.aaa="aaa"
       res.status(200).json({
         status:"ok",
-        data:DeliveryDetail
+        data:deliveryDetail
       });
     }
 
