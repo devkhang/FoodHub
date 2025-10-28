@@ -365,6 +365,82 @@ exports.signupSeller = (req, res, next) => {
     });
 };
 
+exports.createStripeAccount = async (req, res, next) => {
+  const { sellerId, sellerData } = res.locals;
+  if (!sellerId || !sellerData) {
+    const error = new Error('Seller data not found');
+    error.statusCode = 500;
+    throw error;
+  }
+
+  const { email, name, phoneNo, street, locality, zip, aptName } = sellerData;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const seller = await Seller.findById(sellerId).session(session);
+    if (!seller) {
+      const error = new Error('Seller not found');
+      error.statusCode = 404;
+      throw error;
+    }
+    if (seller.stripeAccountId) {
+      const error = new Error('Seller already has a Stripe account');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const stripeAccount = await stripe.accounts.create({
+      type: 'express',
+      country: 'VN',
+      email,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+      business_type: 'company',
+      company: {
+        name,
+        phone: phoneNo,
+        address: {
+          city: locality,
+          country: 'VN',
+          line1: street,
+          line2: aptName,
+          postal_code: zip,
+        },
+      },
+    });
+
+    seller.stripeAccountId = stripeAccount.id;
+    seller.isVerified = false;
+    await seller.save({ session });
+
+    const accountLink = await stripe.accountLinks.create({
+      account: stripeAccount.id,
+      refresh_url: 'https://your-app.com/seller/refresh',
+      return_url: 'https://your-app.com/seller/onboard-complete',
+      type: 'account_onboarding',
+    });
+
+    await session.commitTransaction();
+
+    res.locals.stripeAccountId = stripeAccount.id;
+    res.locals.onboardingUrl = accountLink.url;
+
+    console.log(`Saved stripeAccountId ${stripeAccount.id} for seller ${sellerId}`);
+    return next();
+  } catch (error) {
+    await session.abortTransaction();
+    console.error('Error creating Stripe account:', error);
+    if (!error.statusCode) error.statusCode = 500;
+    throw error;
+  } finally {
+    session.endSession();
+  }
+};
+
 exports.imagesTest = (req, res, next) => {
   if (!req.files) {
     const error = new Error("Upload an image as well.");
