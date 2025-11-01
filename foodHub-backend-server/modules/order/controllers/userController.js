@@ -430,6 +430,13 @@ function selectNextSuitableDeliveryPartner(orderId){
       .then(order=>{
         //find suitable delivery partner
         let deliveryAssignment=deliveryAssignmentMap.get(orderId);
+        if(deliveryAssignment && deliveryAssignment.count>process.env.MAX_ASSIGNMENT_ATTEMP){
+          //[not done]cancel order, cause found no suitable delivery partner
+          console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
+          deliveryAssignmentMap.delete(orderId);
+          return;
+        }
+
         let ans=getObjectNearAPlace({
             lng:order.seller.sellerId.address.lng,
             lat:order.seller.sellerId.address.lat
@@ -445,14 +452,14 @@ function selectNextSuitableDeliveryPartner(orderId){
         );
         if(!ans){
           if(deliveryAssignment){
-            deliveryAssignment.count+1;
+            deliveryAssignment.count+=1;
           }
           else{
             deliveryAssignmentMap.set(orderId,{
               count:0
             })
           }
-          return selectNextSuitableDeliveryPartner();
+          return selectNextSuitableDeliveryPartner(orderId);
         }
         console.log("Suitable driver:", ans);
         //check if this order is assgined before
