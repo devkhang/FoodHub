@@ -17,6 +17,7 @@ const authRoutes = require("./modules/accesscontrol/route/auth");
 const itemRoutes = require("./modules/menu/route/item");
 const userRoutes = require("./modules/order/route/user");
 const deliveryRoutes = require("./modules/Delivery/route/delivery");
+const droneRoute=require("./modules/accesscontrol/route/droneRoute");
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -70,6 +71,7 @@ app.use("/delivery",deliveryRoutes);
 // app.use("/auth", authRoutes);
 app.use("/seller", upload.single("image"), itemRoutes);
 app.use(userRoutes);
+app.use("/drone", droneRoute);
 
 //error middleware
 app.use((error, req, res, next) => {
