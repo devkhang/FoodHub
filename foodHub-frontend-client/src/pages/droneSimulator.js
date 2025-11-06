@@ -30,45 +30,69 @@ export default function DroneSimulator(props){
     let socket=useRef(null);
     let updatePositionInterval=useRef(null);
 
-    useEffect(async ()=>{
-        console.log("initial useEffect");
+    // useEffect(async ()=>{
+    //     console.log("initial useEffect");
         
+    //     socket.current=io(`${process.env.REACT_APP_SERVER_URL}`);
+    //     socket.current.on("disconnect", (reason, details) => {
+    //         console.log("socket disconnected with reason:", reason);
+    //         console.log("detail:", details);
+            
+    //     });
+    //     console.log("socket", socket.current);
+    // },[])
+
+    useEffect(()=>{
+        if(!droneInfo)
+            return;
+
+        console.log("drone selection useEffect");
+        if(socket.current)
+        {
+            socket.current.close();
+            console.log("close socket", socket.id);
+            
+        }
         socket.current=io(`${process.env.REACT_APP_SERVER_URL}`);
         socket.current.on("disconnect", (reason, details) => {
             console.log("socket disconnected with reason:", reason);
             console.log("detail:", details);
+            clearInterval(updatePositionInterval.current);
             
         });
         console.log("socket", socket.current);
-    },[])
 
-    useEffect(()=>{
-        console.log("drone selection useEffect");
-        if(!droneInfo)
-            return;
-        console.log("socket", socket.current);
         // socket.current.connect();//reconnect
         // console.log("reconnect:", socket.current, socket.current.connected);
-        clearInterval(updatePositionInterval.current);
-        updatePositionInterval.current=setInterval(()=>{
-            if(navigator.geolocation){//check if browser support GeoLocation API
-                navigator.geolocation.getCurrentPosition((pos)=>{
-                let dronePosition={
-                    "droneId":droneInfo.droneId,
-                    "lng":pos.coords.longitude,
-                    "lat":pos.coords.latitude
-                }
-                console.log("Drone location:", JSON.stringify(dronePosition));
-                console.log("=================");
-                
-                socket.current.emit("drone:updatePosition", dronePosition);
-                })
-            }
-            else{
-                alert("your browser doesn't support GeoLocation API");
-            }
+        socket.current.on("connect",()=>{
+            console.log("on-connection: configure drone client socket");
+            
+            //register drone socket with server
+            socket.current.emit("drone:registerSocket", droneInfo.droneId);
 
-        }, 1000)
+            //update current position in real time
+            clearInterval(updatePositionInterval.current);
+            updatePositionInterval.current=setInterval(()=>{
+                if(navigator.geolocation){//check if browser support GeoLocation API
+                    navigator.geolocation.getCurrentPosition((pos)=>{
+                    let dronePosition={
+                        "droneId":droneInfo.droneId,
+                        "lng":pos.coords.longitude,
+                        "lat":pos.coords.latitude
+                    }
+                    console.log("Drone location:", JSON.stringify(dronePosition));
+                    console.log("=================");
+                    
+                    socket.current.emit("drone:updatePosition", dronePosition);
+                    })
+                }
+                else{
+                    alert("your browser doesn't support GeoLocation API");
+                }
+
+            }, 1000)
+        })
+
     },[droneInfo]);
 
     return (
