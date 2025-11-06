@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - FoodHub Seller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Roboto', sans-serif; background: #f8f9fa; color: #333; }
+    .container { max-width: 600px; margin: 60px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; }
+    .success { font-size: 60px; color: #28a745; margin-bottom: 16px; }
+    h1 { margin-bottom: 16px; font-size: 28px; color: #28a745; }
+    p { margin-bottom: 24px; font-size: 16px; line-height: 1.6; }
+    .btn { 
+      display: inline-block; padding: 14px 32px; background: #007bff; color: white; 
+      text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 16px;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #0056b3; }
+    .logo { width: 80px; margin-bottom: 20px; }
+    .features { margin-top: 30px; text-align: left; font-size: 15px; }
+    .features li { margin: 8px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="success">✓</div>
+    <h1>Chào mừng đến Dashboard!</h1>
+    <p>Bạn đã hoàn tất xác minh KYC. Bây giờ bạn có thể:</p>
+    <ul class="features">
+      <li>Nhận đơn hàng từ khách</li>
+      <li>Theo dõi doanh thu</li>
+      <li>Quản lý menu & hình ảnh</li>
+      <li>Rút tiền tự động về ngân hàng</li>
+    </ul>
+    <a href="http://localhost:3000/seller/dashboard" class="btn">Vào Dashboard ngay</a>
+  </div>
+
+  <script>
+    // Xóa dữ liệu tạm
+    localStorage.removeItem('sellerId');
+  </script>
+</body>
+</html>

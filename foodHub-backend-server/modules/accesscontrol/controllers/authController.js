@@ -13,6 +13,7 @@ const Account = require("../models/account");
 const Seller = require("../models/seller");
 const DeliveryPartner = require("../models/deliveryPartner");
 const DeliveryDetail = require("../../Delivery/models/deliveryDetail");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // NOT Done (học sendgrid)
 // const transporter = nodemailer.createTransport(
 //   sendgridTransport({
@@ -261,183 +262,99 @@ exports.login = (req, res, next) => {
     });
 };
 
-exports.signupSeller = (req, res, next) => {
+// 
+
+exports.signupSeller = async (req, res, next) => {
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
-    const error = new Error("Validation Failed, Incorrect data entered.");
-    error.statusCode = 422;
-    error.errors = errors.array();
-    throw error;
+    const err = new Error('Dữ liệu không hợp lệ');
+    err.statusCode = 422;
+    err.errors = errors.array();
+    return next(err);
   }
 
-  if (req.files.length == 0) {
-    const error = new Error("Upload an image as well.");
-    error.statusCode = 422;
-    throw error;
-  }
+  const images = req.files.map(f => f.path);
+  const {
+    email, password, name, tags, payment,
+    phoneNo, street, aptName, locality, zip,
+    costForOne, minOrderAmount, formattedAddress, lat, lng
+  } = req.body;
 
-  const arrayFiles = req.files.map((file) => file.path);
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = req.body.password;
-  const tags = req.body.tags;
-  const role = req.body.role;
-  const payment = req.body.payment;
-  const paymentArray = payment.split(" ");
-  const minOrderAmount = req.body.minOrderAmount;
-  const costForOne = req.body.costForOne;
-  const phoneNo = req.body.phoneNo;
-  const street = req.body.street;
-  const aptName = req.body.aptName;
-  const formattedAddress = req.body.formattedAddress;
-  const lat = req.body.lat;
-  const lng = req.body.lng;
-  const locality = req.body.locality;
-  const zip = req.body.zip;
-
-  let token;
-
-  if (role !== "ROLE_SELLER") {
-    const error = new Error(
-      "Signing up a seller should have a role of ROLE_SELLER"
-    );
-    error.statusCode = 500;
-    throw error;
-  }
-
-  bcrypt
-    .hash(password, 12)
-    .then((hashedPassword) => {
-      token = crypto.randomBytes(32).toString("hex");
-
-      const account = new Account({
-        role: role,
-        email: email,
-        password: hashedPassword,
-        accountVerifyToken: token,
-        accountVerifyTokenExpiration: Date.now() + 3600000,
-        isVerified: true, //[not done: learn SendGrip]
-      });
-      return account.save();
-    })
-    .then((savedAccount) => {
-      const seller = new Seller({
-        name: name,
-        tags: tags,
-        imageUrl: arrayFiles,
-        minOrderAmount: minOrderAmount,
-        costForOne: costForOne,
-        account: savedAccount,
-        payment: paymentArray,
-        formattedAddress: formattedAddress,
-        address: {
-          street: street,
-          zip: zip,
-          phoneNo: phoneNo,
-          locality: locality,
-          aptName: aptName,
-          lat: lat,
-          lng: lng,
-        },
-      });
-      return seller.save();
-    })
-    .then((savedSeller) => {
-      // transporter.sendMail({
-      //   to: email,
-      //   from: "YOUR_SENDGRID_VERIFIED_EMAIL",
-      //   subject: "Verify your Account on FoodHub",
-      //   html: `
-      //                 <p>Please verify your email by clicking on the link below - FoodHub</p>
-      //                 <p>Click this <a href="http://localhost:3002/auth/verify/${token}">link</a> to verify your account.</p>
-      //               `,
-      // });
-      res.status(201).json({
-        message:
-          "Seller signed-up successfully, please verify your email before logging in.",
-        sellerId: savedSeller._id,
-      });
-    })
-    .catch((err) => {
-      if (!err.statusCode) err.statusCode = 500;
-      next(err);
+  try {
+    // LẤY TỪ MIDDLEWARE
+    const stripeAccountId = req.stripeAccountId;
+    const onboardingUrl   = req.onboardingUrl;
+    const token = req.verifyToken;                    // ← LẤY TỪ MIDDLEWARE
+    const expires = req.tokenExpires;
+    // === GIỮ NGUYÊN TOKEN NHƯ CŨ, KHÔNG GỬI verifyUrl ===
+    const hashedPw = await bcrypt.hash(password, 12);
+    const account = new Account({
+      role: 'ROLE_SELLER',
+      email,
+      password: hashedPw,
+      accountVerifyToken: token,
+      accountVerifyTokenExpiration: Date.now() + 3600000,
     });
+    const savedAcc = await account.save();
+
+    const seller = new Seller({
+      name, tags, imageUrl: images,
+      payment: payment.split(' '),
+      minOrderAmount, costForOne,
+      formattedAddress,
+      address: { street, aptName, locality, zip, phoneNo, lat, lng },
+      account: savedAcc._id,
+      stripeAccountId
+    });
+    await seller.save();
+
+    // === CHỈ TRẢ VỀ 1 LINK DUY NHẤT ===
+    res.status(201).json({
+      message: 'Đăng ký thành công! Vui lòng check mail để kích hoạt.',
+      sellerId: seller._id,
+      stripeAccountId,
+      onboardingUrl   // ← DUY NHẤT 1 LINK
+      // verifyUrl: ...   ← ĐÃ XÓA
+    });
+  } catch (err) {
+    err.statusCode = 500;
+    next(err);
+  }
 };
 
 exports.createStripeAccount = async (req, res, next) => {
-  const { sellerId, sellerData } = res.locals;
-  if (!sellerId || !sellerData) {
-    const error = new Error('Seller data not found');
-    error.statusCode = 500;
-    throw error;
-  }
-
-  const { email, name, phoneNo, street, locality, zip, aptName } = sellerData;
-
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
+  const { email, name } = req.body;
   try {
-    const seller = await Seller.findById(sellerId).session(session);
-    if (!seller) {
-      const error = new Error('Seller not found');
-      error.statusCode = 404;
-      throw error;
-    }
-    if (seller.stripeAccountId) {
-      const error = new Error('Seller already has a Stripe account');
-      error.statusCode = 400;
-      throw error;
-    }
-
-    const stripeAccount = await stripe.accounts.create({
+    // BƯỚC 1: TẠO STRIPE CONNECT ACCOUNT
+    const token = crypto.randomBytes(32).toString('hex');
+    const account = await stripe.accounts.create({
       type: 'express',
-      country: 'VN',
+      country: 'US',
       email,
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
-      business_type: 'company',
-      company: {
-        name,
-        phone: phoneNo,
-        address: {
-          city: locality,
-          country: 'VN',
-          line1: street,
-          line2: aptName,
-          postal_code: zip,
-        },
-      },
+      business_type: 'individual',
+      capabilities: { transfers: { requested: true } },
+      metadata: { restaurant_name: name },
     });
-
-    seller.stripeAccountId = stripeAccount.id;
-    seller.isVerified = false;
-    await seller.save({ session });
-
+    // BƯỚC 2: TẠO LINK ONBOARDING
     const accountLink = await stripe.accountLinks.create({
-      account: stripeAccount.id,
-      refresh_url: 'https://your-app.com/seller/refresh',
-      return_url: 'https://your-app.com/seller/onboard-complete',
+      account: account.id,
+      return_url: `${process.env.FRONTEND_URL}/onboarding/success?accountId=${account.id}`,
+      refresh_url: `${process.env.FRONTEND_URL}/onboarding/refresh`,
       type: 'account_onboarding',
+      expire_after: 300,
     });
+    // BƯỚC 3: GẮN VÀO req ĐỂ DÙNG TIẾP
+    req.stripeAccountId = account.id;      // acct_…
+    req.onboardingUrl   = accountLink.url;        // link ngân hàng
+    req.verifyToken     = token;           // token lưu vào Account
+    req.tokenExpires    = Date.now() + 3600000;      // link Stripe
 
-    await session.commitTransaction();
-
-    res.locals.stripeAccountId = stripeAccount.id;
-    res.locals.onboardingUrl = accountLink.url;
-
-    console.log(`Saved stripeAccountId ${stripeAccount.id} for seller ${sellerId}`);
-    return next();
+    next(); // → nhảy sang signupSeller
   } catch (error) {
-    await session.abortTransaction();
-    console.error('Error creating Stripe account:', error);
-    if (!error.statusCode) error.statusCode = 500;
-    throw error;
-  } finally {
-    session.endSession();
+    const err = new Error('Tạo Stripe thất bại!');
+    err.statusCode = 500;
+    err.details = error.message;
+    next(err);
   }
 };
 

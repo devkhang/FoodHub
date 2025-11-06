@@ -16,46 +16,53 @@ export const AuthRoute = ({ component: Component, ...rest }) => {
 };
 
 export const UserRoute = ({ component: Component, ...rest }) => {
-  const {
-    authenticated,
-    account: { role },
-  } = useSelector((state) => state.auth);
-  // console.log(props.component);
-  // console.log("props:", ...props);
+  const { authenticated, account } = useSelector((state) => state.auth);
 
   return (
     <Route
       {...rest}
-      render={(props) =>
-        authenticated === true && role === "ROLE_SELLER" ? (
-          <Redirect to="/seller/dashboard" />
-        ) : (
-          <Component {...props} />
-        )
-      }
+      render={(props) => {
+        // 1. Chưa đăng nhập → về login
+        if (!authenticated) {
+          return <Redirect to="/login" />;
+        }
+
+        // 2. Đã đăng nhập nhưng KHÔNG PHẢI USER → về home
+        if (account?.role !== "ROLE_USER") {
+          return <Redirect to="/" />;
+        }
+
+        // 3. Đúng USER → cho vào
+        return <Component {...props} />;
+      }}
     />
   );
 };
 
 export const SellerRoute = ({ component: Component, ...rest }) => {
-  const {
-    authenticated,
-    account: { role },
-  } = useSelector((state) => state.auth);
+  const { authenticated, account } = useSelector((state) => state.auth);
 
   return (
     <Route
       {...rest}
-      render={(props) =>
-        authenticated === true && role === "ROLE_USER" ? (
-          <Redirect to="/" />
-        ) : (
-          <Component {...props} />
-        )
-      }
+      render={(props) => {
+        // 1. Chưa đăng nhập → về login
+        if (!authenticated) {
+          return <Redirect to="/login" />;
+        }
+
+        // 2. Đã đăng nhập nhưng KHÔNG PHẢI SELLER → về home
+        if (account.role !== "ROLE_SELLER") {
+          return <Redirect to="/" />;
+        }
+
+        // 3. Đúng SELLER → cho vào
+        return <Component {...props} />;
+      }}
     />
   );
 };
+
 export const DeliveryRoute = ({ component: Component, ...rest }) => {
   const {
     authenticated,

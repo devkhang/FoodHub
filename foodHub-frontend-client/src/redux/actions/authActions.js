@@ -159,12 +159,15 @@ export const signupSellerFinal = (newSellerData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   axios
     .post("/auth/signup-seller", newSellerData)
+    .then(res => {
+    alert(res.data.message);
+    window.location.href = res.data.onboardingUrl;
+    })
     .then((res) => {
       dispatch({
         type: SIGNUP_SUCCESS,
       });
       dispatch({ type: CLEAR_ERRORS });
-      history.push("/login");
     })
     .catch((err) => {
       if (err.response) {

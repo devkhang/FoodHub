@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Link hết hạn - FoodHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Roboto', sans-serif; background: #f8f9fa; color: #333; text-align: center; padding: 50px 20px; }
+    .container { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h1 { color: #dc3545; margin-bottom: 16px; font-size: 28px; }
+    p { margin-bottom: 24px; font-size: 16px; line-height: 1.6; }
+    .btn { 
+      display: inline-block; padding: 14px 32px; background: #28a745; color: white; 
+      text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 16px;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #218838; }
+    .logo { width: 80px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Link đã hết hạn</h1>
+    <p>Không sao cả! Chúng tôi sẽ tạo link mới để bạn tiếp tục xác minh tài khoản.</p>
+    <button class="btn" onclick="retryOnboarding()">Tạo link mới</button>
+  </div>
+
+  <script>
+    function retryOnboarding() {
+      const sellerId = localStorage.getItem('sellerId');
+      if (!sellerId) {
+        alert('Không tìm thấy thông tin. Vui lòng đăng ký lại.');
+        window.location.href = 'localhost:3000/addrestaurant';
+        return;
+      }
+
+      fetch('http://localhost:3000/seller/retry-onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sellerId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.onboardingUrl) {
+          window.location.href = data.onboardingUrl;
+        } else {
+          alert('Lỗi: ' + (data.error || 'Không thể tạo link mới'));
+        }
+      })
+      .catch(() => {
+        alert('Lỗi kết nối. Vui lòng thử lại sau.');
+      });
+    }
+
+    // Lưu sellerId từ URL (nếu có)
+    const urlParams = new URLSearchParams(window.location.search);
+    const sellerIdFromUrl = urlParams.get('sellerId');
+    if (sellerIdFromUrl && !localStorage.getItem('sellerId')) {
+      localStorage.setItem('sellerId', sellerIdFromUrl);
+    }
+  </script>
+</body>
+</html>

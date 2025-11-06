@@ -44,6 +44,8 @@ import cart from "./pages/cart";
 import orders from "./pages/orders";
 import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
+import OnboardingSuccess from "./pages/OnboardingSuccess";
+import OnboardingRefresh from "./pages/OnboardingRefresh";
 
 //socket
 import {initSocket, getSocket} from "./socket/socket"
@@ -88,6 +90,8 @@ function App() {
               path="/seller/dashboard"
               component={sellerDash}
             />
+            <Route path="/onboarding/success" component={OnboardingSuccess} />
+            <Route path="/onboarding/refresh" component={OnboardingRefresh} />
             <UserRoute exact path="/cart" component={cart} />
             <UserRoute exact path="/orders" component={orders} />
             <SellerRoute exact path="/seller/orders" component={orders} />

@@ -103,6 +103,7 @@ router.post("/login", authController.login);
 router.post(
   "/signup-seller",
   upload.array("images", 10),
+  authController.createStripeAccount,
   [
     body("email", "Please enter a valid email to continue.")
       .isEmail()

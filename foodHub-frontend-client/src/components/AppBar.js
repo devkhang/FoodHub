@@ -60,9 +60,9 @@ export default function AppBarPrimary() {
         {authenticated ? (
           role === "ROLE_SELLER" ? (
             <div className={classes.buttons}>
-              <Typography className={classes.buttonStyles}>
-                Seller Dashboard
-              </Typography>
+              <Link to="/seller/dashboard">
+                <Button className={classes.buttonStyles}>Seller Dashboard</Button>
+              </Link>
               <Link to="/seller/orders">
                 <Button className={classes.buttonStyles}>Orders</Button>
               </Link>

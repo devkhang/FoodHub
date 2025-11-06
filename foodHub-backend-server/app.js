@@ -17,6 +17,8 @@ const authRoutes = require("./modules/accesscontrol/route/auth");
 const itemRoutes = require("./modules/menu/route/item");
 const userRoutes = require("./modules/order/route/user");
 const deliveryRoutes = require("./modules/Delivery/route/delivery");
+const authController = require("./modules/accesscontrol/controllers/authController");
+const stripeRoutes = require("./modules/Payment/route/stripe")
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -41,7 +43,6 @@ const fileFilter = (req, file, cb) => {
 };
 
 const app = express();
-
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
 
 app.use(bodyParser.json());
@@ -53,7 +54,7 @@ app.use(
   },
   express.static(path.join(__dirname, "images"))
 );
-
+app.use('/api/stripe', stripeRoutes);
 //set headers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
