@@ -19,8 +19,8 @@ output:
 -excludeObjectId:[] //object Id to exclude
 */
 exports.getObjectNearAPlace=(origin, objectLocations, acceptRange, excludeObjectId=[])=>{
-    console.log("getObjectNearAPlace()");
-    console.log("input:", objectLocations);
+    // console.log("getObjectNearAPlace()");
+    // console.log("input:", objectLocations);
     if(!objectLocations.length){
         return null;
     }

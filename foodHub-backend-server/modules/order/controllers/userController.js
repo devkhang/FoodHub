@@ -21,6 +21,7 @@ const {getObjectNearAPlace}=require("../../../util/delivery");
 const order = require("../../order/models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
 const deliveryAssignmentMap=require("../../../socket/sources/DeliveryAssignmentMap");
+const {availableDrones, readyDrone, busyDrone, droneOrderAssignment}=require("../../../socket/sources/droneSource");
 
 exports.getRestaurants = (req, res, next) => {
   Seller.find()
@@ -495,9 +496,100 @@ function selectNextSuitableDeliveryPartner(orderId){
         });
 
       });
-
 }
+
+function selectNextSuitablDrone(orderId){
+  //find order information
+  let order=Order
+      .findById(orderId)
+      .populate({
+        path:"seller.sellerId",
+        select:"address"
+      })
+      .then(order=>{
+        //find suitable delivery partner
+        let droneAssigment=droneOrderAssignment.get(orderId);
+        if(droneAssigment && droneAssigment.count>process.env.MAX_ASSIGNMENT_ATTEMP){
+          //[not done]cancel order, cause found no suitable delivery partner
+          console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
+          droneOrderAssignment.delete(orderId);
+          return;
+        }
+
+        //no available drone
+        if(!availableDrones.size===0){
+          //[not done]cancel order, cause found no suitable delivery partner
+          console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
+          droneOrderAssignment.delete(orderId);
+          return;
+        }
+
+        let ans=getObjectNearAPlace({
+            lng:order.seller.sellerId.address.lng,
+            lat:order.seller.sellerId.address.lat
+          }, Array.from(readyDrone.entries()).map(([id, info])=>{
+              return {
+                id:id,
+                pos:availableDrones.get(id).location
+              }
+            }
+          ),
+          parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
+          (droneAssigment)?droneAssigment.refuser:[]
+        );
+
+        //if not suitable drone exist
+        if(!ans){
+          if(droneAssigment){
+            droneAssigment.count+=1;
+          }
+          else{
+            droneOrderAssignment.set(orderId,{
+              count:0
+            })
+          }
+          return selectNextSuitableDeliveryPartner(orderId);
+        }
+        console.log("Suitable driver:", ans);
+
+        //if suitable drone exists
+        //check if this order is assgined before
+        if(!droneAssigment){
+          droneOrderAssignment.set(orderId, {
+              droneId:(ans)?ans.id:null,
+              timeout:setTimeout(() => {
+                selectNextSuitableDeliveryPartner(orderId);
+              }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT)+2*parseInt(process.env.NETWORK_DELAY))*1000),
+              count:0,
+              refuser:[]
+          });
+        }
+        else{
+          if(droneAssigment.count>process.env.MAX_ASSIGNMENT_ATTEMP){
+            //[not done]cancel order, cause found no suitable delivery partner
+            console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
+            droneOrderAssignment.delete(orderId);
+            return;
+          }
+          droneAssigment.orderId=(ans)?ans.id:null;
+          droneAssigment.timeout=setTimeout(() => {
+                selectNextSuitableDeliveryPartner(orderId);
+              }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT)+2*parseInt(process.env.NETWORK_DELAY))*1000
+            );
+          droneAssigment.count+=1;       
+        }
+        const selectedDroneSocket=availableDrones.get(ans.id).socketId;
+        const io=getIO();
+        io.to(selectedDroneSocket).emit("delivery:job_notification",{
+          orderId:orderId,
+          timeout:process.env.DELIVERY_JOB_ACCEPT_TIMEOUT
+        });
+
+      });
+}
+
 exports.selectNextSuitableDeliveryPartner=selectNextSuitableDeliveryPartner;
+exports.selectNextSuitablDrone=selectNextSuitablDrone;
 
 exports.postOrderStatus = (req, res, next) => {
   const authHeader = req.get("Authorization");
@@ -546,7 +638,8 @@ exports.postOrderStatus = (req, res, next) => {
     .then((updatedOrder) => {
       io.getIO().emit("orders", { action: "update", order: updatedOrder });
       if(status=="Ready"){
-        selectNextSuitableDeliveryPartner(orderId);
+        // selectNextSuitableDeliveryPartner(orderId);
+        selectNextSuitablDrone(orderId);
       }
       res.status(200).json({ updatedOrder });
     })

@@ -1,9 +1,7 @@
-const socket = require("../../util/socket");
 const {init, getIO}=require("../../util/socket");
-const deliveryPartnerMap=require("../sources/DeliveryPartnerSource");
-const jwt=require("jsonwebtoken");
-const {verifyJWT}=require("../../util/jwtUtil");
-const {availableDrones, socketToDrone}=require("../sources/droneSource");
+const {availableDrones, socketToDrone, busyDrone, readyDrone}=require("../sources/droneSource");
+const Drone=require("../../modules/accesscontrol/models/drone");
+
 
 exports.droneUpdatePositionHandler=()=>{
     //[not done: not handle free, busy drone yet]
@@ -29,12 +27,26 @@ exports.droneUpdatePositionHandler=()=>{
 exports.droneSocketRegistration=()=>{
     const IO=getIO();
     IO.on("connection",(socket)=>{
-        socket.on("drone:registerSocket", (droneId)=>{
+        socket.on("drone:registerSocket", async (droneId)=>{
             console.log("drone socket registration:", droneId, socket.id);
             availableDrones.set(droneId,{
                 socketId:socket.id
             });
             socketToDrone.set(socket.id, droneId);
+
+            let drone=await Drone.findOne({
+                droneId:droneId
+            });
+            if(drone.status=="IDLE")
+                readyDrone.set(droneId, null);
+                if(busyDrone.get(droneId))
+                    busyDrone.delete(droneId)
+            else if(drone.status=="BUSY"){
+                busyDrone.set(droneId, null);
+                if(readyDrone.get(droneId))
+                    readyDrone.delete(droneId);
+            }
+
         });
 
     });

@@ -18,14 +18,14 @@ socketId->{
 exports.socketToDrone=new Map();
 
 //droneId
-exports.busyDrone=[];
+exports.busyDrone=new Map();
 
 //droneId
-exports.readyDrone=[];
+exports.readyDrone=new Map();
 
 /*
-droneId->{
-    accountId of delivery partner:,
+orderId->{
+    droneId:,
     timeout:Js timeout,
     count: how many time this order is assigned,
     refuser:[accountId]

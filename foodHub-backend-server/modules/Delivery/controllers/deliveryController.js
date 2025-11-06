@@ -20,9 +20,10 @@ const {getObjectNearAPlace}=require("../../../util/delivery");
 const order = require("../../order/models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
 const deliveryAssignmentMap=require("../../../socket/sources/DeliveryAssignmentMap");
+const {availableDrones, readyDrone, busyDrone, droneOrderAssignment}=require("../../../socket/sources/droneSource");
 
 //delivery
-const {selectNextSuitableDeliveryPartner}= require("../../order/controllers/userController");
+const {selectNextSuitableDeliveryPartner, selectNextSuitablDrone}= require("../../order/controllers/userController");
 const { options } = require("mongoose");
 
 
@@ -221,6 +222,62 @@ exports.acceptDeliveryJob=async (req, res, next)=>{
   }
 }
 
+exports.droneAcceptDeliveryJob=async (req, res, next)=>{
+  try{
+    const {droneId, orderId}=req.body;
+    if(droneOrderAssignment.get(orderId).droneId!=droneId){
+      return res.status(400).json({
+        status:"fail",
+        mess:`There is no order ${orderId} assigned to drone ${droneId}`
+      });
+    }
+    else{
+      clearTimeout(droneOrderAssignment.get(orderId).timeout);
+      //check if order is assigned
+      let deliveryDetail= await DeliveryDetail.findOne({
+        order:orderId
+      });
+      if(deliveryDetail){
+        return res.status(400).json({
+          status:"fail",
+          mess:`order ${orderId} is already assigned`
+        });
+      }
+
+      deliveryDetail=await DeliveryDetail.create({
+        order:orderId,
+        deliveryCharge:0,//[not done: get actual delivery charge in backend]
+        drone:droneId,
+      });
+      await DeliveryDetail.populate(deliveryDetail, {
+        path:"order",
+        select:"user seller items",
+        populate:{
+          path:"seller.sellerId",
+          select:"address"
+        }
+      });
+      let totalItemMoney=0;
+      for (let foodSelection of deliveryDetail.order.items){
+        totalItemMoney+=foodSelection.item.price*foodSelection.quantity;
+      }
+      deliveryDetail=deliveryDetail.toObject();
+      deliveryDetail.order.items=null;
+      deliveryDetail.totalItemMoney=totalItemMoney;
+      // deliveryDetail.aaa="aaa"
+      droneOrderAssignment.delete(orderId);
+      return res.status(200).json({
+        status:"ok",
+        data:deliveryDetail
+      });
+    }
+
+  }
+  catch(error){
+    next(error, req, res, next);
+  }
+}
+
 exports.refuseDeliveryJob=async (req, res, next)=>{
   try {
     const {jwtToken, orderId}=req.body;
@@ -232,10 +289,36 @@ exports.refuseDeliveryJob=async (req, res, next)=>{
       });
     }
     else{
+      
       clearTimeout(deliveryAssignmentMap.get(orderId).timeout);
       let deliveryAssignmentInfo=deliveryAssignmentMap.get(orderId);
       deliveryAssignmentInfo.refuser.push(decodedJWT.accountId);
       selectNextSuitableDeliveryPartner(orderId);
+      res.status(200).json({
+        status:"ok",
+        data:"1"//received refuse request
+      });
+    }
+  } catch (error) {
+    next(error, req, res, next);
+  }
+}
+
+exports.droneRefuseDeliveryJob=async (req, res, next)=>{
+  try {
+    const {droneId, orderId}=req.body;
+    if(droneOrderAssignment.get(orderId).droneId!=droneId){
+      return res.status(400).json({
+        status:"fail",
+        mess:`There is no order ${orderId} assigned to drone ${droneId}`
+      });
+    }
+    else{
+      
+      clearTimeout(droneOrderAssignment.get(orderId).timeout);
+      let droneAssigment=droneOrderAssignment.get(orderId);
+      droneAssigment.refuser.push(droneId);
+      selectNextSuitablDrone(orderId);
       res.status(200).json({
         status:"ok",
         data:"1"//received refuse request

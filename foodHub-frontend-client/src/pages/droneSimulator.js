@@ -7,6 +7,7 @@ const io= require("socket.io-client");
 export default function DroneSimulator(props){
 
     let [droneInfo, setDroneInfo]=useState(null);
+    let droneStatus=useRef("IDLE");
 
     async function handleDroneSelection(droneId){
         let result=await axios.get(`${process.env.REACT_APP_SERVER_URL}/drone/getDrone/${droneId}`);
@@ -45,8 +46,8 @@ export default function DroneSimulator(props){
     useEffect(()=>{
         if(!droneInfo)
             return;
-
-        console.log("drone selection useEffect");
+        droneStatus.current="IDLE";
+        // console.log("drone selection useEffect");
         if(socket.current)
         {
             socket.current.close();
@@ -80,8 +81,8 @@ export default function DroneSimulator(props){
                         "lng":pos.coords.longitude,
                         "lat":pos.coords.latitude
                     }
-                    console.log("Drone location:", JSON.stringify(dronePosition));
-                    console.log("=================");
+                    // console.log("Drone location:", JSON.stringify(dronePosition));
+                    // console.log("=================");
                     
                     socket.current.emit("drone:updatePosition", dronePosition);
                     })
@@ -91,6 +92,38 @@ export default function DroneSimulator(props){
                 }
 
             }, 1000)
+
+            //order delivery job notification
+            socket.current.on("delivery:job_notification", async ({orderId, timeout})=>{
+                console.log("delivery:job_notification");
+                let status=droneStatus.current;
+                console.log("droneStatus",status);
+                
+                
+                if(status!=="IDLE"){
+                    console.log(`refuse deliver order ${orderId}`);
+                    
+                    let result=await axios.post(`${process.env.REACT_APP_SERVER_URL}/delivery/drone-refuse-job`,{
+                        droneId:droneInfo.droneId,
+                        orderId:orderId
+                    })
+                    console.log("result:", result.data.data);
+                    
+                }
+                else if(status=="IDLE"){
+                    console.log(`accept deliver order ${orderId}`);
+                    
+                    let result=await axios.post(`${process.env.REACT_APP_SERVER_URL}/delivery/drone-accept-job`,{
+                        droneId:droneInfo.droneId,
+                        orderId:orderId
+                    })
+                    console.log("result:", result.data.data);
+                    //[not done: start drone delivery]                    
+                }
+
+
+            })
+            
         })
 
     },[droneInfo]);
