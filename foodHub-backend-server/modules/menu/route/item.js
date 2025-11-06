@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 
 const itemController = require("../controllers/itemController");
 const auth = require("../../../middleware/auth");
+const Seller = require("../../accesscontrol/models/seller")
 
 const router = express.Router();
 
@@ -41,5 +42,27 @@ router.put(
 router.get("/get-items", auth.verifySeller, itemController.getItems);
 
 router.get("/get-item/:itemId", auth.verifySeller, itemController.getItem);
+
+router.get('/getAllInfo', async (req, res) => {
+  try {
+    const sellers = await Seller.find({})
+      .select('name formattedAddress account') // chỉ lấy cần thiết
+      .populate('account', 'email'); // lấy email từ Account
+
+    const result = sellers.map(s => ({
+      name: s.name,
+      email: s.account?.email || 'N/A', // phòng trường hợp không có account
+      formattedAddress: s.formattedAddress,
+    }));
+
+    res.json({
+      success: true,
+      sellers: result,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Lỗi server' });
+  }
+});
 
 module.exports = router;

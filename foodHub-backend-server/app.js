@@ -8,9 +8,12 @@ const dotenv = require("dotenv");
 dotenv.config(path.join(__dirname, ".env"));
 
 //Socket
-const {init, getIO} = require("./util/socket");
+const { init, getIO } = require("./util/socket");
 let io;
-const {registerDeliveryPartner, trackDeliveryPartnerLocation}=require("./socket/handlers/deliveryPartnerHandler");
+const {
+  registerDeliveryPartner,
+  trackDeliveryPartnerLocation,
+} = require("./socket/handlers/deliveryPartnerHandler");
 
 //Route
 const authRoutes = require("./modules/accesscontrol/route/auth");
@@ -18,7 +21,7 @@ const itemRoutes = require("./modules/menu/route/item");
 const userRoutes = require("./modules/order/route/user");
 const deliveryRoutes = require("./modules/Delivery/route/delivery");
 const authController = require("./modules/accesscontrol/controllers/authController");
-const stripeRoutes = require("./modules/Payment/route/stripe")
+const stripeRoutes = require("./modules/Payment/route/stripe");
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -54,7 +57,7 @@ app.use(
   },
   express.static(path.join(__dirname, "images"))
 );
-app.use('/api/stripe', stripeRoutes);
+app.use("/api/stripe", stripeRoutes);
 //set headers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -67,14 +70,14 @@ app.use((req, res, next) => {
 });
 
 app.use("/auth", authRoutes);
-app.use("/delivery",deliveryRoutes);
+app.use("/delivery", deliveryRoutes);
 // app.use("/auth", authRoutes);
 app.use("/seller", upload.single("image"), itemRoutes);
 app.use(userRoutes);
 
 //error middleware
 app.use((error, req, res, next) => {
-  console.log(error + "--------------------------");
+  console.error(error.stack);
   const statusCode = error.statusCode || 500;
   const message = error.message;
   let errorsPresent;
@@ -97,15 +100,15 @@ mongoose
     const server = app.listen(process.env.PORT || 3001, () => {
       console.log(`Server starts at port ${process.env.PORT}`);
     });
-    
-    let io=init(server);
+
+    let io = init(server);
     io.on("connection", (socket) => {
       socket.on("add-user", (data) => {
         clients[data.userId] = {
           socket: socket.id,
         };
       });
-    
+
       registerDeliveryPartner();
       trackDeliveryPartnerLocation();
 

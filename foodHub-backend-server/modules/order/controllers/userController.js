@@ -587,3 +587,33 @@ exports.getRestaurantsByAddress = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getAllOrders = async (req, res, next) => {
+  try {
+    // 2. Lấy tất cả đơn hàng
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .populate("user.userId", "firstName lastName phone")
+      .populate("seller.sellerId", "name imageUrl")
+      // .lean();
+
+    // 3. Tính tổng tiền
+    const result = orders.map((order) => {
+
+      return {
+        ...order,
+        totalItemMoney: order.totalItemMoney || 0,
+      };
+    });
+
+    // 4. Trả về
+    res.status(200).json({
+      success: true,
+      total: result.length,
+      orders: result,
+    });
+  } catch (err) {
+    console.error("Lỗi lấy đơn hàng:", err);
+    res.status(500).json({ success: false, message: "Lỗi server" });
+  }
+};

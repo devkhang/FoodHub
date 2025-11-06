@@ -51,9 +51,11 @@ router.post("/order-status/:orderId", userController.postOrderStatus);
 
 router.get("/clients/connected", userController.getConnectedClients);
 
+router.get("/orders", userController.getOrders);
 router.get(
   "/restaurants-location/:lat/:lng",
   userController.getRestaurantsByAddress
 );
+router.get("/order/getAllOrders", userController.getAllOrders);
 
 module.exports = router;

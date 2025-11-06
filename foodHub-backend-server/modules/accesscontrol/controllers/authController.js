@@ -340,8 +340,7 @@ exports.createStripeAccount = async (req, res, next) => {
       account: account.id,
       return_url: `${process.env.FRONTEND_URL}/onboarding/success?accountId=${account.id}`,
       refresh_url: `${process.env.FRONTEND_URL}/onboarding/refresh`,
-      type: 'account_onboarding',
-      expire_after: 300,
+      type: 'account_onboarding'
     });
     // BƯỚC 3: GẮN VÀO req ĐỂ DÙNG TIẾP
     req.stripeAccountId = account.id;      // acct_…
@@ -351,6 +350,7 @@ exports.createStripeAccount = async (req, res, next) => {
 
     next(); // → nhảy sang signupSeller
   } catch (error) {
+    console.log(error.message);
     const err = new Error('Tạo Stripe thất bại!');
     err.statusCode = 500;
     err.details = error.message;
