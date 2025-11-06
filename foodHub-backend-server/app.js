@@ -11,6 +11,7 @@ dotenv.config(path.join(__dirname, ".env"));
 const {init, getIO} = require("./util/socket");
 let io;
 const {registerDeliveryPartner, trackDeliveryPartnerLocation}=require("./socket/handlers/deliveryPartnerHandler");
+const {droneUpdatePositionHandler}=require("./socket/handlers/droneHandler")
 
 //Route
 const authRoutes = require("./modules/accesscontrol/route/auth");
@@ -109,6 +110,7 @@ mongoose
     
       registerDeliveryPartner();
       trackDeliveryPartnerLocation();
+      droneUpdatePositionHandler();
 
       //Removing the socket on disconnect
       socket.on("disconnect", () => {

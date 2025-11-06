@@ -46,6 +46,7 @@ import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
 import DeliveryJobNotification from "./pages/DeliveryJobNotification";
 import ReactRouterHistoryProvider from "./components/ReactRouterHistoryProvider";
+import DroneSimulator from "./pages/droneSimulator";
 
 // //socket
 // import {initSocket, getSocket} from "./socket/socket"
@@ -96,6 +97,9 @@ function App() {
             <SellerRoute exact path="/seller/orders" component={orders} />
             <Route exact path="/deliveryJobNotification">
               <DeliveryJobNotification />
+            </Route>
+            <Route exact path="/droneSimulation">
+              <DroneSimulator />
             </Route>
             <Route component={error404} />
           </Switch>

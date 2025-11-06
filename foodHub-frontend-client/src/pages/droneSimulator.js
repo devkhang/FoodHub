@@ -1,0 +1,104 @@
+import axios from "axios";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useRef } from "react";
+const io= require("socket.io-client");
+
+export default function DroneSimulator(props){
+
+    let [droneInfo, setDroneInfo]=useState(null);
+
+    async function handleDroneSelection(droneId){
+        let result=await axios.get(`${process.env.REACT_APP_SERVER_URL}/drone/getDrone/${droneId}`);
+        
+        //[not done: doesn't handle error, or show error]
+        if(result.data.status==="ok"){
+            let droneInfo=result.data.data;
+            setDroneInfo(droneInfo);
+        }
+    }
+
+    const buttonStyle = {
+        // CSS property names are converted from kebab-case (font-size) to camelCase (fontSize)
+        backgroundColor: 'darkblue', 
+        color: 'white',
+        padding: '10px 20px',
+        borderRadius: '5px',
+        border: 'none',
+        marginRight: '10px' // Example of camelCase
+    };
+    let socket=useRef(null);
+    let updatePositionInterval=useRef(null);
+
+    useEffect(async ()=>{
+        console.log("initial useEffect");
+        
+        socket.current=io(`${process.env.REACT_APP_SERVER_URL}`);
+        socket.current.on("disconnect", (reason, details) => {
+            console.log("socket disconnected with reason:", reason);
+            console.log("detail:", details);
+            
+        });
+        console.log("socket", socket.current);
+    },[])
+
+    useEffect(()=>{
+        console.log("drone selection useEffect");
+        if(!droneInfo)
+            return;
+        console.log("socket", socket.current);
+        // socket.current.connect();//reconnect
+        // console.log("reconnect:", socket.current, socket.current.connected);
+        clearInterval(updatePositionInterval.current);
+        updatePositionInterval.current=setInterval(()=>{
+            if(navigator.geolocation){//check if browser support GeoLocation API
+                navigator.geolocation.getCurrentPosition((pos)=>{
+                let dronePosition={
+                    "droneId":droneInfo.droneId,
+                    "lng":pos.coords.longitude,
+                    "lat":pos.coords.latitude
+                }
+                console.log("Drone location:", JSON.stringify(dronePosition));
+                console.log("=================");
+                
+                socket.current.emit("drone:updatePosition", dronePosition);
+                })
+            }
+            else{
+                alert("your browser doesn't support GeoLocation API");
+            }
+
+        }, 1000)
+    },[droneInfo]);
+
+    return (
+        <div>
+            <div class="droneSelection" onSubmit={(e)=>{
+                e.preventDefault();
+                let formData=new FormData(e.target);
+                handleDroneSelection(formData.get("droneId"));
+            }}>
+                <form class="droneSelection--form">
+                    <label for="droneId">Drone id:</label><br/>
+                    <input class="droneSelection--droneid" type="text" name="droneId" id="droneId" placeholder="Enter your drone id">
+                    </input> <br/>
+                    <button type="submit" style={buttonStyle}>Select drone</button>
+                </form>
+            </div>
+            {(droneInfo)? (
+                <div>
+                    <div class="droneInfo">
+                        <p class="droneInfo__droneid">Drone Id: {droneInfo.droneId}</p>
+                        <p class="droneInfo__homebase"> Home base: longitude:{droneInfo.homeBase.lng}, latitude:{droneInfo.homeBase.lat}</p>
+                    </div>
+                    <div id="droneSimulation">
+                        <li class="droneSimulation__actions">
+                        </li>
+                    </div>
+                </div>
+            ):""}
+
+        </div>
+    )
+
+}
