@@ -425,8 +425,52 @@ exports.getJobDeliveryNotificationDetail=async(req, res, next)=>{
 
 
   } catch (error) {
-    // next(error, req, res, next);
+    next(error, req, res, next);
     console.log(error);
     return;
   }
+}
+
+exports.finishDeliveryJob=async (req, res, next)=>{
+  try{
+    let {droneId, orderId}=req.body;
+    let deliveryDetail=await DeliveryDetail.findOne({
+      order:orderId,
+      drone:droneId
+    });
+    if(!deliveryDetail){
+      return res.status(400).json({
+        status:"fail",
+        mess:"something are wrong with order, droneId"
+      });
+    }
+    await DeliveryDetail.populate(deliveryDetail, {
+      path:"order",
+      select:"user seller",
+    });
+    // if(orderId!=deliveryDetail.order || droneId!=deliveryDetail.droneId){
+    //   return res.status(400).json({
+    //     status:"fail",
+    //     mess:"something are wrong with order, droneId"
+    //   });
+    // }
+    let order=await Order.findById(orderId);
+    order.status="Completed";
+    await order.save();
+    deliveryDetail.endTime=new Date();
+    await deliveryDetail.save();
+    
+    res.status(200).json({
+      status:"ok",
+      data:deliveryDetail.toJSON({ virtuals: false })
+    });
+
+    //[not done: not message the client about the order update status]
+
+  }
+  catch(error){
+    next(error, req, res, next);
+  }
+
+
 }

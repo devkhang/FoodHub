@@ -13,12 +13,12 @@ exports.droneUpdatePositionHandler=()=>{
             if(!drone){
                 return;
             }
-            console.log("receive drone position:", droneId, lng, lat);
+            // console.log("receive drone position:", droneId, lng, lat);
             drone.location={
                 lng:lng,
                 lat:lat
             };
-            console.log(availableDrones);
+            // console.log(availableDrones);
         });
 
     });
