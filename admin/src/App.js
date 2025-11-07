@@ -1,8 +1,8 @@
-// src/app.js
+// src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { DashboardOutlined, ShopOutlined, RocketOutlined, CarOutlined } from '@ant-design/icons';
+import { DashboardOutlined, ShopOutlined, CarOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 
 // Import các trang đã tách
@@ -12,11 +12,12 @@ import Sellers from './Pages/Sellers';
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const menuItems = [
-    { key: '/admin', icon: <DashboardOutlined />, label: 'Tổng quan' },
-    { key: '/admin/sellers', icon: <ShopOutlined />, label: 'Quán ăn' },
-    { key: '/admin/drones', icon: <RocketOutlined />, label: 'Drone' },
-    { key: '/admin/orders', icon: <CarOutlined />, label: 'Đơn hàng' },
+    { key: '/', icon: <DashboardOutlined />, label: 'Tổng quan' },
+    { key: '/sellers', icon: <ShopOutlined />, label: 'Quán ăn' },
   ];
 
   return (
@@ -28,9 +29,10 @@ const AdminLayout = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['/admin']}
+          defaultSelectedKeys={['/']}
+          selectedKeys={[location.pathname === '/admin' ? '/' : location.pathname.replace('/admin', '')]}
           items={menuItems}
-          onClick={({ key }) => window.location.href = key}
+          onClick={({ key }) => navigate(key)}
         />
       </Sider>
 
@@ -42,7 +44,6 @@ const AdminLayout = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/sellers" element={<Sellers />} />
-            <Route path="/orders" element={<div>Đơn hàng realtime...</div>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Content>
