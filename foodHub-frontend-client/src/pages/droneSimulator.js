@@ -202,6 +202,7 @@ export default function DroneSimulator(props){
     async function droneDeliverySimulation(map){
         await simulateDroneToSeller(map);
         await simulateDroneToCustomer(map);
+        
     }
     useEffect(() => {
         // if(!orderId)

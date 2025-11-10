@@ -99,7 +99,7 @@ export const unRegisterTrackDelivery=(orderId)=>{
 
 export const trackDelivery=(map, positionSource, routeSource)=>{
     const socket=getSocket();
-    socket.on("drone-delivery-progress",(geoJsonPosition, geojsonRoute)=>{
+    socket.on("drone-delivery-progress",({orderId, geoJsonPosition, geojsonRoute})=>{
         //[not done: not implemented]
         map.getSource(positionSource).setData({
             geoJsonPosition
@@ -111,5 +111,6 @@ export const trackDelivery=(map, positionSource, routeSource)=>{
 }
 
 export const unTrackDelivery=()=>{
+    const socket=getSocket();
     socket.removeAllListeners("drone-delivery-progress");
 }

@@ -264,7 +264,40 @@ exports.droneAcceptDeliveryJob=async (req, res, next)=>{
       deliveryDetail=deliveryDetail.toObject();
       deliveryDetail.order.items=null;
       deliveryDetail.totalItemMoney=totalItemMoney;
-      // deliveryDetail.aaa="aaa"
+
+      return res.status(200).json({
+        status:"ok",
+        data:deliveryDetail
+      });
+    }
+
+  }
+  catch(error){
+    next(error, req, res, next);
+  }
+}
+
+exports.droneFinishDeliveryJob=async (req, res, next)=>{
+  try{
+    const {droneId, orderId}=req.body;
+    if(droneOrderAssignment.get(orderId).droneId!=droneId){
+      return res.status(400).json({
+        status:"fail",
+        mess:`There is no order ${orderId} assigned to drone ${droneId}`
+      });
+    }
+    else{
+      //check if order is assigned
+      let deliveryDetail= await DeliveryDetail.findOne({
+        order:orderId
+      });
+      if(deliveryDetail.drone!=droneId){
+        return res.status(400).json({
+          status:"fail",
+          mess:`order ${orderId} isn't assigned to you`
+        });
+      }
+
       droneOrderAssignment.delete(orderId);
       return res.status(200).json({
         status:"ok",
@@ -459,6 +492,9 @@ exports.finishDeliveryJob=async (req, res, next)=>{
     await order.save();
     deliveryDetail.endTime=new Date();
     await deliveryDetail.save();
+
+    //untrack the order assignment
+    droneOrderAssignment.delete(orderId);
     
     res.status(200).json({
       status:"ok",

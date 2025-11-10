@@ -49,11 +49,11 @@ export default function TrackDelivery(props){
             };
             map.addSource("route",{
                 type:"geojson",
-                data:source
+                data:route
             });
             map.addSource("position",{
                 type:"geojson",
-                data:route
+                data:point
             });
             //add layer to render the source data
             //source get updated->rerender source

@@ -11,9 +11,7 @@ droneId->{
 exports.availableDrones=new Map();
 //the reverse of availableDrones
 /*
-socketId->{
-    droneId
-}
+socketId->droneId
 */
 exports.socketToDrone=new Map();
 

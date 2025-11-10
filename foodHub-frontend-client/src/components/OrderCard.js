@@ -77,7 +77,7 @@ const OrderCard = (props) => {
   const classes = useStyles();
   dayjs.extend(relativeTime);
   const dispatch = useDispatch();
-  const socket=getSocket();
+  // const socket=getSocket();
 
   const handleCancel = () => {
     const body = {
