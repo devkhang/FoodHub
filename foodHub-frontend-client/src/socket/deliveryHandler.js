@@ -86,3 +86,30 @@ export function JobNotification(){
         // }
     })
 }
+
+export const registerTrackDelivery=(orderId)=>{
+    const socket=getSocket();
+    socket.emit("register-track-delivery", orderId)
+}
+
+export const unRegisterTrackDelivery=(orderId)=>{
+    const socket=getSocket();
+    socket.emit("unregister-track-delivery",orderId);
+}
+
+export const trackDelivery=(map, positionSource, routeSource)=>{
+    const socket=getSocket();
+    socket.on("drone-delivery-progress",(geoJsonPosition, geojsonRoute)=>{
+        //[not done: not implemented]
+        map.getSource(positionSource).setData({
+            geoJsonPosition
+        });
+        map.getSource(routeSource).setData({
+            geojsonRoute
+        });
+    })
+}
+
+export const unTrackDelivery=()=>{
+    socket.removeAllListeners("drone-delivery-progress");
+}

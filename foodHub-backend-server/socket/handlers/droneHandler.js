@@ -67,3 +67,12 @@ exports.droneCutConnection=()=>{
 
     });    
 }
+
+exports.registerTrackDelivery=()=>{
+    const IO=getIO();
+    IO.on("connection",(socket)=>{
+        socket.on("track-delivery",(orderId)=>{
+            socket.join(orderId);
+        }) 
+    })
+}

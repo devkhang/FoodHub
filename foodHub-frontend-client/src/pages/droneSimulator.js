@@ -77,8 +77,14 @@ export default function DroneSimulator(props){
             lng:point.features[0].geometry.coordinates[0],
             lat:point.features[0].geometry.coordinates[1]
         };
+        socket.current.emit("update-delivery-progress",{
+            orderId:orderId,
+            geoJsonPosition:point,
+            geojsonRoute:route
+        });
 
         map.getSource("position").setData(point);
+
 
         await delay(100);
         await movingSimulation(counter, steps, point, map, route);

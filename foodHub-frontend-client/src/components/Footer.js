@@ -44,7 +44,7 @@ export default function Footer() {
   const { authenticated } = useSelector((state) => state.auth);
   const classes = useStyles();
   return (
-    <Grid container direction="row" className={classes.container}>
+    <Grid id="footer" container direction="row" className={classes.container}>
       <Grid item xs={12} sm={4} className={classes.innerCont}>
         {authenticated ? (
           <Grid container direction="row">

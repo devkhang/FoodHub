@@ -44,9 +44,10 @@ import cart from "./pages/cart";
 import orders from "./pages/orders";
 import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
-import DeliveryJobNotification from "./pages/DeliveryJobNotification";
+import DeliveryJobNotification from "./pages/deliveryJobNotification";
 import ReactRouterHistoryProvider from "./components/ReactRouterHistoryProvider";
 import DroneSimulator from "./pages/droneSimulator";
+import TrackDelivery from "./pages/trackDelivery";
 
 // //socket
 // import {initSocket, getSocket} from "./socket/socket"
@@ -100,6 +101,9 @@ function App() {
             </Route>
             <Route exact path="/droneSimulation">
               <DroneSimulator />
+            </Route>
+            <Route exact path="/track-delivery">
+              <TrackDelivery />
             </Route>
             <Route component={error404} />
           </Switch>

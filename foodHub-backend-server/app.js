@@ -19,6 +19,7 @@ const itemRoutes = require("./modules/menu/route/item");
 const userRoutes = require("./modules/order/route/user");
 const deliveryRoutes = require("./modules/Delivery/route/delivery");
 const droneRoute=require("./modules/accesscontrol/route/droneRoute");
+const { trackDelivery } = require("./socket/handlers/deliveryHandler");
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -113,6 +114,7 @@ mongoose
       droneUpdatePositionHandler();
       droneSocketRegistration();
       droneCutConnection();
+      trackDelivery();
 
       //Removing the socket on disconnect
       socket.on("disconnect", () => {
