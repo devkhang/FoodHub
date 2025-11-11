@@ -621,7 +621,7 @@ async function selectNextSuitablDrone(orderId){
             
             return;
           }
-          droneAssigment.orderId=(ans)?ans.id:null;
+          droneAssigment.droneId=(ans)?ans.id:null;
           droneAssigment.timeout=setTimeout(() => {
                 selectNextSuitablDrone(orderId);
               }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT)+2*parseInt(process.env.NETWORK_DELAY))*1000

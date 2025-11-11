@@ -212,10 +212,17 @@ const OrderCard = (props) => {
         }
         <br />
         {
-          (order.status==="Out For Delivery")?
-            <Button onClick={handleTrackDelivery}>Track delivery</Button>
-            :""
-      }
+          (role === "ROLE_SELLER")?(
+              (order.status=="ready" || order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")
+            ):(
+              (role === "ROLE_USER")?(
+                (order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")
+              ):("")
+            )
+          // (order.status==="Out For Delivery")?
+          //   <Button onClick={handleTrackDelivery}>Track delivery</Button>
+          //   :""
+        }
       </div>
     </Paper>
   );

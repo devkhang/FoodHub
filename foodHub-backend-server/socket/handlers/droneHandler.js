@@ -7,7 +7,7 @@ exports.droneUpdatePositionHandler=()=>{
     //[not done: not handle free, busy drone yet]
     const IO=getIO();
     IO.on("connection",(socket)=>{
-        socket.on("drone:updatePosition", ({droneId, lng, lat})=>{
+        socket.on("drone:updatePosition", ({droneId, lng, lat, status})=>{
             
             let drone=availableDrones.get(droneId);
             if(!drone){
@@ -19,6 +19,15 @@ exports.droneUpdatePositionHandler=()=>{
                 lat:lat
             };
             // console.log(availableDrones);
+            if(status=="IDLE")
+                readyDrone.set(droneId, null);
+                if(busyDrone.get(droneId))
+                    busyDrone.delete(droneId)
+            else if(status=="BUSY"){
+                busyDrone.set(droneId, null);
+                if(readyDrone.get(droneId))
+                    readyDrone.delete(droneId);
+            }
         });
 
     });

@@ -9,6 +9,7 @@ const { promisify } = require('node:util');
 const jwt=require("jsonwebtoken");
 const path=require("path");
 const axios=require("axios");
+const io = require("../../../util/socket");
 
 const dotenv=require("dotenv");
 dotenv.config(path.join(__dirname, ".env"));
@@ -500,7 +501,8 @@ exports.finishDeliveryJob=async (req, res, next)=>{
     // }
     let order=await Order.findById(orderId);
     order.status="Completed";
-    await order.save();
+    let updatedOrder=await order.save();
+    io.getIO().emit("orders", { action: "update", order: updatedOrder });   
     deliveryDetail.endTime=new Date();
     deliveryDetail.deliveryCharge=parseInt(process.env.DELIVERY_CHARGE_BASE)+travelDistance*parseInt(process.env.DELIVERY_CHARGE_RATE_PER_KM);//[not done: get actual delivery charge in backend]
     await deliveryDetail.save();

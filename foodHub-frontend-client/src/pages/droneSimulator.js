@@ -424,9 +424,10 @@ export default function DroneSimulator(props){
                 <form class="droneSelection--form" onSubmit={(e)=>{
                         e.preventDefault();
                         let formData=new FormData(e.target);
-                        currentPosition.current.lng=parseInt(formData.get("droneLongitude"));
-                        currentPosition.current.lat=parseInt(formData.get("droneLatitude"));
-                        droneSpeed.current=parseInt(formData.get("droneSpeed"));
+                        let a=formData.get("droneLongitude");
+                        currentPosition.current.lng=parseFloat(formData.get("droneLongitude"));
+                        currentPosition.current.lat=parseFloat(formData.get("droneLatitude"));
+                        droneSpeed.current=parseFloat(formData.get("droneSpeed"));
                         handleDroneSelection(formData.get("droneId"));
                     }}>
                     <label for="droneId">Drone id:</label><br/>

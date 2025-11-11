@@ -77,7 +77,7 @@ app.use("/drone", droneRoute);
 
 //error middleware
 app.use((error, req, res, next) => {
-  console.log(error + "--------------------------");
+  console.error(error.stack)
   const statusCode = error.statusCode || 500;
   const message = error.message;
   let errorsPresent;

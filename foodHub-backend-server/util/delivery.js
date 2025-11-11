@@ -30,11 +30,12 @@ exports.getClosestObjectBetweenOriginDest=(origin, objectLocations, dest, accept
         id:null,
         dist: Number.MAX_SAFE_INTEGER
     }
+    let dist;
     for(let obj of objectLocations){
         if(excludeObjectId.includes(obj.id))
             continue;
 
-        let dist=haversine(origin, obj.pos)/1000;
+        dist=haversine(origin, obj.pos)/1000;
         dist+=haversine(origin, dest)/1000;
 
         if(dist<=acceptRange)
