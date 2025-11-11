@@ -448,7 +448,8 @@ function selectNextSuitableDeliveryPartner(orderId){
               }
             }
           ),
-          10,
+          parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
+          parseInt(process.env.MAX_DISTANCE_ACCEPTED_RANGE),
           (deliveryAssignment)?deliveryAssignment.refuser:[]
         );
         if(!ans){
@@ -457,7 +458,7 @@ function selectNextSuitableDeliveryPartner(orderId){
           }
           else{
             deliveryAssignmentMap.set(orderId,{
-              count:0
+              count:1
             })
           }
           return selectNextSuitableDeliveryPartner(orderId);
@@ -470,7 +471,7 @@ function selectNextSuitableDeliveryPartner(orderId){
               timeout:setTimeout(() => {
                 selectNextSuitableDeliveryPartner(orderId);
               }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT)+2*parseInt(process.env.NETWORK_DELAY))*1000),
-              count:0,
+              count:1,
               refuser:[]
           });
         }
@@ -498,7 +499,17 @@ function selectNextSuitableDeliveryPartner(orderId){
       });
 }
 
-function selectNextSuitablDrone(orderId){
+const CancelOrderCauseNoSuitableDrone=async (orderId, )=>{
+  droneOrderAssignment.delete(orderId);
+  let updatedOrder=await Order.findById(orderId);
+  updatedOrder.status="Cancelled";
+  updatedOrder=await updatedOrder.save();
+  io.getIO().emit("orders", { action: "update", order: updatedOrder });           
+}
+
+async function selectNextSuitablDrone(orderId){
+  
+
   //find order information
   let order=Order
       .findById(orderId)
@@ -506,21 +517,42 @@ function selectNextSuitablDrone(orderId){
         path:"seller.sellerId",
         select:"address"
       })
-      .then(order=>{
+      .then(async (order)=>{
         //find suitable delivery partner
         let droneAssigment=droneOrderAssignment.get(orderId);
         if(droneAssigment && droneAssigment.count>process.env.MAX_ASSIGNMENT_ATTEMP){
+          //[not done: duplicated logic at 2 other places]
           //[not done]cancel order, cause found no suitable delivery partner
           console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
-          droneOrderAssignment.delete(orderId);
+          // droneOrderAssignment.delete(orderId);
+          // let updatedOrder=await Order.findOneAndUpdate({
+          //   orderId:orderId
+          // },{
+          //   status:"Cancelled"
+          // },{
+          //   new:true
+          // });
+          // io.getIO().emit("orders", { action: "update", order: updatedOrder });
+          CancelOrderCauseNoSuitableDrone(orderId);
+          
           return;
         }
 
         //no available drone
-        if(!availableDrones.size===0){
+        if(availableDrones.size===0){
           //[not done]cancel order, cause found no suitable delivery partner
           console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
-          droneOrderAssignment.delete(orderId);
+          // droneOrderAssignment.delete(orderId);
+          // let updatedOrder=await Order.findOneAndUpdate({
+          //   orderId:orderId
+          // },{
+          //   status:"Cancelled"
+          // },{
+          //   new:true
+          // });
+          // io.getIO().emit("orders", { action: "update", order: updatedOrder });
+          CancelOrderCauseNoSuitableDrone(orderId);
+          
           return;
         }
 
@@ -535,6 +567,7 @@ function selectNextSuitablDrone(orderId){
             }
           ),
           parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
+          parseInt(process.env.MAX_DISTANCE_ACCEPTED_RANGE),
           (droneAssigment)?droneAssigment.refuser:[]
         );
 
@@ -545,10 +578,13 @@ function selectNextSuitablDrone(orderId){
           }
           else{
             droneOrderAssignment.set(orderId,{
-              count:0
+              count:1
             })
           }
-          return selectNextSuitableDeliveryPartner(orderId);
+          //retry after a certain amount of type if no suitable drone is found
+          return setTimeout(() => {
+            selectNextSuitablDrone(orderId)
+          }, parseInt(process.env.NO_SUITABLE_DRONE_RETRY)*1000);
         }
         console.log("Suitable driver:", ans);
 
@@ -558,9 +594,9 @@ function selectNextSuitablDrone(orderId){
           droneOrderAssignment.set(orderId, {
               droneId:(ans)?ans.id:null,
               timeout:setTimeout(() => {
-                selectNextSuitableDeliveryPartner(orderId);
+                selectNextSuitablDrone(orderId);
               }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT)+2*parseInt(process.env.NETWORK_DELAY))*1000),
-              count:0,
+              count:1,
               refuser:[]
           });
         }
@@ -568,12 +604,22 @@ function selectNextSuitablDrone(orderId){
           if(droneAssigment.count>process.env.MAX_ASSIGNMENT_ATTEMP){
             //[not done]cancel order, cause found no suitable delivery partner
             console.log(`order ${orderId} will be cancelled, cause found no suitable delivery partner`);
-            droneOrderAssignment.delete(orderId);
+            // droneOrderAssignment.delete(orderId);
+            // let updatedOrder=await Order.findOneAndUpdate({
+            //   orderId:orderId
+            // },{
+            //   status:"Cancelled"
+            // },{
+            //   new:true
+            // });
+            // io.getIO().emit("orders", { action: "update", order: updatedOrder });
+            CancelOrderCauseNoSuitableDrone(orderId);
+            
             return;
           }
           droneAssigment.orderId=(ans)?ans.id:null;
           droneAssigment.timeout=setTimeout(() => {
-                selectNextSuitableDeliveryPartner(orderId);
+                selectNextSuitablDrone(orderId);
               }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT)+2*parseInt(process.env.NETWORK_DELAY))*1000
             );
           droneAssigment.count+=1;       

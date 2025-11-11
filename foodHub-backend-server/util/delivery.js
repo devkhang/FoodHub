@@ -18,7 +18,7 @@ output:
 },
 -excludeObjectId:[] //object Id to exclude
 */
-exports.getObjectNearAPlace=(origin, objectLocations, acceptRange, excludeObjectId=[])=>{
+exports.getObjectNearAPlace=(origin, objectLocations, acceptRange, maxAcceptRange,excludeObjectId=[])=>{
     // console.log("getObjectNearAPlace()");
     // console.log("input:", objectLocations);
     if(!objectLocations.length){
@@ -39,12 +39,16 @@ exports.getObjectNearAPlace=(origin, objectLocations, acceptRange, excludeObject
                 id:obj.id,
                 dist:dist
             }
-        if(dist<ans.dist){
+        
+        if(dist>maxAcceptRange){
+            continue;
+        }
+        else if(dist<ans.dist){
             ans.id=obj.id;
             ans.dist=dist;
         }
     }
-    return (ans.id)?ans:null;
+    return (ans.id!==null)?ans:null;
 }
 
 /*
