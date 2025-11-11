@@ -17,7 +17,7 @@ const DeliveryPartner = require("../../accesscontrol/models/deliveryPartner");
 //socket
 const DeliveyPartnerSocketMap=require("../../../socket/sources/DeliveryPartnerSource");
 const {getIO}=require("../../../util/socket");
-const {getObjectNearAPlace}=require("../../../util/delivery");
+const {getClosestObjectBetweenOriginDest}=require("../../../util/delivery");
 const order = require("../../order/models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
 const deliveryAssignmentMap=require("../../../socket/sources/DeliveryAssignmentMap");
@@ -438,7 +438,7 @@ function selectNextSuitableDeliveryPartner(orderId){
           return;
         }
 
-        let ans=getObjectNearAPlace({
+        let ans=getClosestObjectBetweenOriginDest({
             lng:order.seller.sellerId.address.lng,
             lat:order.seller.sellerId.address.lat
           }, Array.from(deliveryPartnerMap.entries()).map(([id, info])=>{
@@ -556,7 +556,7 @@ async function selectNextSuitablDrone(orderId){
           return;
         }
 
-        let ans=getObjectNearAPlace({
+        let ans=getClosestObjectBetweenOriginDest({
             lng:order.seller.sellerId.address.lng,
             lat:order.seller.sellerId.address.lat
           }, Array.from(readyDrone.entries()).map(([id, info])=>{
@@ -566,6 +566,10 @@ async function selectNextSuitablDrone(orderId){
               }
             }
           ),
+          {
+            lng:order.user.address.lng,
+            lat:order.user.address.lat
+          },
           parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
           parseInt(process.env.MAX_DISTANCE_ACCEPTED_RANGE),
           (droneAssigment)?droneAssigment.refuser:[]
