@@ -211,7 +211,11 @@ const OrderCard = (props) => {
         )} */
         }
         <br />
-        <Button onClick={handleTrackDelivery}>Track delivery</Button>
+        {
+          (order.status==="Out For Delivery")?
+            <Button onClick={handleTrackDelivery}>Track delivery</Button>
+            :""
+      }
       </div>
     </Paper>
   );
