@@ -25,6 +25,7 @@ const {availableDrones, readyDrone, busyDrone, droneOrderAssignment}=require("..
 //delivery
 const {selectNextSuitableDeliveryPartner, selectNextSuitablDrone}= require("../../order/controllers/userController");
 const { options } = require("mongoose");
+const Drone = require("../../accesscontrol/models/drone");
 
 
 /**
@@ -265,6 +266,15 @@ exports.droneAcceptDeliveryJob=async (req, res, next)=>{
       deliveryDetail.order.items=null;
       deliveryDetail.totalItemMoney=totalItemMoney;
 
+      let drone=await Drone.findOne({
+        droneId:droneId
+      });
+      drone.status="BUSY";
+      drone.save();
+
+      busyDrone.set(droneId,null);
+      readyDrone.delete(droneId);
+
       return res.status(200).json({
         status:"ok",
         data:deliveryDetail
@@ -277,39 +287,39 @@ exports.droneAcceptDeliveryJob=async (req, res, next)=>{
   }
 }
 
-exports.droneFinishDeliveryJob=async (req, res, next)=>{
-  try{
-    const {droneId, orderId}=req.body;
-    if(droneOrderAssignment.get(orderId).droneId!=droneId){
-      return res.status(400).json({
-        status:"fail",
-        mess:`There is no order ${orderId} assigned to drone ${droneId}`
-      });
-    }
-    else{
-      //check if order is assigned
-      let deliveryDetail= await DeliveryDetail.findOne({
-        order:orderId
-      });
-      if(deliveryDetail.drone!=droneId){
-        return res.status(400).json({
-          status:"fail",
-          mess:`order ${orderId} isn't assigned to you`
-        });
-      }
+// exports.droneFinishDeliveryJob=async (req, res, next)=>{
+//   try{
+//     const {droneId, orderId}=req.body;
+//     if(droneOrderAssignment.get(orderId).droneId!=droneId){
+//       return res.status(400).json({
+//         status:"fail",
+//         mess:`There is no order ${orderId} assigned to drone ${droneId}`
+//       });
+//     }
+//     else{
+//       //check if order is assigned
+//       let deliveryDetail= await DeliveryDetail.findOne({
+//         order:orderId
+//       });
+//       if(deliveryDetail.drone!=droneId){
+//         return res.status(400).json({
+//           status:"fail",
+//           mess:`order ${orderId} isn't assigned to you`
+//         });
+//       }
 
-      droneOrderAssignment.delete(orderId);
-      return res.status(200).json({
-        status:"ok",
-        data:deliveryDetail
-      });
-    }
+//       droneOrderAssignment.delete(orderId);
+//       return res.status(200).json({
+//         status:"ok",
+//         data:deliveryDetail
+//       });
+//     }
 
-  }
-  catch(error){
-    next(error, req, res, next);
-  }
-}
+//   }
+//   catch(error){
+//     next(error, req, res, next);
+//   }
+// }
 
 exports.refuseDeliveryJob=async (req, res, next)=>{
   try {
@@ -495,6 +505,15 @@ exports.finishDeliveryJob=async (req, res, next)=>{
 
     //untrack the order assignment
     droneOrderAssignment.delete(orderId);
+
+    let drone=await Drone.findOne({
+      droneId:droneId
+    });
+    drone.status="IDLE";
+    await drone.save();
+
+    readyDrone.set(droneId, null);
+    busyDrone.delete(droneId);
     
     res.status(200).json({
       status:"ok",

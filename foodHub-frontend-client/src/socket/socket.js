@@ -6,7 +6,7 @@ console.log("io:",io);
 
 
 export function initSocket(serverURL){
-    console.log("Connect delivery partner socket");
+    console.log("Socket to server");
     
     socket=io(serverURL,{
         pingTimeout:process.env.PING_TIMEOUT*1000

@@ -100,12 +100,34 @@ export const unRegisterTrackDelivery=(orderId)=>{
 export const trackDelivery=(map, positionSource, routeSource)=>{
     const socket=getSocket();
     socket.on("drone-delivery-progress",({orderId, geoJsonPosition, geojsonRoute})=>{
-        //[not done: not implemented]
-        map.getSource(positionSource).setData({
-            geoJsonPosition
-        });
-        map.getSource(routeSource).setData({
-            geojsonRoute
+        let test1={
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            106.01304072305896,
+                            9.99251022421053
+                        ]
+                    }
+                }
+            ]
+        }
+
+        let src1=map.getSource(positionSource);
+        src1.setData(geoJsonPosition);
+        map.getSource(routeSource).setData(geojsonRoute);
+        map.flyTo({
+            center: geoJsonPosition.features[0].geometry.coordinates,
+            zoom: 9,
+            speed: 0.2,
+            curve: 1,
+            easing(t) {
+                return t;
+            }
         });
     })
 }

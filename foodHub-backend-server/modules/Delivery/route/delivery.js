@@ -17,4 +17,5 @@ router.post("/refuseDeliveryJob", deliveryControllers.refuseDeliveryJob);
 router.post("/drone-refuse-job",deliveryControllers.droneRefuseDeliveryJob);
 router.post("/drone-accept-job", deliveryControllers.droneAcceptDeliveryJob);
 router.put("/finishDeliveryJob", deliveryControllers.finishDeliveryJob);
+
 module.exports = router; 

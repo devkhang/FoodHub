@@ -64,7 +64,7 @@ export default function DroneSimulator(props){
     //     console.log("socket", socket.current);
     // },[])
     async function movingSimulation(counter=0, steps=0, point, map, route){
-        console.log("counter, steps:", counter, steps);
+        // console.log("counter, steps:", counter, steps);
         
         if(counter==steps-1){
             console.log("destroy");
@@ -72,11 +72,14 @@ export default function DroneSimulator(props){
         }
         counter++;
         point.features[0].geometry.coordinates=route.features[0].geometry.coordinates[counter];
-        console.log("moving to", point.features[0].geometry.coordinates);
+        // console.log("moving to", point.features[0].geometry.coordinates);
         currentPosition.current={
             lng:point.features[0].geometry.coordinates[0],
             lat:point.features[0].geometry.coordinates[1]
         };
+
+        console.log("update-delivery-progress");
+        
         socket.current.emit("update-delivery-progress",{
             orderId:orderId,
             geoJsonPosition:point,
@@ -91,7 +94,7 @@ export default function DroneSimulator(props){
     }
 
     async function simulateDroneToSeller(map){
-        let directionServiceURL=`${process.env.REACT_APP_MAPBOX_DIRECTION_URL}/driving/${currentPosition.current.lng},${currentPosition.current.lat};${sellerPosition.current.lng},${currentPosition.current.lat}?geometries=geojson&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`;
+        let directionServiceURL=`${process.env.REACT_APP_MAPBOX_DIRECTION_URL}/driving/${currentPosition.current.lng},${currentPosition.current.lat};${sellerPosition.current.lng},${sellerPosition.current.lat}?geometries=geojson&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`;
         let result=await axios.get(directionServiceURL);
         let data=result.data;
         // let route=data.routes[0].geometry;
@@ -327,6 +330,7 @@ export default function DroneSimulator(props){
             console.log("on-connection: configure drone client socket");
             
             //register drone socket with server
+            console.log("drone:registerSocket");
             socket.current.emit("drone:registerSocket", droneInfo.droneId);
 
             //update current position in real time
@@ -393,8 +397,7 @@ export default function DroneSimulator(props){
                         lng: data.order.user.address.lng,
                         lat: data.order.user.address.lat
                     };
-                    customerPosition.current=userCoord;
-                    //[not done: start drone delivery]                    
+                    customerPosition.current=userCoord;              
                 }
 
 
@@ -403,6 +406,13 @@ export default function DroneSimulator(props){
         })
 
     },[droneInfo]);
+    useEffect(()=>{
+
+
+        return()=>{
+
+        }
+    },[])
 
     return (
         <div class="droneSimulator-container">

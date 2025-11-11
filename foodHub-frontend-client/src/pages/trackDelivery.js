@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useSelector } from "react-redux";
 import {registerTrackDelivery, trackDelivery, unRegisterTrackDelivery, unTrackDelivery} from "../socket/deliveryHandler"
+import "../css/trackDelivery.css"
 
 export default function TrackDelivery(props){
     const mapRef = useRef()
@@ -16,6 +17,7 @@ export default function TrackDelivery(props){
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
+            style: 'mapbox://styles/mapbox/streets-v12', // style URL
         });
 
         //initialize map to render
@@ -30,7 +32,8 @@ export default function TrackDelivery(props){
                         'properties': {},
                         'geometry': {
                             'type': 'Point',
-                            'coordinates': []
+                            // 'coordinates':[],
+                            'coordinates': [106.574, 10.7]
                         }
                     }
                 ]
@@ -95,12 +98,8 @@ export default function TrackDelivery(props){
 
 
     return (
-        <div>
-
-
+        <div class="trackdelivery-container">
             <div id='map-container' ref={mapContainerRef}/>
-
-
         </div>
     )
     

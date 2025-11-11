@@ -10,7 +10,7 @@ exports.registerTrackDelivery=()=>{
     })
 }
 
-exports.unRegisterTrackDelivery=(orderId)=>{
+exports.unRegisterTrackDelivery=()=>{
     const io=getIO();
     io.on("connection",(socket)=>{
         socket.on("unregister-track-delivery", (orderId)=>{

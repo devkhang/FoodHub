@@ -16,6 +16,7 @@ module.exports = {
     });
 
     io.on("connection", (socket)=>{
+      console.log(`socket ${socket.id} connects`)
       socket.on("disconnect", (reason)=>{
         socket.disconnect();
       });
