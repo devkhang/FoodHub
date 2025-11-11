@@ -189,9 +189,10 @@ exports.acceptDeliveryJob=async (req, res, next)=>{
         });
       }
 
+
+
       deliveryDetail=await DeliveryDetail.create({
         order:orderId,
-        deliveryCharge:0,//[not done: get actual delivery charge in backend]
         DeliveryPartnerId:decodedJWT.accountId,
       });
       await DeliveryDetail.populate(deliveryDetail, {
@@ -476,7 +477,7 @@ exports.getJobDeliveryNotificationDetail=async(req, res, next)=>{
 
 exports.finishDeliveryJob=async (req, res, next)=>{
   try{
-    let {droneId, orderId}=req.body;
+    let {droneId, orderId, travelDistance}=req.body;
     let deliveryDetail=await DeliveryDetail.findOne({
       order:orderId,
       drone:droneId
@@ -501,6 +502,7 @@ exports.finishDeliveryJob=async (req, res, next)=>{
     order.status="Completed";
     await order.save();
     deliveryDetail.endTime=new Date();
+    deliveryDetail.deliveryCharge=parseInt(process.env.DELIVERY_CHARGE_BASE)+travelDistance*parseInt(process.env.DELIVERY_CHARGE_RATE_PER_KM);//[not done: get actual delivery charge in backend]
     await deliveryDetail.save();
 
     //untrack the order assignment

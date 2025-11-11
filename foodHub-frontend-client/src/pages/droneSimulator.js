@@ -12,6 +12,7 @@ const io= require("socket.io-client");
 export default function DroneSimulator(props){
     const mapRef = useRef()
     const mapContainerRef = useRef()
+    let travelDistance=0;
 
     let [droneInfo, setDroneInfo]=useState(null);
     let droneStatus=useRef("IDLE");
@@ -108,6 +109,7 @@ export default function DroneSimulator(props){
             ]
         };
         let distance=turf.length(route.features[0]);
+        travelDistance+=distance;
         let step=droneSpeed.current;
         let distPerStep=distance/step;
         let progressPath=[];//coordinates that represent the movement from src to dest
@@ -155,6 +157,7 @@ export default function DroneSimulator(props){
             ]
         };
         let distance=turf.length(route.features[0]);
+        travelDistance+=distance;
         let step=droneSpeed.current;
         let distPerStep=distance/step;
         let progressPath=[];//coordinates that represent the movement from src to dest
@@ -195,7 +198,8 @@ export default function DroneSimulator(props){
         await movingSimulation(0, step, point, map, route);
         result=await axios.put(`${process.env.REACT_APP_SERVER_URL}/delivery/finishDeliveryJob`,{
             droneId:droneInfo.droneId,
-            orderId:orderId
+            orderId:orderId,
+            travelDistance:travelDistance
         });
         console.log("result after deliver order:", result.data.data);
         
