@@ -233,5 +233,5 @@ router.post(
 );
 
 router.post("/images-test", authController.imagesTest);
-
+router.get("/onboarding/refresh/:accountId", authController.refreshOnboarding);
 module.exports = router;

@@ -207,7 +207,7 @@ export const removeCartItem = (itemID) => (dispatch) => {
 export const fetchAddress = (userData, history) => (dispatch) => {
   console.log("fetchAddress at dataAction.js");
   console.log("goong gecode endpoint", process.env.REACT_APP_GOONG_GEOCODE);
-
+  console.log(userData);
   const location = `+${userData.aptName},+${userData.locality},+${userData.street},+${userData.zip}`;
   axiosNewInstance
     .get(process.env.REACT_APP_GOONG_GEOCODE, {
@@ -232,6 +232,35 @@ export const fetchAddress = (userData, history) => (dispatch) => {
     });
 };
 
+// dataActions.js – createCheckoutSession
+export const createCheckoutSession = (history) => (dispatch, getState) => {
+  dispatch({ type: LOADING_UI });
+
+  const { cart = [], price = 0 } = getState().data;
+  const deliveryCharge = price !== 0 ? 30000 : 0;
+  console.log("cart :",cart);
+
+  const orderData = {
+    items: cart.map(c => ({
+      itemId: c.itemId._id.toString(),   // chỉ ID (string)
+      title:  c.itemId.title,            // tiêu đề ngắn
+      price:  c.itemId.price,
+      quantity: c.quantity,
+    })),
+    total: price + deliveryCharge,
+  };
+
+  axios
+    .post("/order/create-checkout-session", orderData)
+    .then(res => {
+      dispatch({ type: CLEAR_ERRORS });
+      window.location.href = res.data.sessionUrl;   // redirect
+    })
+    .catch(err => {
+      console.error(err);
+      dispatch({ type: SET_ERRORS, payload: [{ msg: "Lỗi tạo thanh toán!" }] });
+    });
+};
 export const addAddress = (userData, history) => (dispatch) => {
   console.log(userData.formattedAddress);
   axios
@@ -240,7 +269,7 @@ export const addAddress = (userData, history) => (dispatch) => {
       // console.log(res.data);
       dispatch(getUserData());
       dispatch({ type: CLEAR_ERRORS });
-      dispatch(placeOrder(history));
+      dispatch(createCheckoutSession(history));
     })
     .catch((err) => {
       console.log(err.response);
@@ -254,6 +283,26 @@ export const addAddress = (userData, history) => (dispatch) => {
           type: SERVER_ERROR,
         });
       }
+    });
+};
+
+export const verifySessionAndPlaceOrder = (sessionId) => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .post("/api/orders/verify-session", { session_id: sessionId }) // API verify paid
+    .then((res) => {
+      if (res.data.paid) {
+        dispatch(placeOrder()); // GỌI placeOrder SAU THÀNH CÔNG – Tạo order
+        dispatch(getOrders()); // Refresh list
+      } else {
+        alert("Thanh toán chưa hoàn tất, quay về cart!");
+        window.location.href = '/cart';
+      }
+    })
+    .catch((err) => {
+      console.log(err.response);
+      alert("Lỗi verify session: " + (err.response?.data?.message || "Thử lại!"));
+      window.location.href = '/cart';
     });
 };
 

@@ -40,19 +40,18 @@ import addRestaurant from "./pages/addRestaurant";
 import delivery from "./pages/delivery"
 import restaurant from "./pages/restaurant";
 import sellerDash from "./pages/sellerDashboard";
+import CheckoutPage from "./components/Checkout";
 import cart from "./pages/cart";
 import orders from "./pages/orders";
 import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
 import OnboardingSuccess from "./pages/OnboardingSuccess";
 import OnboardingRefresh from "./pages/OnboardingRefresh";
-
 //socket
 import {initSocket, getSocket} from "./socket/socket"
 const io=initSocket(process.env.REACT_APP_SERVER_URL);
 
 const theme = createMuiTheme(themeFile);
-
 const token = localStorage.jwt;
 
 if (token) {
@@ -94,7 +93,9 @@ function App() {
             <Route path="/onboarding/refresh" component={OnboardingRefresh} />
             <UserRoute exact path="/cart" component={cart} />
             <UserRoute exact path="/orders" component={orders} />
+            <UserRoute exact path="/orders/:sessionId" component={orders} />
             <SellerRoute exact path="/seller/orders" component={orders} />
+            <UserRoute exact path="/checkout/:orderId" component={CheckoutPage} />
             <Route component={error404} />
           </Switch>
           <Footer />

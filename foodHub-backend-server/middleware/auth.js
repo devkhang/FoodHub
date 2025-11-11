@@ -4,6 +4,7 @@ const Account = require("../modules/accesscontrol/models/account");
 
 const verifyToken = (req, res) => {
   const authHeader = req.get("Authorization");
+  console.log("authHeader : ",authHeader);
   if (!authHeader) {
     const error = new Error("Not authenticated");
     error.statusCode = 401;
@@ -28,7 +29,14 @@ const verifyToken = (req, res) => {
 };
 
 exports.verifySeller = (req, res, next) => {
-  const accountId = verifyToken(req, res);
+  let accountId;
+  try {
+    // Phải bọc trong try...catch vì verifyToken ném lỗi đồng bộ
+    accountId = verifyToken(req, res);
+  } catch (err) {
+    // Nếu verifyToken lỗi, chuyển ngay cho bộ xử lý lỗi của Express
+    return next(err); 
+  }
   Account.findById(accountId)
     .then((account) => {
       if (!account) {
@@ -51,7 +59,14 @@ exports.verifySeller = (req, res, next) => {
 };
 
 exports.verifyUser = (req, res, next) => {
-  const accountId = verifyToken(req, res);
+  let accountId;
+  try {
+    // Phải bọc trong try...catch vì verifyToken ném lỗi đồng bộ
+    accountId = verifyToken(req, res);
+  } catch (err) {
+    // Nếu verifyToken lỗi, chuyển ngay cho bộ xử lý lỗi của Express
+    return next(err); 
+  }
   Account.findById(accountId)
     .then((account) => {
       if (!account) {
@@ -65,6 +80,31 @@ exports.verifyUser = (req, res, next) => {
         throw error;
       }
       req.loggedInUserId = accountId;
+      next();
+    })
+    .catch((err) => {
+      if (!err.statusCode) err.statusCode = 500;
+      next(err);
+    });
+};
+
+exports.protect = (req, res, next) => {
+  let accountId;
+  try {
+    accountId = verifyToken(req, res);
+  } catch (err) {
+    return next(err);
+  }
+  Account.findById(accountId)
+    .select('-password')
+    .then((account) => {
+      if (!account) {
+        const error = new Error("Internal server error");
+        error.statusCode = 500;
+        throw error;
+      }
+      req.loggedInUserId = accountId;
+      req.user = account;  // Thêm: Gắn full account cho controller (role, email)
       next();
     })
     .catch((err) => {

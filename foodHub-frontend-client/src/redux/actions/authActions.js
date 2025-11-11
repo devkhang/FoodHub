@@ -79,7 +79,9 @@ export const loginAction = (userData, history) => (dispatch) => {
 
       dispatch(getUserData());
       dispatch({ type: CLEAR_ERRORS });
-      history.push("/");
+      getUserData().then(() => {
+        history.push("/");  // Chờ state update mới push
+      });
       // console.log("Authenticated, check localStorage", jwt);
     })
     .catch((err) => {
@@ -123,6 +125,7 @@ export const getUserData = () => (dispatch) => {
     })
     .catch((err) => console.log(err));
 };
+
 
 export const signupSeller = (newSellerData, history) => (dispatch) => {
   const location = `+${newSellerData.get("aptName")},+${newSellerData.get(

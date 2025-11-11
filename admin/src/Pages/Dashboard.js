@@ -88,7 +88,7 @@ export default function Dashboard() {
   return (
     <>
       <Row gutter={16}>
-        <Col span={12}><Card><Statistic title="Doanh thu hôm nay" value={formatVND(stats.todayRevenue)} valueStyle={{ color: '#ff4d4f' }} /></Card></Col>
+        <Col span={12}><Card><Statistic title="số tiền giao dịch trong hôm nay" value={formatVND(stats.todayRevenue)} valueStyle={{ color: '#ff4d4f' }} /></Card></Col>
         <Col span={12}><Card><Statistic title="Tổng đơn hàng" value={stats.totalOrders} /></Card></Col>
       </Row>
 

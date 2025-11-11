@@ -47,7 +47,6 @@ const fileFilter = (req, file, cb) => {
 
 const app = express();
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
-
 app.use(bodyParser.json());
 app.use(
   "/images",

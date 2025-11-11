@@ -13,12 +13,12 @@ const Order = require("../models/order");
 const io = require("../../../util/socket");
 const app = require("../../../app");
 const DeliveryPartner = require("../../accesscontrol/models/deliveryPartner");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 //socket
 const DeliveyPartnerSocketMap = require("../../../socket/sources/DeliveryPartnerSource");
 const { getIO } = require("../../../util/socket");
 const { getObjectNearAPlace } = require("../../../util/delivery");
-const order = require("../models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
 const deliveryAssignmentMap = require("../../../socket/sources/DeliveryAssignmentMap");
 
@@ -297,6 +297,17 @@ exports.getLoggedInUser = (req, res, next) => {
       if (!err.statusCode) err.statusCode = 500;
       next(err);
     });
+};
+
+exports.verifySession = async (req, res) => {
+  try {
+    const { session_id } = req.body;
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    res.json({ paid: session.payment_status === 'paid' });
+  } catch (error) {
+    console.error('Lỗi verify:', error);
+    res.status(500).json({ message: 'Lỗi verify session' });
+  }
 };
 
 exports.postOrder = (req, res, next) => {
@@ -615,5 +626,48 @@ exports.getAllOrders = async (req, res, next) => {
   } catch (err) {
     console.error("Lỗi lấy đơn hàng:", err);
     res.status(500).json({ success: false, message: "Lỗi server" });
+  }
+};
+
+
+exports.createCheckoutSession = async (req, res) => {
+  try {
+    const { items, total } = req.body;
+    const userId = req.loggedInUserId;
+
+    console.log("total :",total)
+    // Không cần tìm order → BỎ findOne
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "Giỏ hàng trống!" });
+    }
+
+    const lineItems = items.map(it => {
+      if (!it.itemId) throw new Error("Thiếu itemId");
+      return {
+        price_data: {
+          currency: "vnd",
+          product_data: {
+            name: it.title,
+            metadata: { itemId: it.itemId }, // ← string ID
+          },
+          unit_amount: Math.round(it.price),
+        },
+        quantity: it.quantity,
+      };
+    });
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
+      success_url: `${req.headers.origin}/orders?{CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/cart`,
+      metadata: { userId: userId.toString() },
+    });
+
+    res.json({ sessionUrl: session.url });
+  } catch (e) {
+    console.error("Lỗi tạo session:", e.message);
+    res.status(500).json({ message: e.message });
   }
 };

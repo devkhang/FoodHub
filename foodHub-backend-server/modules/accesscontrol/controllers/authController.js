@@ -106,6 +106,43 @@ exports.signupUser = (req, res, next) => {
 // const DeliveryPartner = require('../models/deliveryPartner'); // Giả định
 // const Account = require('../models/account'); // Giả định
 
+exports.protect = async (req, res, next) => {
+  let token;
+
+  // Lấy token từ header Authorization (Bearer token)
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    try {
+      token = req.headers.authorization.split(' ')[1];  // Lấy phần sau 'Bearer '
+    } catch (error) {
+      return res.status(401).json({ message: 'Token không hợp lệ!' });
+    }
+  }
+
+  if (!token) {
+    return res.status(401).json({ message: 'Không có token, vui lòng đăng nhập lại!' });
+  }
+
+  try {
+    // Verify token (dùng secret từ .env, như login)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    // Tìm Account theo id từ token (như login loadedUser)
+    const account = await Account.findById(decoded.accountId).select('-password');  // Bỏ password an toàn
+
+    if (!account) {
+      return res.status(401).json({ message: 'Account không tồn tại!' });
+    }
+
+    // Gắn info account vào req (dùng ở controller: req.user.role, req.user._id)
+    req.user = account;
+
+    next();  // Cho qua vào controller
+  } catch (error) {
+    console.error('Protect lỗi:', error);
+    return res.status(401).json({ message: 'Token hết hạn hoặc không hợp lệ!' });
+  }
+};
+
 exports.signUpDeliveryPartner = (req, res, next) => {
   // 1. XỬ LÝ LỖI XÁC THỰC (VALIDATION)
   const errors = validationResult(req);
@@ -322,6 +359,20 @@ exports.signupSeller = async (req, res, next) => {
   }
 };
 
+exports.refreshOnboarding = async (req, res) => {
+  const stripeAccountId = req.params.accountId;
+  if (!stripeAccountId) return res.status(400).json({ error: "Missing accountId" });
+
+  const accountLink = await stripe.accountLinks.create({
+    account: stripeAccountId,
+    return_url: `http://localhost:3000/onboarding/success?accountId=${stripeAccountId}`,
+    refresh_url: `http://localhost:3000/onboarding/refresh?accountId=${stripeAccountId}`,
+    type: 'account_onboarding'
+  });
+
+  res.json({ url: accountLink.url }); // ← Trả JSON cho frontend
+};
+
 exports.createStripeAccount = async (req, res, next) => {
   const { email, name } = req.body;
   try {
@@ -337,10 +388,10 @@ exports.createStripeAccount = async (req, res, next) => {
     });
     // BƯỚC 2: TẠO LINK ONBOARDING
     const accountLink = await stripe.accountLinks.create({
-      account: account.id,
-      return_url: `${process.env.FRONTEND_URL}/onboarding/success?accountId=${account.id}`,
-      refresh_url: `${process.env.FRONTEND_URL}/onboarding/refresh`,
-      type: 'account_onboarding'
+        account: account.id,
+        return_url: `http://localhost:3000/onboarding/success?accountId=${account.id}`,
+        refresh_url: `http://localhost:3000/onboarding/refresh?accountId=${account.id}`,
+        type: 'account_onboarding'
     });
     // BƯỚC 3: GẮN VÀO req ĐỂ DÙNG TIẾP
     req.stripeAccountId = account.id;      // acct_…

@@ -51,11 +51,26 @@ router.post("/order-status/:orderId", userController.postOrderStatus);
 
 router.get("/clients/connected", userController.getConnectedClients);
 
+router.post(
+  '/order/create-checkout-session',
+  auth.verifyUser,
+  [
+    body('orderId', 'Order ID không hợp lệ').trim().not().isEmpty().isMongoId(),
+  ],
+  userController.createCheckoutSession
+);
+
 router.get("/orders", userController.getOrders);
 router.get(
   "/restaurants-location/:lat/:lng",
   userController.getRestaurantsByAddress
 );
 router.get("/order/getAllOrders", userController.getAllOrders);
+router.post(
+  '/verify-session',
+  auth.verifyUser,
+  body('session_id', 'Session ID không hợp lệ').trim().not().isEmpty(),
+  userController.verifySession
+);
 
 module.exports = router;

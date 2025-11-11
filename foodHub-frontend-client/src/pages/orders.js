@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import openSocket from "socket.io-client";
 
-import { getOrders, socketStatusUpdate } from "../redux/actions/dataActions";
+import { getOrders, socketStatusUpdate, verifySessionAndPlaceOrder} from "../redux/actions/dataActions";
 import OrderCard from "../components/OrderCard";
 
 //material-ui
@@ -25,12 +25,24 @@ const useStyles = makeStyles((theme) => ({
 
 const Orders = (props) => {
   const dispatch = useDispatch();
-  const { orders } = useSelector((state) => state.data);
+  const { orders, loading } = useSelector((state) => state.data);
   const {
     account: { role },
     _id,
   } = useSelector((state) => state.auth);
   const classes = useStyles();
+  
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id'); // Lấy từ URL ?session_id=xxx
+    if (sessionId) {
+      dispatch(verifySessionAndPlaceOrder(sessionId)); // ← GỌI Ở ĐÂY: Verify + placeOrder nếu paid
+      // Clear URL để sạch (không hiện param nữa)
+      window.history.replaceState({}, document.title, '/orders');
+    } else {
+      dispatch(getOrders()); // Bình thường, nếu không có session_id
+    }
+  }, [dispatch]); // Dependency: dispatch (eslint ok)
 
   useEffect(() => {
     dispatch(getOrders());
