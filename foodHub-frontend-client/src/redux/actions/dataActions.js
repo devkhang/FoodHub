@@ -63,10 +63,10 @@ export const fetchRestaurantsByAddress = (lat, lng) => (dispatch) => {
     });
 };
 
-export const fetchRestaurantsByAddressPagination = (lat, lng, page, limit, first=false, last=false) => (dispatch) => {
+export const fetchRestaurantsByAddressPagination = (lat, lng, page, limit, first=false, last=false, urlQuery) => (dispatch) => {
   //[not done: refactor this code, is this really need ot be redux action]
   dispatch({ type: LOADING_DATA });
-  let url=`/restaurants-location/${lat}/${lng}?page=${page}&limit=${limit}&first=${first?first:""}&last=${last?last:""}`;
+  let url=`/restaurants-location/${lat}/${lng}?page=${page}&limit=${limit}&first=${first?first:""}&last=${last?last:""}&`+urlQuery;
   axios
     .get(url)
     .then((res) => {
@@ -84,12 +84,19 @@ export const fetchRestaurantsByAddressPagination = (lat, lng, page, limit, first
       });
     })
     .catch((err) => {
-      // console.log(err);
-      // dispatch({
-      //   type: SET_RESTAURANTS,
-      //   payload: ,
-      // });
-      dispatch({type:STOP_LOADING_DATA})
+      let errorMess;
+      if(err.response){
+        errorMess=err.response.data.message;
+      }
+      if(errorMess==="PAGE_DONT_EXIST"){
+        dispatch({type:STOP_LOADING_DATA})
+      }
+      else{
+        dispatch({
+          type: SET_RESTAURANTS,
+          payload: [],
+        });
+      }
     });
 };
 

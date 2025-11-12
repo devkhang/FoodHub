@@ -714,11 +714,18 @@ exports.getRestaurantsByAddress = (req, res, next) => {
   let isFirst=req.query.first;
   let isLast=req.query.last;
   let page=req.query.page*1 || 1;//(1)
-  let limit=req.query.limit*1 || process.env.MAX_ITEM_PER_PAGE*1;//(2)
+  let limit=req.query.limit*1 || parseInt(process.env.MAX_ITEM_PER_PAGE);//(2)
   let skip=(page-1)*limit;
   let totalPage;
+  let storeName=req.query.storeName;
+  let queryObj={};
+  if(storeName){
+    queryObj.name={
+      $regex:storeName
+    }
+  }
 
-  Seller.find()
+  Seller.find(queryObj)
     .populate("account", "isVerified")
     .sort({ createdAt: -1 })
     .then((sellers) => {
@@ -728,6 +735,10 @@ exports.getRestaurantsByAddress = (req, res, next) => {
 
         return restaurant.account.isVerified === true;
       });
+
+      if(sellersVerified.length==0){
+        throw new Error("NO_SUITABLE_SELLER");
+      }
 
       const sellersFinal = sellersVerified.reduce((result, seller) => {
         const lat2 = seller.address.lat;
@@ -751,6 +762,7 @@ exports.getRestaurantsByAddress = (req, res, next) => {
       }, []);
 
       totalPage=sellersFinal.length/(process.env.MAX_ITEM_PER_PAGE*1);
+      totalPage=Math.ceil(totalPage);
 
       if(isFirst){
         skip=0;
@@ -765,7 +777,7 @@ exports.getRestaurantsByAddress = (req, res, next) => {
           //   status:"fail",
           //   message:"this page doesn't exist"
           // });
-          throw new Error("this page doesn't exist");
+          throw new Error("PAGE_DONT_EXIST");
       }
       let sellersFinalForPage=[]
       //[not done: this code is inefficient]

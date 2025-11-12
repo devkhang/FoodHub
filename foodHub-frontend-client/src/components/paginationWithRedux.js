@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {fetchRestaurantsByAddressPagination} from "../redux/actions/dataActions";
+import { useEffect } from "react";
 
 /*
 the expected structure of props such that this pagination
@@ -27,17 +28,20 @@ const PaginationWithRedux =(props)=>{
         console.log(`type:${type}`);
 
         if(props.for==="store"){
+            let urlQuery='';
+            if(props.storeName)
+                urlQuery+=`storeName=${props.storeName}`;
             if(type==="first")
-                dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, null, null, true, null));
+                dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, null, null, true, null, urlQuery));
             else if(type==="prev"){
                 if(currentPage>1)
-                    dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, currentPage-1, null, null, null));
+                    dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, currentPage-1, null, null, null, urlQuery));
             }
             else if(type==="next"){
-                dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, currentPage+1, null, null, null));
+                dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, currentPage+1, null, null, null, urlQuery));
             }
             else if(type==="last"){
-                dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, null, null, null, true));
+                dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, null, null, null, true, urlQuery));
             }
         }
 
@@ -52,6 +56,8 @@ const PaginationWithRedux =(props)=>{
         // }
         
     }
+
+
     return (
         <div class="pagination">
             <button onClick={()=>handlePageClick("first")} class="pagination__firstBtn">&lt;&lt;First</button>
