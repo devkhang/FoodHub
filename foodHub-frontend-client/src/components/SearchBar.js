@@ -68,7 +68,14 @@ export default function SearchBar(props) {
   const [suggestions, setSuggestions] = useState([]); // State cho gợi ý địa chỉ
   const [loading, setLoading] = useState(false); // State cho trạng thái tải
 
+  /*
+  get the current position via GeoLocation API,
+  set the current position,
+  get the formatted address of the current position,
+  get nearby restaurant
+  */
   const getBrowserLocation = () => {
+    console.log(12);
     navigator.geolocation.getCurrentPosition(
       function (position) {
         getUserAddressBy(position.coords.latitude, position.coords.longitude);
@@ -79,6 +86,13 @@ export default function SearchBar(props) {
     );
   };
 
+  /*
+  receive the selected suggestion,
+  set suggestion as the current location
+  get (lng, lat) from the suggestion
+  set the current (lng,lat) as the lng,lat) of the suggestion
+  get restaurant closed to the current (lng, lat)
+  */
   const handleSelect = async (value) => {
     if (value === "") localStorage.removeItem("location");
     else localStorage.setItem("location", value);
@@ -105,7 +119,7 @@ export default function SearchBar(props) {
     };
     axios
       .get(
-        `${process.env.REACT_AP_GOONG_GEOCODE}?latlng=${lat},${long}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+        `${process.env.REACT_APP_GOONG_GEOCODE}?latlng=${lat},${long}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
       )
       .then((result) => {
         console.log(result.data);
@@ -172,66 +186,75 @@ export default function SearchBar(props) {
     fetchSuggestions(newValue); // Lấy gợi ý dựa trên giá trị mới
   };
 
+  // const handleGetSuggestionFromCurrentPosition=()=>{}
+
   return (
-    <Paper
-      component="form"
-      className={page !== "items" ? classes.rootHome : classes.rootItems}
-    >
-      {page === "home" && <LocationOn className={classes.iconButton} />}
-      {page === "items" && (
-        <InputBase
-          className={classes.input}
-          placeholder="Search Items"
-          onChange={handleSearch}
-          inputProps={{ "aria-label": "search for items" }}
-        />
-      )}
-      {page === "home" && (
-        <>
+    <>
+      <Paper
+        component="form"
+        className={page !== "items" ? classes.rootHome : classes.rootItems}
+      >
+        {page === "home" && <LocationOn className={classes.iconButton} />}
+        {page === "items" && (
           <InputBase
-            value={address}
-            onChange={handleInputChange}
-            placeholder="Enter delivery address"
             className={classes.input}
-            inputProps={{
-              "aria-label": "search goong maps for delivery address",
-            }}
+            placeholder="Search Items"
+            onChange={handleSearch}
+            inputProps={{ "aria-label": "search for items" }}
           />
-          {loading && <div>Loading...</div>}
-          {suggestions.length > 0 && (
-            <div className={classes.results}>
-              {suggestions.map((suggestion, index) => {
-                const style = suggestion.active
-                  ? { backgroundColor: "#41b6e6", cursor: "pointer" }
-                  : { backgroundColor: "#fff", cursor: "pointer" };
-                return (
-                  <div
-                    key={index}
-                    onClick={() => handleSelect(suggestion.description)}
-                    style={style}
-                  >
-                    {suggestion.description}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </>
-      )}
-      <SearchIcon className={classes.iconButton} />
-      {page === "home" && (
-        <>
-          <Divider className={classes.divider} orientation="vertical" />
-          <IconButton
-            color="primary"
-            className={classes.iconButton}
-            aria-label="directions"
-            onClick={getBrowserLocation}
-          >
-            <MyLocation />
-          </IconButton>
-        </>
-      )}
-    </Paper>
+        )}
+        {page === "home" && (
+          <>
+            <InputBase
+              value={address}
+              onChange={handleInputChange}
+              placeholder="Enter delivery address"
+              className={classes.input}
+              inputProps={{
+                "aria-label": "search goong maps for delivery address",
+              }}
+            />
+            {loading && <div>Loading...</div>}
+            {suggestions.length > 0 && (
+              <div className={classes.results}>
+                {suggestions.map((suggestion, index) => {
+                  const style = suggestion.active
+                    ? { backgroundColor: "#41b6e6", cursor: "pointer" }
+                    : { backgroundColor: "#fff", cursor: "pointer" };
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => handleSelect(suggestion.description)}
+                      style={style}
+                    >
+                      {suggestion.description}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            
+          </>
+          
+        )}
+        <SearchIcon className={classes.iconButton} />
+        {page === "home" && (
+          <>
+            <Divider className={classes.divider} orientation="vertical" />
+            <IconButton
+              color="primary"
+              className={classes.iconButton}
+              aria-label="directions"
+              onClick={getBrowserLocation}
+            >
+              <MyLocation />
+            </IconButton>
+          </>
+        )}
+      </Paper>
+      {/* {page==="home" && (
+        <button class="current-position-suggestion-btn" onClick={()=>{}}>Current position</button>
+      )} */}
+    </>
   );
 }

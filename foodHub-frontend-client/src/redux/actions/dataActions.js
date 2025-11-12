@@ -40,6 +40,8 @@ export const fetchRestaurants = () => (dispatch) => {
     });
 };
 
+//get restaurant close to (lat, lng)
+//then update the redux restaurants state
 export const fetchRestaurantsByAddress = (lat, lng) => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
