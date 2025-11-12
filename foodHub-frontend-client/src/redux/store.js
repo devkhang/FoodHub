@@ -7,7 +7,7 @@ import dataReducer from "./reducers/dataReducer";
 import uiReducer from "./reducers/uiReducer";
 import deliveryDataReducer from "./reducers/deliveryReducer";
 import trackDeliveryReducer from "./reducers/trackDeliveryReducer";
-
+import paginationReducer from "./reducers/paginationReducer";
 
 const initialState = {};
 
@@ -18,7 +18,8 @@ const reducers = combineReducers({
   data: dataReducer,
   UI: uiReducer,
   deliveryData:deliveryDataReducer,
-  trackDelivery: trackDeliveryReducer
+  trackDelivery: trackDeliveryReducer,
+  pagination: paginationReducer
 });
 
 const composeEnhancers =

@@ -16,10 +16,12 @@ import {
   SET_ERRORS,
   SET_ORDERS,
   EDIT_STATUS,
+  STOP_LOADING_DATA
 } from "../types";
 import axios from "../../util/axios";
 import axiosNewInstance from "axios";
 import { getUserData } from "./authActions";
+import { updatePage } from "./paginationActions";
 
 export const fetchRestaurants = () => (dispatch) => {
   dispatch({ type: LOADING_DATA });
@@ -58,6 +60,36 @@ export const fetchRestaurantsByAddress = (lat, lng) => (dispatch) => {
         type: SET_RESTAURANTS,
         payload: [],
       });
+    });
+};
+
+export const fetchRestaurantsByAddressPagination = (lat, lng, page, limit, first=false, last=false) => (dispatch) => {
+  //[not done: refactor this code, is this really need ot be redux action]
+  dispatch({ type: LOADING_DATA });
+  let url=`/restaurants-location/${lat}/${lng}?page=${page}&limit=${limit}&first=${first?first:""}&last=${last?last:""}`;
+  axios
+    .get(url)
+    .then((res) => {
+      if(res.data.data && res.data.data.status==="fail")
+        return;
+      if(first)
+        dispatch(updatePage(1))
+      else if(last)
+        dispatch(updatePage(res.data.totalPage))
+      else
+        dispatch(updatePage(page));
+      dispatch({
+        type: SET_RESTAURANTS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      // console.log(err);
+      // dispatch({
+      //   type: SET_RESTAURANTS,
+      //   payload: ,
+      // });
+      dispatch({type:STOP_LOADING_DATA})
     });
 };
 

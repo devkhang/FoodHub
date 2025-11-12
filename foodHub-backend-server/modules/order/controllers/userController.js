@@ -14,6 +14,8 @@ const io = require("../../../util/socket");
 const app = require("../../../app");
 const DeliveryPartner = require("../../accesscontrol/models/deliveryPartner");
 
+const APIQueryFeatures=require("../../../util/APIQueryFeatures");
+
 //socket
 const DeliveyPartnerSocketMap=require("../../../socket/sources/DeliveryPartnerSource");
 const {getIO}=require("../../../util/socket");
@@ -648,6 +650,8 @@ exports.postOrderStatus = (req, res, next) => {
     error.statusCode = 401;
     throw error;
   }
+  //[not done: postOrderStatus ko co quyen cap nhat status thanh complete]
+
 
   const token = authHeader.split(" ")[1];
   let decodedToken;
@@ -707,13 +711,20 @@ exports.getRestaurantsByAddress = (req, res, next) => {
   const lat1 = req.params.lat;
   const lon1 = req.params.lng;
 
+  let isFirst=req.query.first;
+  let isLast=req.query.last;
+  let page=req.query.page*1 || 1;//(1)
+  let limit=req.query.limit*1 || process.env.MAX_ITEM_PER_PAGE*1;//(2)
+  let skip=(page-1)*limit;
+  let totalPage;
+
   Seller.find()
     .populate("account", "isVerified")
     .sort({ createdAt: -1 })
     .then((sellers) => {
       const sellersVerified = sellers.filter((restaurant) => {
-        if (restaurant.account) console.error("yes");
-        else console.error("no");
+        // if (restaurant.account) console.error("yes");
+        // else console.error("no");
 
         return restaurant.account.isVerified === true;
       });
@@ -734,17 +745,54 @@ exports.getRestaurantsByAddress = (req, res, next) => {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         const d = R * c; // in km
-        if (d < 10) result.push(seller);
+        if (d < process.env.MAX_RESTAURANT_ACCEPT_RANGE*1) result.push(seller);
 
         return result;
       }, []);
 
-      return sellersFinal;
+      totalPage=sellersFinal.length/(process.env.MAX_ITEM_PER_PAGE*1);
+
+      if(isFirst){
+        skip=0;
+      }
+      else if(isLast){
+        skip=sellersFinal.length-limit;
+        skip=(skip>0)?skip:0;
+      }
+
+      if(skip>= sellersFinal.length){
+          // return res.status(400).json({
+          //   status:"fail",
+          //   message:"this page doesn't exist"
+          // });
+          throw new Error("this page doesn't exist");
+      }
+      let sellersFinalForPage=[]
+      //[not done: this code is inefficient]
+      // hints: use index for faster seller retrieval
+      for(let seller of sellersFinal){
+        if(skip){
+          --skip;
+        }
+        else{
+          if(limit){  
+            sellersFinalForPage.push(seller);
+            --limit;
+          }
+          else{
+            break;
+          }
+        }
+      }
+      
+      return sellersFinalForPage;
     })
     .then((results) => {
-      res.status(200).json({
+
+      return res.status(200).json({
         restaurants: results,
         totalItems: results.length,
+        totalPage:totalPage
       });
     })
     .catch((err) => {

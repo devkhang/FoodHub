@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 
 import RestaurantCard from "./RestaurantCard";
+import PaginationWithRedux from "./paginationWithRedux";
 
 const RestaurantContent = () => {
   const { restaurants } = useSelector((state) => state.data);
@@ -43,6 +44,9 @@ const RestaurantContent = () => {
           <p>Server Error, come back Later.</p>
         )}
       </Grid>
+      {(restaurantArray && restaurantArray.length>0)?(
+        <PaginationWithRedux for="store"/>
+      ):("")}
     </>
   );
 };
