@@ -23,6 +23,7 @@ import {registerDeliveryPartnerSocket,
 
 
 import {initSocket, getSocket} from "../../socket/socket";
+import { registerTrackDelivery, trackDelivery, unRegisterTrackDelivery } from "../../socket/deliveryHandler";
 
 export const signupUser = (newUserData, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
@@ -62,19 +63,31 @@ export const loginAction = (userData, history) => (dispatch) => {
       .get("/user")
       .then((res) => {
         console.log("user", res.data.result);
+        const socket=initSocket(process.env.REACT_APP_SERVER_URL);
         if(res.data.result.account.role == 'ROLE_DELIVERY'){
 
           //configure socket for delivery partner
-          console.log("loginAction()");
+          console.log("ROLE_DELIVERY loginAction()");
           
-          const socket=initSocket(process.env.REACT_APP_SERVER_URL);
+          // const socket=initSocket(process.env.REACT_APP_SERVER_URL);
           socket.on("connect", ()=>{
             console.log("configure socket for delivery partner");
             registerDeliveryPartnerSocket();
             updateDeliveryPartnerLocation();
             JobNotification();
           });
-        } 
+        }
+        else if(res.data.result.account.role == 'ROLE_SELLER' || res.data.result.account.role == 'ROLE_USER'){
+          // const socket=initSocket(process.env.REACT_APP_SERVER_URL);
+          console.log("ROLE_SELLER or ROLE_USER loginAction()");
+          socket.on("connect", ()=>{
+            console.log("configure socket for seller or user");
+            // registerTrackDelivery();
+            // unRegisterTrackDelivery();
+            // trackDelivery();
+          });
+
+        }
       })
 
       dispatch(getUserData());

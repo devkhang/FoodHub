@@ -6,29 +6,33 @@ const initialState=
     sellerAddress:{
         formattedAddress:null,
         pos:{
-            lng:null,
-            lat:null
+            lat:null,
+            lng:null
         }
     },
-    userAddress:{
+    customerAddress:{
         formattedAddress:null,
         pos:{
-            lng:null,
-            lat:null
+            lat:null,
+            lng:null
         }
     }
 }
 
 
-export default function deliveryDataReducer(state={
-
-}, action){
+export default function deliveryDataReducer(state=initialState, action){
+    console.log("deliveryDataReducer() + action.type", action.type);
+    
     switch(action.type){
         case "setDeliveryJobNotification":
+            console.log("choose setDeliveryJobNotification+action.payload", action.payload);
             return {
+                ...state,
                 ...(action.payload)
             };
             break;
+        case "removeDeliveryJobNotification":
+            return initialState
         default:
             return state;
     }

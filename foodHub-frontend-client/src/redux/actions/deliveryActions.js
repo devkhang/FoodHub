@@ -1,7 +1,7 @@
 /*
 input:
 -deliveryJobDetail:{
-    delivery charge:,
+    deliveryCharge:,
     totalItemMoney:,
     sellerAddress:{
         formattedAddress:,
@@ -9,21 +9,29 @@ input:
             lng:,
             lat
         }
-    }
-    userAddress:{
+    },
+    customerAddress:{
         formattedAddress:,
         pos:{
             lng:,
             lat
         }
-    }
+    },
+    orderId:
 }
 */
 export function setDeliveryJobNotification(deliveryJobDetail){
+    console.log("setDeliveryJobNotification()");
+    
     return{
         type:"setDeliveryJobNotification",
         payload:{
-            deliveryJobDetail
+            ...deliveryJobDetail
         }
+    }
+}
+export function removeDeliveryJobNotification(){
+    return{
+        type:"removeDeliveryJobNotification"
     }
 }

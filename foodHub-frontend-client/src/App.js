@@ -46,10 +46,14 @@ import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
 import OnboardingSuccess from "./pages/OnboardingSuccess";
 import OnboardingRefresh from "./pages/OnboardingRefresh";
+import DeliveryJobNotification from "./pages/deliveryJobNotification";
+import ReactRouterHistoryProvider from "./components/ReactRouterHistoryProvider";
+import DroneSimulator from "./pages/droneSimulator";
+import TrackDelivery from "./pages/trackDelivery";
 
-//socket
-import {initSocket, getSocket} from "./socket/socket"
-const io=initSocket(process.env.REACT_APP_SERVER_URL);
+// //socket
+// import {initSocket, getSocket} from "./socket/socket"
+// const io=initSocket(process.env.REACT_APP_SERVER_URL);
 
 const theme = createMuiTheme(themeFile);
 
@@ -74,6 +78,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <Router>
+          <ReactRouterHistoryProvider />
           <AppBar />
           <ScrollToTop />
           <Switch>
@@ -95,6 +100,15 @@ function App() {
             <UserRoute exact path="/cart" component={cart} />
             <UserRoute exact path="/orders" component={orders} />
             <SellerRoute exact path="/seller/orders" component={orders} />
+            <Route exact path="/deliveryJobNotification">
+              <DeliveryJobNotification />
+            </Route>
+            <Route exact path="/droneSimulation">
+              <DroneSimulator />
+            </Route>
+            <Route exact path="/track-delivery">
+              <TrackDelivery />
+            </Route>
             <Route component={error404} />
           </Switch>
           <Footer />

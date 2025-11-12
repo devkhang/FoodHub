@@ -13,6 +13,11 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import SummaryExpansion from "./FilterExpansion";
 import { changeOrderStatus } from "../redux/actions/dataActions";
+import {setDeliveryTrack} from "../redux/actions/trackDeliveryAction"
+import { historyReactRouterObj } from "./ReactRouterHistoryProvider";
+
+import { getSocket } from "../socket/socket";
+import {registerTrackDelivery} from "../socket/deliveryHandler";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -72,6 +77,7 @@ const OrderCard = (props) => {
   const classes = useStyles();
   dayjs.extend(relativeTime);
   const dispatch = useDispatch();
+  // const socket=getSocket();
 
   const handleCancel = () => {
     const body = {
@@ -107,6 +113,12 @@ const OrderCard = (props) => {
     };
     dispatch(changeOrderStatus(order._id, body));
   };
+  const handleTrackDelivery=()=>{
+    //here here here: not done
+    dispatch(setDeliveryTrack(order._id));
+    historyReactRouterObj.push("/track-delivery");
+    // socket.emit("track-delivery", order.orderId);
+  }
 
   return (
     <Paper
@@ -199,6 +211,18 @@ const OrderCard = (props) => {
         )} */
         }
         <br />
+        {
+          (role === "ROLE_SELLER")?(
+              (order.status=="ready" || order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")
+            ):(
+              (role === "ROLE_USER")?(
+                (order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")
+              ):("")
+            )
+          // (order.status==="Out For Delivery")?
+          //   <Button onClick={handleTrackDelivery}>Track delivery</Button>
+          //   :""
+        }
       </div>
     </Paper>
   );

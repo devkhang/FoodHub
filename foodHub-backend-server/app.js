@@ -10,10 +10,8 @@ dotenv.config(path.join(__dirname, ".env"));
 //Socket
 const { init, getIO } = require("./util/socket");
 let io;
-const {
-  registerDeliveryPartner,
-  trackDeliveryPartnerLocation,
-} = require("./socket/handlers/deliveryPartnerHandler");
+const {registerDeliveryPartner, trackDeliveryPartnerLocation}=require("./socket/handlers/deliveryPartnerHandler");
+const {droneUpdatePositionHandler, droneSocketRegistration, droneCutConnection}=require("./socket/handlers/droneHandler")
 
 //Route
 const authRoutes = require("./modules/accesscontrol/route/auth");
@@ -22,6 +20,8 @@ const userRoutes = require("./modules/order/route/user");
 const deliveryRoutes = require("./modules/Delivery/route/delivery");
 const authController = require("./modules/accesscontrol/controllers/authController");
 const stripeRoutes = require("./modules/Payment/route/stripe");
+const droneRoute=require("./modules/accesscontrol/route/droneRoute");
+const { trackDelivery, registerTrackDelivery, unRegisterTrackDelivery } = require("./socket/handlers/deliveryHandler");
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -74,6 +74,7 @@ app.use("/delivery", deliveryRoutes);
 // app.use("/auth", authRoutes);
 app.use("/seller", upload.single("image"), itemRoutes);
 app.use(userRoutes);
+app.use("/drone", droneRoute);
 
 //error middleware
 app.use((error, req, res, next) => {
@@ -109,9 +110,6 @@ mongoose
         };
       });
 
-      registerDeliveryPartner();
-      trackDeliveryPartnerLocation();
-
       //Removing the socket on disconnect
       socket.on("disconnect", () => {
         for (const userId in clients) {
@@ -122,6 +120,18 @@ mongoose
         }
       });
     });
+
+    // registerDeliveryPartner();
+    // trackDeliveryPartnerLocation();
+    droneUpdatePositionHandler();
+    droneSocketRegistration();
+    droneCutConnection();
+
+    //drone delivery
+    registerTrackDelivery();
+    unRegisterTrackDelivery();
+    trackDelivery();
+
   })
   .catch((err) => console.log(err));
 
