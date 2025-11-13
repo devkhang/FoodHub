@@ -29,7 +29,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./util/scrollToTop";
 
 //restrict routes
-import { AuthRoute, SellerRoute, UserRoute,DeliveryRoute } from "./util/route";
+import { AuthRoute, SellerRoute, UserRoute, DeliveryRoute } from "./util/route";
 
 //pages
 import home from "./pages/home";
@@ -37,7 +37,7 @@ import error404 from "./pages/404";
 import signup from "./pages/sign-up";
 import login from "./pages/login";
 import addRestaurant from "./pages/addRestaurant";
-import delivery from "./pages/delivery"
+import delivery from "./pages/delivery";
 import restaurant from "./pages/restaurant";
 import sellerDash from "./pages/sellerDashboard";
 import cart from "./pages/cart";
@@ -46,10 +46,20 @@ import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
 import OnboardingSuccess from "./pages/OnboardingSuccess";
 import OnboardingRefresh from "./pages/OnboardingRefresh";
-import { useLayoutEffect } from "react"
+import { useLayoutEffect } from "react";
 //socket
-import {initSocket, getSocket} from "./socket/socket"
-const io=initSocket(process.env.REACT_APP_SERVER_URL);
+import { initSocket, getSocket } from "./socket/socket";
+// const io = initSocket(process.env.REACT_APP_SERVER_URL);
+import DeliveryJobNotification from "./pages/deliveryJobNotification";
+import ReactRouterHistoryProvider from "./components/ReactRouterHistoryProvider";
+import DroneSimulator from "./pages/droneSimulator";
+import TrackDelivery from "./pages/trackDelivery";
+
+const io = initSocket(process.env.REACT_APP_SERVER_URL);
+
+// //socket
+// import {initSocket, getSocket} from "./socket/socket"
+// const io=initSocket(process.env.REACT_APP_SERVER_URL);
 
 const theme = createMuiTheme(themeFile);
 const token = localStorage.jwt;
@@ -93,6 +103,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
         <Router>
+          <ReactRouterHistoryProvider />
           <AppBar />
           <ScrollToTop />
           <Switch>
@@ -101,7 +112,11 @@ function App() {
             <AuthRoute exact path="/register" component={signup} />
             <AuthRoute exact path="/delivery" component={delivery} />
             <DeliveryRoute exact path="/delivery/profile" component={profile} />
-            <DeliveryRoute exact path="/delivery/OrderDetail" component={Invoice} />
+            <DeliveryRoute
+              exact
+              path="/delivery/OrderDetail"
+              component={Invoice}
+            />
             <AuthRoute exact path="/addrestaurant" component={addRestaurant} />
             <UserRoute exact path="/order/:restName" component={restaurant} />
             <SellerRoute
@@ -114,6 +129,15 @@ function App() {
             <UserRoute exact path="/cart" component={cart} />
             <UserRoute path="/orders" component={orders} />
             <SellerRoute exact path="/seller/orders" component={orders} />
+            <Route exact path="/deliveryJobNotification">
+              <DeliveryJobNotification />
+            </Route>
+            <Route exact path="/droneSimulation">
+              <DroneSimulator />
+            </Route>
+            <Route exact path="/track-delivery">
+              <TrackDelivery />
+            </Route>
             <Route component={error404} />
           </Switch>
           <Footer />

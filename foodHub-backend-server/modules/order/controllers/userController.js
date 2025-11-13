@@ -13,14 +13,21 @@ const Order = require("../models/order");
 const io = require("../../../util/socket");
 const app = require("../../../app");
 const DeliveryPartner = require("../../accesscontrol/models/deliveryPartner");
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //socket
 const DeliveyPartnerSocketMap = require("../../../socket/sources/DeliveryPartnerSource");
 const { getIO } = require("../../../util/socket");
-const { getObjectNearAPlace } = require("../../../util/delivery");
+const { getClosestObjectBetweenOriginDest } = require("../../../util/delivery");
+const order = require("../../order/models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
 const deliveryAssignmentMap = require("../../../socket/sources/DeliveryAssignmentMap");
+const {
+  availableDrones,
+  readyDrone,
+  busyDrone,
+  droneOrderAssignment,
+} = require("../../../socket/sources/droneSource");
 
 exports.getRestaurants = (req, res, next) => {
   Seller.find()
@@ -303,10 +310,10 @@ exports.verifySession = async (req, res) => {
   try {
     const { session_id } = req.body;
     const session = await stripe.checkout.sessions.retrieve(session_id);
-    res.json({ paid: session.payment_status === 'paid' });
+    res.json({ paid: session.payment_status === "paid" });
   } catch (error) {
-    console.error('Lỗi verify:', error);
-    res.status(500).json({ message: 'Lỗi verify session' });
+    console.error("Lỗi verify:", error);
+    res.status(500).json({ message: "Lỗi verify session" });
   }
 };
 
@@ -447,7 +454,19 @@ function selectNextSuitableDeliveryPartner(orderId) {
     .then((order) => {
       //find suitable delivery partner
       let deliveryAssignment = deliveryAssignmentMap.get(orderId);
-      let ans = getObjectNearAPlace(
+      if (
+        deliveryAssignment &&
+        deliveryAssignment.count > process.env.MAX_ASSIGNMENT_ATTEMP
+      ) {
+        //[not done]cancel order, cause found no suitable delivery partner
+        console.log(
+          `order ${orderId} will be cancelled, cause found no suitable delivery partner`
+        );
+        deliveryAssignmentMap.delete(orderId);
+        return;
+      }
+
+      let ans = getClosestObjectBetweenOriginDest(
         {
           lng: order.seller.sellerId.address.lng,
           lat: order.seller.sellerId.address.lat,
@@ -458,17 +477,30 @@ function selectNextSuitableDeliveryPartner(orderId) {
             pos: info.location,
           };
         }),
+        parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
+        parseInt(process.env.MAX_DISTANCE_ACCEPTED_RANGE),
         deliveryAssignment ? deliveryAssignment.refuser : []
       );
+      if (!ans) {
+        if (deliveryAssignment) {
+          deliveryAssignment.count += 1;
+        } else {
+          deliveryAssignmentMap.set(orderId, {
+            count: 1,
+          });
+        }
+        return selectNextSuitableDeliveryPartner(orderId);
+      }
       console.log("Suitable driver:", ans);
       //check if this order is assgined before
       if (!deliveryAssignment) {
         deliveryAssignmentMap.set(orderId, {
-          accountId: ans.id,
+          accountId: ans ? ans.id : null,
           timeout: setTimeout(() => {
             selectNextSuitableDeliveryPartner(orderId);
-          }, (process.env.DELIVERY_JOB_ACCEPT_TIMEOUT + 2 * process.env.NETWORK_DELAY) * 1000),
-          count: 0,
+          }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT) + 2 * parseInt(process.env.NETWORK_DELAY)) * 1000),
+          count: 1,
+          refuser: [],
         });
       } else {
         if (deliveryAssignment.count > process.env.MAX_ASSIGNMENT_ATTEMP) {
@@ -479,10 +511,10 @@ function selectNextSuitableDeliveryPartner(orderId) {
           deliveryAssignmentMap.delete(orderId);
           return;
         }
-        deliveryAssignment.accountId = ans.id;
+        deliveryAssignment.accountId = ans ? ans.id : null;
         deliveryAssignment.timeout = setTimeout(() => {
           selectNextSuitableDeliveryPartner(orderId);
-        }, (process.env.DELIVERY_JOB_ACCEPT_TIMEOUT + 2 * process.env.NETWORK_DELAY) * 1000);
+        }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT) + 2 * parseInt(process.env.NETWORK_DELAY)) * 1000);
         deliveryAssignment.count += 1;
       }
       const deliveryPartnerSocket = deliveryPartnerMap.get(ans.id).socketId;
@@ -493,7 +525,151 @@ function selectNextSuitableDeliveryPartner(orderId) {
       });
     });
 }
+
+const CancelOrderCauseNoSuitableDrone = async (orderId) => {
+  droneOrderAssignment.delete(orderId);
+  let updatedOrder = await Order.findById(orderId);
+  updatedOrder.status = "Cancelled";
+  updatedOrder = await updatedOrder.save();
+  io.getIO().emit("orders", { action: "update", order: updatedOrder });
+};
+
+async function selectNextSuitablDrone(orderId) {
+  //find order information
+  let order = Order.findById(orderId)
+    .populate({
+      path: "seller.sellerId",
+      select: "address",
+    })
+    .then(async (order) => {
+      //find suitable delivery partner
+      let droneAssigment = droneOrderAssignment.get(orderId);
+      if (
+        droneAssigment &&
+        droneAssigment.count > process.env.MAX_ASSIGNMENT_ATTEMP
+      ) {
+        //[not done: duplicated logic at 2 other places]
+        //[not done]cancel order, cause found no suitable delivery partner
+        console.log(
+          `order ${orderId} will be cancelled, cause found no suitable delivery partner`
+        );
+        // droneOrderAssignment.delete(orderId);
+        // let updatedOrder=await Order.findOneAndUpdate({
+        //   orderId:orderId
+        // },{
+        //   status:"Cancelled"
+        // },{
+        //   new:true
+        // });
+        // io.getIO().emit("orders", { action: "update", order: updatedOrder });
+        CancelOrderCauseNoSuitableDrone(orderId);
+
+        return;
+      }
+
+      //no available drone
+      if (availableDrones.size === 0) {
+        //[not done]cancel order, cause found no suitable delivery partner
+        console.log(
+          `order ${orderId} will be cancelled, cause found no suitable delivery partner`
+        );
+        // droneOrderAssignment.delete(orderId);
+        // let updatedOrder=await Order.findOneAndUpdate({
+        //   orderId:orderId
+        // },{
+        //   status:"Cancelled"
+        // },{
+        //   new:true
+        // });
+        // io.getIO().emit("orders", { action: "update", order: updatedOrder });
+        CancelOrderCauseNoSuitableDrone(orderId);
+
+        return;
+      }
+
+      let ans = getClosestObjectBetweenOriginDest(
+        {
+          lng: order.seller.sellerId.address.lng,
+          lat: order.seller.sellerId.address.lat,
+        },
+        Array.from(readyDrone.entries()).map(([id, info]) => {
+          return {
+            id: id,
+            pos: availableDrones.get(id).location,
+          };
+        }),
+        {
+          lng: order.user.address.lng,
+          lat: order.user.address.lat,
+        },
+        parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
+        parseInt(process.env.MAX_DISTANCE_ACCEPTED_RANGE),
+        droneAssigment ? droneAssigment.refuser : []
+      );
+
+      //if not suitable drone exist
+      if (!ans) {
+        if (droneAssigment) {
+          droneAssigment.count += 1;
+        } else {
+          droneOrderAssignment.set(orderId, {
+            count: 1,
+          });
+        }
+        //retry after a certain amount of type if no suitable drone is found
+        return setTimeout(() => {
+          selectNextSuitablDrone(orderId);
+        }, parseInt(process.env.NO_SUITABLE_DRONE_RETRY) * 1000);
+      }
+      console.log("Suitable driver:", ans);
+
+      //if suitable drone exists
+      //check if this order is assgined before
+      if (!droneAssigment) {
+        droneOrderAssignment.set(orderId, {
+          droneId: ans ? ans.id : null,
+          timeout: setTimeout(() => {
+            selectNextSuitablDrone(orderId);
+          }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT) + 2 * parseInt(process.env.NETWORK_DELAY)) * 1000),
+          count: 1,
+          refuser: [],
+        });
+      } else {
+        if (droneAssigment.count > process.env.MAX_ASSIGNMENT_ATTEMP) {
+          //[not done]cancel order, cause found no suitable delivery partner
+          console.log(
+            `order ${orderId} will be cancelled, cause found no suitable delivery partner`
+          );
+          // droneOrderAssignment.delete(orderId);
+          // let updatedOrder=await Order.findOneAndUpdate({
+          //   orderId:orderId
+          // },{
+          //   status:"Cancelled"
+          // },{
+          //   new:true
+          // });
+          // io.getIO().emit("orders", { action: "update", order: updatedOrder });
+          CancelOrderCauseNoSuitableDrone(orderId);
+
+          return;
+        }
+        droneAssigment.droneId = ans ? ans.id : null;
+        droneAssigment.timeout = setTimeout(() => {
+          selectNextSuitablDrone(orderId);
+        }, (parseInt(process.env.DELIVERY_JOB_ACCEPT_TIMEOUT) + 2 * parseInt(process.env.NETWORK_DELAY)) * 1000);
+        droneAssigment.count += 1;
+      }
+      const selectedDroneSocket = availableDrones.get(ans.id).socketId;
+      const io = getIO();
+      io.to(selectedDroneSocket).emit("delivery:job_notification", {
+        orderId: orderId,
+        timeout: process.env.DELIVERY_JOB_ACCEPT_TIMEOUT,
+      });
+    });
+}
+
 exports.selectNextSuitableDeliveryPartner = selectNextSuitableDeliveryPartner;
+exports.selectNextSuitablDrone = selectNextSuitablDrone;
 
 exports.postOrderStatus = (req, res, next) => {
   const authHeader = req.get("Authorization");
@@ -527,7 +703,7 @@ exports.postOrderStatus = (req, res, next) => {
   }
   const status = req.body.status;
   Order.findById(orderId)
-    .populate('seller.sellerId')
+    .populate("seller.sellerId")
     .then((order) => {
       if (!order) {
         const error = new Error(
@@ -537,45 +713,49 @@ exports.postOrderStatus = (req, res, next) => {
         throw error;
       }
       // Branch payout nếu status === 'Completed' (tích hợp từ changeOrderStatus, dùng .then() nested)
-      if (status === 'Completed' && !order.transferId) {
+      if (status === "Completed" && !order.transferId) {
         const total = order.totalItemMoney * 100;
-        const amountAfterminusStripeFee = total - total*0.029+0.3;
-        const commission = amountAfterminusStripeFee*0.1;
+        const amountAfterminusStripeFee = total - total * 0.029 + 0.3;
+        const commission = amountAfterminusStripeFee * 0.1;
         const sellerAmount = amountAfterminusStripeFee - commission;
         // Tạo Stripe transfer (Promise chain)
-        return stripe.transfers.create({
-          amount: Math.round(sellerAmount),
-          currency: 'usd',
-          destination: order.seller.sellerId.stripeAccountId,
-          description: `Payout cho order ${orderId}`,
-          metadata: { orderId: orderId.toString() },
-        }).then((transfer) => {
-          // Lưu vào order (trong chain)
-          order.transferId = transfer.id;
-          order.commission = commission/100;
-          order.sellerAmount = sellerAmount/100;
-          return order;  // Trả về order đã cập nhật để chain tiếp
-        }).catch((stripeErr) => {
-          // Xử lý lỗi payout (không crash, chỉ log và throw để rollback)
-          console.error('Lỗi payout Stripe:', stripeErr.message);
-          const error = new Error('Payout thất bại, thử lại sau');
-          error.statusCode = 500;
-          throw error;
-        });
+        return stripe.transfers
+          .create({
+            amount: Math.round(sellerAmount),
+            currency: "usd",
+            destination: order.seller.sellerId.stripeAccountId,
+            description: `Payout cho order ${orderId}`,
+            metadata: { orderId: orderId.toString() },
+          })
+          .then((transfer) => {
+            // Lưu vào order (trong chain)
+            order.transferId = transfer.id;
+            order.commission = commission / 100;
+            order.sellerAmount = sellerAmount / 100;
+            return order; // Trả về order đã cập nhật để chain tiếp
+          })
+          .catch((stripeErr) => {
+            // Xử lý lỗi payout (không crash, chỉ log và throw để rollback)
+            console.error("Lỗi payout Stripe:", stripeErr.message);
+            const error = new Error("Payout thất bại, thử lại sau");
+            error.statusCode = 500;
+            throw error;
+          });
       } else {
         // Không payout, trả về order gốc
         return order;
       }
     })
-    .then((order)=>{
+    .then((order) => {
       order.status = status;
       return order.save();
     })
     .then((updatedOrder) => {
       io.getIO().emit("orders", { action: "update", order: updatedOrder });
-      // if (status == "Ready") {
-      //   selectNextSuitableDeliveryPartner(orderId);
-      // }
+      if (status == "Ready") {
+        // selectNextSuitableDeliveryPartner(orderId);
+        selectNextSuitablDrone(orderId);
+      }
       res.status(200).json({ updatedOrder });
     })
     .catch((err) => {
@@ -644,12 +824,11 @@ exports.getAllOrders = async (req, res, next) => {
     const orders = await Order.find()
       .sort({ createdAt: -1 })
       .populate("user.userId", "firstName lastName phone")
-      .populate("seller.sellerId", "name imageUrl")
-      // .lean();
+      .populate("seller.sellerId", "name imageUrl");
+    // .lean();
 
     // 3. Tính tổng tiền
     const result = orders.map((order) => {
-
       return {
         ...order,
         totalItemMoney: order.totalItemMoney || 0,
@@ -668,20 +847,19 @@ exports.getAllOrders = async (req, res, next) => {
   }
 };
 
-
 exports.createCheckoutSession = async (req, res) => {
   try {
     const { items, total } = req.body;
     const userId = req.loggedInUserId;
 
-    console.log("total :",total)
+    console.log("total :", total);
     // Không cần tìm order → BỎ findOne
 
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: "Giỏ hàng trống!" });
     }
 
-    const lineItems = items.map(it => {
+    const lineItems = items.map((it) => {
       if (!it.itemId) throw new Error("Thiếu itemId");
       return {
         price_data: {

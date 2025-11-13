@@ -61,16 +61,16 @@ const orderSchema = new Schema(
     sellerAmount: { type: Number }, // Tiền seller nhận (ví dụ: 264000)
     sessionId: { type: String, required: true,unique: true }, // Lưu session_id từ Stripe
   },
-  {
+  { 
     timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toJSON:{virtuals:true},//HERE HERE: option
+    toObject:{virtuals:true}
   }
 );
-orderSchema.virtual("totalItemMoney").get(function () {
-  let res = 0;
-  for (let foodSelection of this.items) {
-    res += foodSelection.item.price * foodSelection.quantity;
+orderSchema.virtual("totalItemMoney").get(function(){
+  let res=0;
+  for (let foodSelection of this.items){
+    res+=foodSelection.item.price*foodSelection.quantity;
   }
   return res;
 });

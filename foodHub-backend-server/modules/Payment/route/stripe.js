@@ -98,7 +98,7 @@ router.get('/status/:paymentId', auth.protect, stripeController.getPaymentStatus
 //     res.json({ received: true });
 //   }
 // );
-
+const AVAILABLE_FUNDS_TEST_TOKEN = 'tok_bypassPending'
 router.post('/test-add-available-funds', async (req, res) => {
     // Lấy số tiền muốn nạp từ body (nên dùng một số lớn hơn số tiền bạn muốn transfer)
     // Lưu ý: Stripe API yêu cầu số tiền phải ở đơn vị nhỏ nhất (ví dụ: VND/100 = đồng)

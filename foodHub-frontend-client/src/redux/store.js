@@ -5,7 +5,9 @@ import thunk from "redux-thunk";
 import userReducer from "./reducers/userReducer";
 import dataReducer from "./reducers/dataReducer";
 import uiReducer from "./reducers/uiReducer";
-import deliveryReducer from "./reducers/deliveryReducer";
+import deliveryDataReducer from "./reducers/deliveryReducer";
+import trackDeliveryReducer from "./reducers/trackDeliveryReducer";
+
 
 const initialState = {};
 
@@ -15,7 +17,8 @@ const reducers = combineReducers({
   auth: userReducer,
   data: dataReducer,
   UI: uiReducer,
-  deliveryData:deliveryReducer
+  deliveryData:deliveryDataReducer,
+  trackDelivery: trackDeliveryReducer
 });
 
 const composeEnhancers =

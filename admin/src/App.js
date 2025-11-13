@@ -8,6 +8,7 @@ import 'antd/dist/reset.css';
 // Import các trang đã tách
 import Dashboard from './Pages/Dashboard';
 import Sellers from './Pages/Sellers';
+import Drones from './Pages/Drones';
 
 const { Header, Sider, Content } = Layout;
 
@@ -18,6 +19,7 @@ const AdminLayout = () => {
   const menuItems = [
     { key: '/', icon: <DashboardOutlined />, label: 'Tổng quan' },
     { key: '/sellers', icon: <ShopOutlined />, label: 'Quán ăn' },
+    { key: '/drones', icon: <CarOutlined />, label: 'Quản lý Drone' },
   ];
 
   return (
@@ -44,6 +46,7 @@ const AdminLayout = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/sellers" element={<Sellers />} />
+            <Route path="/drones" element={<Drones />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Content>

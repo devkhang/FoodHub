@@ -347,7 +347,7 @@ exports.signupSeller = async (req, res, next) => {
 
     // === CHỈ TRẢ VỀ 1 LINK DUY NHẤT ===
     res.status(201).json({
-      message: 'Đăng ký thành công! Vui lòng check mail để kích hoạt.',
+      message: 'Đăng ký thành công!',
       sellerId: seller._id,
       stripeAccountId,
       onboardingUrl   // ← DUY NHẤT 1 LINK

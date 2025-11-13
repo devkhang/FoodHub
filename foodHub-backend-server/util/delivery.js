@@ -10,6 +10,7 @@ input:
         lat
     }
 }]
+-dest: {lng, lat}
 -acceptRange: the acceptable range in Km, when an object's distance <= acceptRange, top searching
 output:
 -ans:{
@@ -18,37 +19,40 @@ output:
 },
 -excludeObjectId:[] //object Id to exclude
 */
-exports.getObjectNearAPlace=(origin, objectLocations, acceptRange, excludeObjectId=[])=>{
-    console.log("getObjectNearAPlace()");
-    console.log("input:", objectLocations);
+exports.getClosestObjectBetweenOriginDest=(origin, objectLocations, dest, acceptRange, maxAcceptRange,excludeObjectId=[])=>{
+    // console.log("getObjectNearAPlace()");
+    // console.log("input:", objectLocations);
     if(!objectLocations.length){
         return null;
     }
     
     let ans={
-        id:objectLocations[0].id,
-        dist: haversine(origin, objectLocations[0].pos)/1000
+        id:null,
+        dist: Number.MAX_SAFE_INTEGER
     }
-    if(ans.dist<=acceptRange)
-        return ans;
+    let dist;
     for(let obj of objectLocations){
-        for(let obj of objectLocations){
-            if(excludeObjectId.includes(obj.id))
-                continue;
-        }
+        if(excludeObjectId.includes(obj.id))
+            continue;
 
         dist=haversine(origin, obj.pos)/1000;
+        dist+=haversine(origin, dest)/1000;
+
         if(dist<=acceptRange)
             return {
                 id:obj.id,
                 dist:dist
             }
-        if(dist<ans.dist){
+        
+        if(dist>maxAcceptRange){
+            continue;
+        }
+        else if(dist<ans.dist){
             ans.id=obj.id;
             ans.dist=dist;
         }
     }
-    return ans;
+    return (ans.id!==null)?ans:null;
 }
 
 /*
