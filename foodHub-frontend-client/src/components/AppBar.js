@@ -104,9 +104,6 @@ export default function AppBarPrimary() {
               <Link to={{ pathname: "/cart", state: { address: address } }}>
                 <Button className={classes.buttonStyles}>Cart</Button>
               </Link>
-              <Link to="/checkout/68e1f71472524532fc892495">
-                <Button className={classes.buttonStyles}>checkout</Button>
-              </Link>
               <Button
                 onClick={handleLogout}
                 className={classes.buttonStyles}

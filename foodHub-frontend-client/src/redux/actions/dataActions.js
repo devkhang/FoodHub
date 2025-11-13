@@ -21,6 +21,14 @@ import axios from "../../util/axios";
 import axiosNewInstance from "axios";
 import { getUserData } from "./authActions";
 
+export const clearCart = () => ({
+    type: SET_CART,
+    payload: {
+        cart: [],        // Mảng rỗng
+        totalPrice: 0    // Tổng tiền bằng 0
+    }
+});
+
 export const fetchRestaurants = () => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
@@ -244,7 +252,7 @@ export const createCheckoutSession = (history) => (dispatch, getState) => {
     items: cart.map(c => ({
       itemId: c.itemId._id.toString(),   // chỉ ID (string)
       title:  c.itemId.title,            // tiêu đề ngắn
-      price:  c.itemId.price,
+      price:  c.itemId.price*100,
       quantity: c.quantity,
     })),
     total: price + deliveryCharge,
@@ -288,33 +296,33 @@ export const addAddress = (userData, history) => (dispatch) => {
 
 export const verifySessionAndPlaceOrder = (sessionId) => (dispatch) => {
   dispatch({ type: LOADING_DATA });
-  axios
-    .post("/api/orders/verify-session", { session_id: sessionId }) // API verify paid
+
+  return axios.post("/verify-session", { session_id: sessionId })
     .then((res) => {
       if (res.data.paid) {
-        dispatch(placeOrder()); // GỌI placeOrder SAU THÀNH CÔNG – Tạo order
-        dispatch(getOrders()); // Refresh list
+        return dispatch(placeOrder(sessionId)); // ← Chỉ truyền sessionId
       } else {
-        alert("Thanh toán chưa hoàn tất, quay về cart!");
-        window.location.href = '/cart';
+        alert("Thanh toán chưa hoàn tất!");
+        return Promise.reject();
       }
     })
     .catch((err) => {
-      console.log(err.response);
-      alert("Lỗi verify session: " + (err.response?.data?.message || "Thử lại!"));
-      window.location.href = '/cart';
+      const msg = err.response?.data?.message || err.message || "Lỗi verify session";
+      console.error("[LỖI] verifySession:", msg); // ← CHỈ 1 DÒNG
+      alert(msg);
+      throw err;
     });
 };
 
-export const placeOrder = (history) => (dispatch) => {
-  axios
-    .post("/order")
-    .then((res) => {
-      history.push("/orders");
+export const placeOrder = (sessionId) => (dispatch) => {
+  return axios.post("/order", { session_id: sessionId })
+    .then(() => {
       dispatch(getOrders());
+      dispatch(clearCart());
     })
-    .catch((err) => {
-      console.log(err.response);
+    .catch(err => {
+      console.error("Lỗi placeOrder:", err);
+      throw err;
     });
 };
 

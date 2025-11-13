@@ -311,6 +311,12 @@ exports.verifySession = async (req, res) => {
 };
 
 exports.postOrder = (req, res, next) => {
+  const sessionId = req.body.session_id; // ← LẤY session_id
+  if (!sessionId) {
+    const error = new Error("Thiếu session_id");
+    error.statusCode = 400;
+    return next(error);
+  }
   let accountObj;
   let userObj;
   Account.findById(req.loggedInUserId)
@@ -351,6 +357,7 @@ exports.postOrder = (req, res, next) => {
               phone: seller.address.phoneNo,
               sellerId: seller,
             },
+            sessionId,
           });
 
           order.save();
@@ -520,6 +527,7 @@ exports.postOrderStatus = (req, res, next) => {
   }
   const status = req.body.status;
   Order.findById(orderId)
+    .populate('seller.sellerId')
     .then((order) => {
       if (!order) {
         const error = new Error(
@@ -528,15 +536,46 @@ exports.postOrderStatus = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-
+      // Branch payout nếu status === 'Completed' (tích hợp từ changeOrderStatus, dùng .then() nested)
+      if (status === 'Completed' && !order.transferId) {
+        const total = order.totalItemMoney * 100;
+        const amountAfterminusStripeFee = total - total*0.029+0.3;
+        const commission = amountAfterminusStripeFee*0.1;
+        const sellerAmount = amountAfterminusStripeFee - commission;
+        // Tạo Stripe transfer (Promise chain)
+        return stripe.transfers.create({
+          amount: Math.round(sellerAmount),
+          currency: 'usd',
+          destination: order.seller.sellerId.stripeAccountId,
+          description: `Payout cho order ${orderId}`,
+          metadata: { orderId: orderId.toString() },
+        }).then((transfer) => {
+          // Lưu vào order (trong chain)
+          order.transferId = transfer.id;
+          order.commission = commission/100;
+          order.sellerAmount = sellerAmount/100;
+          return order;  // Trả về order đã cập nhật để chain tiếp
+        }).catch((stripeErr) => {
+          // Xử lý lỗi payout (không crash, chỉ log và throw để rollback)
+          console.error('Lỗi payout Stripe:', stripeErr.message);
+          const error = new Error('Payout thất bại, thử lại sau');
+          error.statusCode = 500;
+          throw error;
+        });
+      } else {
+        // Không payout, trả về order gốc
+        return order;
+      }
+    })
+    .then((order)=>{
       order.status = status;
       return order.save();
     })
     .then((updatedOrder) => {
       io.getIO().emit("orders", { action: "update", order: updatedOrder });
-      if (status == "Ready") {
-        selectNextSuitableDeliveryPartner(orderId);
-      }
+      // if (status == "Ready") {
+      //   selectNextSuitableDeliveryPartner(orderId);
+      // }
       res.status(200).json({ updatedOrder });
     })
     .catch((err) => {
@@ -646,7 +685,7 @@ exports.createCheckoutSession = async (req, res) => {
       if (!it.itemId) throw new Error("Thiếu itemId");
       return {
         price_data: {
-          currency: "vnd",
+          currency: "usd",
           product_data: {
             name: it.title,
             metadata: { itemId: it.itemId }, // ← string ID
@@ -660,11 +699,10 @@ exports.createCheckoutSession = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `${req.headers.origin}/orders?{CHECKOUT_SESSION_ID}`,
+      success_url: `${req.headers.origin}/orders?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/cart`,
       metadata: { userId: userId.toString() },
     });
-
     res.json({ sessionUrl: session.url });
   } catch (e) {
     console.error("Lỗi tạo session:", e.message);

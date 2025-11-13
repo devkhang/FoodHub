@@ -71,7 +71,7 @@ const Cart = (props) => {
   let zipError = null;
   let phoneNoError = null;
 
-  if (price !== 0) deliveryCharge = 30000;
+  if (price !== 0) deliveryCharge = 0;
 
   const handlePlaceOrder = () => {
     console.log("handlePlaceOrder at cart.js");
@@ -86,37 +86,13 @@ const Cart = (props) => {
     dispatch(fetchAddress(userData, history));
   };
 
+  const initialAddress = props.location.state?.address || {};
   const { inputs, handleInputChange } = useForm({
-    street:
-      props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
-        ? props.location.state.address.street
-        : "",
-    locality:
-      props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
-        ? props.location.state.address.locality
-        : "",
-    aptName:
-      props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
-        ? props.location.state.address.aptName
-        : "",
-    zip:
-      props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
-        ? props.location.state.address.zip
-        : "",
-    phoneNo:
-      props.location.state.address != null &&
-      // eslint-disable-next-line
-      props.location.state.address != undefined
-        ? props.location.state.address.phoneNo
-        : "",
+    street: initialAddress.street || "",
+    locality: initialAddress.locality || "",
+    aptName: initialAddress.aptName || "",
+    zip: initialAddress.zip || "",
+    phoneNo: initialAddress.phoneNo || "",
   });
 
   useEffect(() => {

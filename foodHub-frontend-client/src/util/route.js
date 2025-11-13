@@ -16,8 +16,11 @@ export const AuthRoute = ({ component: Component, ...rest }) => {
 };
 
 export const UserRoute = ({ component: Component, ...rest }) => {
-  const { authenticated, account } = useSelector((state) => state.auth);
+  const { authenticated, account ,loading } = useSelector((state) => state.auth);
   console.log('UserRoute debug:', { authenticated, role: account.role, path: rest.path });
+  if (loading) {
+    return <div>Đang tải...</div>;
+  }
   return (
     <Route
       {...rest}

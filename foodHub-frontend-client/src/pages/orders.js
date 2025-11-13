@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import openSocket from "socket.io-client";
 
 import { getOrders, socketStatusUpdate, verifySessionAndPlaceOrder} from "../redux/actions/dataActions";
 import OrderCard from "../components/OrderCard";
-
+import { useHistory} from 'react-router-dom';
 //material-ui
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
@@ -25,18 +25,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Orders = (props) => {
   const dispatch = useDispatch();
-  const { orders, loading } = useSelector((state) => state.data);
+  const history = useHistory();
+  const { orders} = useSelector((state) => state.data);
   const {
     account: { role },
     _id,
   } = useSelector((state) => state.auth);
   const classes = useStyles();
-  
-  useEffect(() => {
+  useLayoutEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const sessionId = urlParams.get('session_id'); // Lấy từ URL ?session_id=xxx
+    const sessionId = urlParams.get('session_id');
+    console.log('sessionId :',sessionId); // Lấy từ URL ?session_id=xxx
     if (sessionId) {
-      dispatch(verifySessionAndPlaceOrder(sessionId)); // ← GỌI Ở ĐÂY: Verify + placeOrder nếu paid
+      dispatch(verifySessionAndPlaceOrder(sessionId))
+      .then(() => {
+          history.push('/orders'); // ← REDIRECT Ở ĐÂY
+        })
+        .catch(() => {
+          history.push('/cart');
+        }); // ← GỌI Ở ĐÂY: Verify + placeOrder nếu paid
       // Clear URL để sạch (không hiện param nữa)
       window.history.replaceState({}, document.title, '/orders');
     } else {

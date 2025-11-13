@@ -56,6 +56,10 @@ const orderSchema = new Schema(
         ref: "Seller",
       },
     },
+    transferId: { type: String }, // ID Stripe Transfer (ví dụ: "tr_abc123")
+    commission: { type: Number }, // Phí platform (ví dụ: 66000)
+    sellerAmount: { type: Number }, // Tiền seller nhận (ví dụ: 264000)
+    sessionId: { type: String, required: true,unique: true }, // Lưu session_id từ Stripe
   },
   {
     timestamps: true,

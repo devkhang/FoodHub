@@ -40,13 +40,13 @@ import addRestaurant from "./pages/addRestaurant";
 import delivery from "./pages/delivery"
 import restaurant from "./pages/restaurant";
 import sellerDash from "./pages/sellerDashboard";
-import CheckoutPage from "./components/Checkout";
 import cart from "./pages/cart";
 import orders from "./pages/orders";
 import profile from "./pages/profile";
 import Invoice from "./pages/Invoice";
 import OnboardingSuccess from "./pages/OnboardingSuccess";
 import OnboardingRefresh from "./pages/OnboardingRefresh";
+import { useLayoutEffect } from "react"
 //socket
 import {initSocket, getSocket} from "./socket/socket"
 const io=initSocket(process.env.REACT_APP_SERVER_URL);
@@ -69,6 +69,26 @@ if (token) {
 
 function App() {
   console.log("App");
+
+  useLayoutEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 > Date.now()) {
+          store.dispatch({ type: SET_AUTHENTICATED }); // ← DÙNG store.dispatch
+          axios.defaults.headers.common["Authorization"] = token;
+          store.dispatch(getUserData()); // ← DÙNG store.dispatch
+        } else {
+          store.dispatch(logoutAction());
+          window.location.href = "/login";
+        }
+      } catch (err) {
+        localStorage.removeItem("jwt");
+        window.location.href = "/login";
+      }
+    }
+  }, []);
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
@@ -92,10 +112,8 @@ function App() {
             <Route path="/onboarding/success" component={OnboardingSuccess} />
             <Route path="/onboarding/refresh" component={OnboardingRefresh} />
             <UserRoute exact path="/cart" component={cart} />
-            <UserRoute exact path="/orders" component={orders} />
-            <UserRoute exact path="/orders/:sessionId" component={orders} />
+            <UserRoute path="/orders" component={orders} />
             <SellerRoute exact path="/seller/orders" component={orders} />
-            <UserRoute exact path="/checkout/:orderId" component={CheckoutPage} />
             <Route component={error404} />
           </Switch>
           <Footer />
