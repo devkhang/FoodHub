@@ -394,6 +394,7 @@ exports.getOrders = (req, res, next) => {
   }
 
   const accountId = decodedToken.accountId;
+  let totalPage;
 
   Account.findById(accountId)
     .then((account) => {
@@ -402,18 +403,42 @@ exports.getOrders = (req, res, next) => {
       if (account.role === "ROLE_SELLER")
         return Seller.findOne({ account: account._id });
     })
-    .then((result) => {
-      if (result instanceof User)
-        return Order.find({ "user.userId": result._id }).sort({
+    .then(async (result) => {
+      let query;
+      let limit=req.query.limit*1 || 1;
+      let orders;
+      if (result instanceof User){
+        totalPage=await Order.find({ "user.userId": result._id });
+        totalPage=Math.ceil(totalPage.length/limit);
+
+        query=Order.find({ "user.userId": result._id }).sort({
           createdAt: -1,
         });
-      if (result instanceof Seller)
-        return Order.find({ "seller.sellerId": result._id }).sort({
+        let features=new APIQueryFeatures(query, req.query, User);
+        features.sorting();
+        await features.pagination()
+        return query;
+      }
+      if (result instanceof Seller){
+        totalPage=await Order.find({ "seller.sellerId": result._id });
+        totalPage=Math.ceil(totalPage.length/limit);
+
+        query=Order.find({ "seller.sellerId": result._id }).sort({
           createdAt: -1,
         });
+        let features=new APIQueryFeatures(query, req.query, Seller);
+        features.sorting();
+        await features.pagination()
+        return query;
+      }
+      return orders
+      
     })
     .then((orders) => {
-      res.status(200).json({ orders });
+      res.status(200).json({
+        orders,
+        totalPage:totalPage
+      });
     })
     .catch((err) => {
       if (!err.statusCode) err.statusCode = 500;

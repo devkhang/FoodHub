@@ -328,7 +328,7 @@ export const placeOrder = (history) => (dispatch) => {
 export const getOrders = () => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
-    .get("/orders")
+    .get(`/orders`)
     .then((res) => {
       dispatch({
         type: SET_ORDERS,
@@ -336,6 +336,35 @@ export const getOrders = () => (dispatch) => {
       });
     })
     .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const getOrdersWithPagination = (page=null, limit=null, first=false, last=false) => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .get(`/orders?page=${page?page:''}&limit=${limit?limit:''}&first=${first?first:""}&last=${last?last:""}`)
+    .then((res) => {
+      if(res.data.orders.length)
+      {
+        if(first)
+          dispatch(updatePage(1))
+        else if(last)
+          dispatch(updatePage(res.data.totalPage))
+        else
+          dispatch(updatePage(page));
+
+        dispatch({
+          type: SET_ORDERS,
+          payload: res.data.orders,
+        });
+      }
+      else{
+        throw new Error("This page doesn't exist");
+      }
+    })
+    .catch((err) => {
+
       console.log(err.response);
     });
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchRestaurantsByAddressPagination} from "../redux/actions/dataActions";
+import {fetchRestaurantsByAddressPagination, getOrders, getOrdersWithPagination} from "../redux/actions/dataActions";
 import { useEffect } from "react";
 
 /*
@@ -44,6 +44,23 @@ const PaginationWithRedux =(props)=>{
                 dispatch(fetchRestaurantsByAddressPagination(latlng.lat, latlng.lng, null, null, null, true, urlQuery));
             }
         }
+        else if(props.for==="order"){
+            // let urlQuery='';
+            // if(props.storeName)
+            //     urlQuery+=`storeName=${props.storeName}`;
+            if(type==="first")
+                dispatch(getOrdersWithPagination(null, null, true, false));
+            else if(type==="prev"){
+                if(currentPage>1)
+                    dispatch(getOrdersWithPagination(currentPage-1, null,false, false));
+            }
+            else if(type==="next"){
+                dispatch(getOrdersWithPagination(currentPage+1, null, false, false));
+            }
+            else if(type==="last"){
+                dispatch(getOrdersWithPagination(null, null, false, true));
+            }
+        }
 
         // if(type==="first"){
         //     setCurrentPage(1);
@@ -64,7 +81,7 @@ const PaginationWithRedux =(props)=>{
             <button onClick={()=>handlePageClick("prev")} class="pagination__prevBtn">&lt;Prev</button>
             <p class="pagination_current-page">{currentPage}</p>
             <button onClick={()=>handlePageClick("next")} class="pagination__nexttBtn">Next&gt;</button>
-            <button onClick={()=>handlePageClick("last")} class="pagination__lastBtn">Last&gt;&gt;</button>
+            {/* <button onClick={()=>handlePageClick("last")} class="pagination__lastBtn">Last&gt;&gt;</button> */}
         </div>
     )
 }

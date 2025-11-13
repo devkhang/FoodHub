@@ -9,6 +9,7 @@ import OrderCard from "../components/OrderCard";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import PaginationWithRedux from "../components/paginationWithRedux";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -71,6 +72,9 @@ const Orders = (props) => {
         </Grid>
         <Grid item xs={12} sm={1} />
       </Grid>
+        {(orders && orders.length>0)?(
+          <PaginationWithRedux for="order"/>
+        ):("")}
     </>
   );
 };
