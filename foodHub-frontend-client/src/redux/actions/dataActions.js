@@ -187,6 +187,11 @@ export const addToCart = (itemData) => (dispatch) => {
   axios
     .post("/cart", itemData)
     .then((res) => {
+      // setSnackBar(true);
+      dispatch({
+        type:"SET_SNACKBAR",
+        payload:true
+      })
       dispatch({
         type: ADD_CART_SUCCESS,
         payload: itemData.itemId,
@@ -194,10 +199,20 @@ export const addToCart = (itemData) => (dispatch) => {
       dispatch(getCart());
     })
     .catch((err) => {
-      console.log(err.response);
-      dispatch({
-        type: ADD_CART_FAIL,
-      });
+      if(err.response){
+        if(err.response.data.message==="MIX_CART"){
+          dispatch({
+            type: ADD_CART_FAIL,
+            payload:"MIX_CART"
+          });
+        }
+
+      }
+      else{
+        dispatch({
+          type: ADD_CART_FAIL,
+        });
+      }
     });
 };
 
@@ -345,3 +360,9 @@ export const socketStatusUpdate = (order) => (dispatch) => {
     payload: order,
   });
 };
+
+export const clearAddCartFailReason=()=>{
+  return {
+    type:"CLEAR_ADD_CART_FAIL_REASON",
+  }
+}

@@ -89,7 +89,7 @@ exports.postCart = (req, res, next) => {
       return user.addToCart(targetItem);
     })
     .then((result) => {
-      res.status(200).json({ message: "Item successfully added to cart." });
+      return res.status(200).json({ message: "Item successfully added to cart." });
     })
     .catch((err) => {
       if (!err.statusCode) err.statusCode = 500;
@@ -842,3 +842,23 @@ exports.getAllOrders = async (req, res, next) => {
     res.status(500).json({ success: false, message: "Lỗi server" });
   }
 };
+exports.clearCart = (req, res, next) => {
+  let accountObj;
+  let userObj;
+  Account.findById(req.loggedInUserId)
+    .then((account) => {
+      accountObj = account;
+      return User.findOne({ account: account._id });
+    })
+    .then((user) => {
+      user.clearCart();
+      return res.status(200).json({
+        status:"ok",
+      })
+    })
+    .catch((err) => {
+      if (!err.statusCode) err.statusCode = 500;
+      next(err);
+    });
+};
+

@@ -76,7 +76,15 @@ app.use("/seller", upload.single("image"), itemRoutes);
 app.use(userRoutes);
 app.use("/drone", droneRoute);
 
+
 //error middleware
+const handleMixCart=(req,res)=>{
+  return res.status(400).json({
+    status:"fail",
+    message:"MIX_CART"
+  });
+}
+
 app.use((error, req, res, next) => {
   console.error(error.stack);
   const statusCode = error.statusCode || 500;
@@ -84,6 +92,10 @@ app.use((error, req, res, next) => {
   let errorsPresent;
   if (error.errors) {
     errorsPresent = error.errors;
+  }
+
+  if(message==="MIX_CART"){
+    handleMixCart(req, res);
   }
 
   res.status(statusCode).json({

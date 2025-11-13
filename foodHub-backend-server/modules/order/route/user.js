@@ -11,7 +11,7 @@ router.get("/restaurants", userController.getRestaurants);
 router.get("/restaurant/:restId", userController.getRestaurant);
 
 router.post("/cart", auth.verifyUser, userController.postCart);
-
+router.delete("/cart", auth.verifyUser, userController.clearCart);
 router.get("/cart", auth.verifyUser, userController.getCart);
 
 router.post(
