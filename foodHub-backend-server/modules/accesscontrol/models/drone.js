@@ -2,6 +2,9 @@ const mongoose=require("mongoose");
 
 const DroneSchema = new mongoose.Schema({
   droneId:{ type: String, unique: true },   // "DRN-001"
+  model:{
+    type:String
+  },
   status:{ 
     type: String, 
     enum: ['IDLE','BUSY'],

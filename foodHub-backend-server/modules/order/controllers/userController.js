@@ -24,6 +24,7 @@ const order = require("../../order/models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
 const deliveryAssignmentMap=require("../../../socket/sources/DeliveryAssignmentMap");
 const {availableDrones, readyDrone, busyDrone, droneOrderAssignment}=require("../../../socket/sources/droneSource");
+const DeliveryDetail = require("../../Delivery/models/deliveryDetail");
 
 exports.getRestaurants = (req, res, next) => {
   Seller.find()
@@ -434,9 +435,21 @@ exports.getOrders = (req, res, next) => {
       return orders
       
     })
-    .then((orders) => {
+    .then(async (orders) => {
+      let result=[];
+      for(let order of orders){
+        let objOrder=order.toObject();
+        let deliveryDetail=await DeliveryDetail.findOne({
+          order:order._id
+        })
+        .select("drone");
+        if(deliveryDetail){
+          objOrder.droneId=deliveryDetail.drone;
+        }
+        result.push(objOrder);
+      }
       res.status(200).json({
-        orders,
+        orders:result,
         totalPage:totalPage
       });
     })
@@ -716,9 +729,16 @@ exports.postOrderStatus = (req, res, next) => {
     })
     .then((updatedOrder) => {
       io.getIO().emit("orders", { action: "update", order: updatedOrder });
-      if(status=="Ready"){
+      if(status==="Ready"){
         // selectNextSuitableDeliveryPartner(orderId);
         selectNextSuitablDrone(orderId);
+      }
+      else if(status==="Out For Delivery"){
+        let droneSocketId=droneOrderAssignment.get(orderId).droneId;
+        droneSocketId=availableDrones.get(droneSocketId).socketId;
+        io.getIO().to(droneSocketId).emit("order_hand_over",{
+          handOverOrderId:orderId
+        });
       }
       res.status(200).json({ updatedOrder });
     })

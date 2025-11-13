@@ -160,6 +160,7 @@ const OrderCard = (props) => {
         <Typography gutterBottom variant="body1" color="textPrimary">
           Ordered - {dayjs(order.createdAt).fromNow()}
         </Typography>
+        <p>Assigned to drone -{order.droneId}</p>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <FiberManualRecordIcon
             disabled

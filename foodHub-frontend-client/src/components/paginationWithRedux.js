@@ -18,16 +18,18 @@ const PaginationWithRedux =(props)=>{
     // const [currentPage, setCurrentPage]=useState(1);
     let currentPage=useSelector(state=>state.pagination.page)
     const dispatch=useDispatch();
-    let latlng=localStorage.getItem("latlng").split(",");
-    latlng={
-        lat:latlng[0],
-        lng:latlng[1]
-    }
+
 
     const handlePageClick=(type)=>{
         console.log(`type:${type}`);
 
         if(props.for==="store"){
+            let latlng=localStorage.getItem("latlng").split(",");
+            latlng={
+                lat:latlng[0],
+                lng:latlng[1]
+            }
+
             let urlQuery='';
             if(props.storeName)
                 urlQuery+=`storeName=${props.storeName}`;
