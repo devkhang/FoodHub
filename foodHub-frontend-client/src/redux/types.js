@@ -8,6 +8,7 @@ export const SET_CART = "SET_CART";
 export const DELETE_ITEM_CART = "DELETE_ITEM_CART";
 export const SET_ORDERS = "SET_ORDERS";
 export const EDIT_STATUS = "EDIT_STATUS";
+export const STOP_LOADING_DATA="STOP_LOADING_DATA"
 
 //UI reducers
 export const SET_ERRORS = "SET_ERRORS";

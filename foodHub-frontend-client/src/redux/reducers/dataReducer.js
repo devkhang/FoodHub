@@ -8,6 +8,7 @@ import {
   DELETE_ITEM_CART,
   SET_ORDERS,
   EDIT_STATUS,
+  STOP_LOADING_DATA
 } from "../types";
 
 const initialState = {
@@ -19,6 +20,8 @@ const initialState = {
   addCartSuccess: null,
   deleteSuccessItem: null,
   orders: [],
+  addCartFailReason:String,
+  snackbar:false,
 };
 
 export default function dataReducer(state = initialState, action) {
@@ -27,6 +30,11 @@ export default function dataReducer(state = initialState, action) {
       return {
         ...state,
         loading: true,
+      };
+      case STOP_LOADING_DATA:
+      return {
+        ...state,
+        loading: false,
       };
     case SET_RESTAURANTS:
       return {
@@ -49,6 +57,7 @@ export default function dataReducer(state = initialState, action) {
       return {
         ...state,
         addCartSuccess: false,
+        addCartFailReason:action.payload
       };
     case DELETE_ITEM_CART:
       return {
@@ -75,6 +84,17 @@ export default function dataReducer(state = initialState, action) {
         cart: action.payload.cart,
         price: action.payload.totalPrice,
       };
+    case "CLEAR_ADD_CART_FAIL_REASON":
+      return{
+        ...state,
+        addCartFailReason:""
+      }
+    case "SET_SNACKBAR":
+      return{
+        ...state,
+        snackbar:action.payload
+      }
+
     default:
       return state;
   }

@@ -160,6 +160,7 @@ const OrderCard = (props) => {
         <Typography gutterBottom variant="body1" color="textPrimary">
           Ordered - {dayjs(order.createdAt).fromNow()}
         </Typography>
+        <p>Assigned to drone -{order.droneId}</p>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <FiberManualRecordIcon
             disabled
@@ -213,7 +214,7 @@ const OrderCard = (props) => {
         <br />
         {
           (role === "ROLE_SELLER")?(
-              (order.status=="ready" || order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")
+              (order.status=="Ready" || order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")
             ):(
               (role === "ROLE_USER")?(
                 (order.status==="Out For Delivery")?(<Button onClick={handleTrackDelivery}>Track delivery</Button>):("")

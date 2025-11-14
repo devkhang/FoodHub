@@ -13,10 +13,13 @@ export default function DroneSimulator(props){
     const mapRef = useRef()
     const mapContainerRef = useRef()
     let travelDistance=0;
+    let isArriveAtSeller=useRef(false);
 
     let [droneInfo, setDroneInfo]=useState(null);
     let droneStatus=useRef("IDLE");
     let [orderId, setOrderId]=useState(null);
+    let orderIdRef=useRef(null);
+    const getOrderIdState=()=>orderId;
     let sellerPosition=useRef({
         lng:null,
         lat:null
@@ -109,7 +112,7 @@ export default function DroneSimulator(props){
             ]
         };
         let distance=turf.length(route.features[0]);
-        travelDistance+=distance;
+        // travelDistance+=distance;
         let step=droneSpeed.current;
         let distPerStep=distance/step;
         let progressPath=[];//coordinates that represent the movement from src to dest
@@ -198,7 +201,7 @@ export default function DroneSimulator(props){
         await movingSimulation(0, step, point, map, route);
         result=await axios.put(`${process.env.REACT_APP_SERVER_URL}/delivery/finishDeliveryJob`,{
             droneId:droneInfo.droneId,
-            orderId:orderId,
+            orderId:orderIdRef.current,
             travelDistance:travelDistance
         });
         console.log("result after deliver order:", result.data.data);
@@ -208,9 +211,117 @@ export default function DroneSimulator(props){
     }
     async function droneDeliverySimulation(map){
         await simulateDroneToSeller(map);
-        await simulateDroneToCustomer(map);
+        isArriveAtSeller.current=true;
+        // await simulateDroneToCustomer(map);
         
     }
+
+    
+    useEffect(()=>{
+        if(!droneInfo)
+            return ()=>{};
+        droneStatus.current="IDLE";
+        // console.log("drone selection useEffect");
+        if(socket.current)
+        {
+            socket.current.close();
+            console.log("close socket", socket.id);
+            
+        }
+        socket.current=io(`${process.env.REACT_APP_SERVER_URL}`);
+        socket.current.on("disconnect", (reason, details) => {
+            console.log("socket disconnected with reason:", reason);
+            console.log("detail:", details);
+            clearInterval(updatePositionInterval.current);
+            
+        });
+        console.log("socket", socket.current);
+
+        // socket.current.connect();//reconnect
+        // console.log("reconnect:", socket.current, socket.current.connected);
+        socket.current.on("connect",()=>{
+            console.log("on-connection: configure drone client socket");
+            
+            //register drone socket with server
+            console.log("drone:registerSocket");
+            socket.current.emit("drone:registerSocket", droneInfo.droneId);
+
+            //update current position in real time
+            clearInterval(updatePositionInterval.current);
+            updatePositionInterval.current=setInterval(()=>{
+                // if(navigator.geolocation){//check if browser support GeoLocation API
+                //     navigator.geolocation.getCurrentPosition((pos)=>{
+                //     let dronePosition={
+                //         "droneId":droneInfo.droneId,
+                //         "lng":pos.coords.longitude,
+                //         "lat":pos.coords.latitude
+                //     }
+                //     // console.log("Drone location:", JSON.stringify(dronePosition));
+                //     // console.log("=================");
+                    
+                //     socket.current.emit("drone:updatePosition", dronePosition);
+                //     })
+                // }
+                // else{
+                //     alert("your browser doesn't support GeoLocation API");
+                // }
+                socket.current.emit("drone:updatePosition", {
+                    droneId:droneInfo.droneId,
+                    lng:currentPosition.current.lng,
+                    lat:currentPosition.current.lat
+                });
+            }, 1000)
+
+            //order delivery job notification
+            socket.current.on("delivery:job_notification", async ({orderId, timeout})=>{
+                console.log("delivery:job_notification");
+                let status=droneStatus.current;
+                console.log("droneStatus",status);
+                
+                
+                if(status!=="IDLE"){
+                    console.log(`refuse deliver order ${orderId}`);
+                    
+                    let result=await axios.post(`${process.env.REACT_APP_SERVER_URL}/delivery/drone-refuse-job`,{
+                        droneId:droneInfo.droneId,
+                        orderId:orderId
+                    })
+                    console.log("result:", result.data.data);
+                    
+                }
+                else if(status=="IDLE"){
+                    console.log(`accept deliver order ${orderId}`);
+                    
+                    let result=await axios.post(`${process.env.REACT_APP_SERVER_URL}/delivery/drone-accept-job`,{
+                        droneId:droneInfo.droneId,
+                        orderId:orderId
+                    })
+                    console.log("result:", result.data.data);
+
+                    let data=result.data.data;
+                    setOrderId(orderId);
+                    orderIdRef.current=orderId
+                    let sellerCoord={
+                        lng:data.order.seller.sellerId.address.lng,
+                        lat:data.order.seller.sellerId.address.lat,
+                    };
+                    console.log("sellerCoord", sellerCoord);
+                    sellerPosition.current=sellerCoord;
+                    let userCoord={
+                        lng: data.order.user.address.lng,
+                        lat: data.order.user.address.lat
+                    };
+                    customerPosition.current=userCoord;              
+                }
+
+
+            })
+            
+
+        })
+
+    },[droneInfo]);
+
     useEffect(() => {
         // if(!orderId)
         //     return ()=>{};
@@ -301,122 +412,26 @@ export default function DroneSimulator(props){
 
             })
 
+            if(socket.current)
+            {    
+                socket.current.removeAllListeners("order_hand_over");
+                socket.current.on("order_hand_over",({handOverOrderId})=>{
+                    // let a=getOrderIdState();
+                    if(orderIdRef.current!=handOverOrderId || !isArriveAtSeller.current){
+                        return;
+                    }
+                    simulateDroneToCustomer(mapRef.current);
+                })    
+            }   
+
             return () => {
                 mapRef.current.remove()
             }
         }
+ 
 
     }, [orderId])
 
-    useEffect(()=>{
-        if(!droneInfo)
-            return ()=>{};
-        droneStatus.current="IDLE";
-        // console.log("drone selection useEffect");
-        if(socket.current)
-        {
-            socket.current.close();
-            console.log("close socket", socket.id);
-            
-        }
-        socket.current=io(`${process.env.REACT_APP_SERVER_URL}`);
-        socket.current.on("disconnect", (reason, details) => {
-            console.log("socket disconnected with reason:", reason);
-            console.log("detail:", details);
-            clearInterval(updatePositionInterval.current);
-            
-        });
-        console.log("socket", socket.current);
-
-        // socket.current.connect();//reconnect
-        // console.log("reconnect:", socket.current, socket.current.connected);
-        socket.current.on("connect",()=>{
-            console.log("on-connection: configure drone client socket");
-            
-            //register drone socket with server
-            console.log("drone:registerSocket");
-            socket.current.emit("drone:registerSocket", droneInfo.droneId);
-
-            //update current position in real time
-            clearInterval(updatePositionInterval.current);
-            updatePositionInterval.current=setInterval(()=>{
-                // if(navigator.geolocation){//check if browser support GeoLocation API
-                //     navigator.geolocation.getCurrentPosition((pos)=>{
-                //     let dronePosition={
-                //         "droneId":droneInfo.droneId,
-                //         "lng":pos.coords.longitude,
-                //         "lat":pos.coords.latitude
-                //     }
-                //     // console.log("Drone location:", JSON.stringify(dronePosition));
-                //     // console.log("=================");
-                    
-                //     socket.current.emit("drone:updatePosition", dronePosition);
-                //     })
-                // }
-                // else{
-                //     alert("your browser doesn't support GeoLocation API");
-                // }
-                socket.current.emit("drone:updatePosition", {
-                    droneId:droneInfo.droneId,
-                    lng:currentPosition.current.lng,
-                    lat:currentPosition.current.lat
-                });
-            }, 1000)
-
-            //order delivery job notification
-            socket.current.on("delivery:job_notification", async ({orderId, timeout})=>{
-                console.log("delivery:job_notification");
-                let status=droneStatus.current;
-                console.log("droneStatus",status);
-                
-                
-                if(status!=="IDLE"){
-                    console.log(`refuse deliver order ${orderId}`);
-                    
-                    let result=await axios.post(`${process.env.REACT_APP_SERVER_URL}/delivery/drone-refuse-job`,{
-                        droneId:droneInfo.droneId,
-                        orderId:orderId
-                    })
-                    console.log("result:", result.data.data);
-                    
-                }
-                else if(status=="IDLE"){
-                    console.log(`accept deliver order ${orderId}`);
-                    
-                    let result=await axios.post(`${process.env.REACT_APP_SERVER_URL}/delivery/drone-accept-job`,{
-                        droneId:droneInfo.droneId,
-                        orderId:orderId
-                    })
-                    console.log("result:", result.data.data);
-
-                    let data=result.data.data;
-                    setOrderId(orderId);
-                    let sellerCoord={
-                        lng:data.order.seller.sellerId.address.lng,
-                        lat:data.order.seller.sellerId.address.lat,
-                    };
-                    console.log("sellerCoord", sellerCoord);
-                    sellerPosition.current=sellerCoord;
-                    let userCoord={
-                        lng: data.order.user.address.lng,
-                        lat: data.order.user.address.lat
-                    };
-                    customerPosition.current=userCoord;              
-                }
-
-
-            })
-            
-        })
-
-    },[droneInfo]);
-    useEffect(()=>{
-
-
-        return()=>{
-
-        }
-    },[])
 
     return (
         <div class="droneSimulator-container">

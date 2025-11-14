@@ -16,10 +16,12 @@ import {
   SET_ERRORS,
   SET_ORDERS,
   EDIT_STATUS,
+  STOP_LOADING_DATA
 } from "../types";
 import axios from "../../util/axios";
 import axiosNewInstance from "axios";
 import { getUserData } from "./authActions";
+import { updatePage } from "./paginationActions";
 
 export const clearCart = () => ({
     type: SET_CART,
@@ -48,6 +50,8 @@ export const fetchRestaurants = () => (dispatch) => {
     });
 };
 
+//get restaurant close to (lat, lng)
+//then update the redux restaurants state
 export const fetchRestaurantsByAddress = (lat, lng) => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
@@ -64,6 +68,43 @@ export const fetchRestaurantsByAddress = (lat, lng) => (dispatch) => {
         type: SET_RESTAURANTS,
         payload: [],
       });
+    });
+};
+
+export const fetchRestaurantsByAddressPagination = (lat, lng, page, limit, first=false, last=false, urlQuery) => (dispatch) => {
+  //[not done: refactor this code, is this really need ot be redux action]
+  dispatch({ type: LOADING_DATA });
+  let url=`/restaurants-location/${lat}/${lng}?page=${page}&limit=${limit}&first=${first?first:""}&last=${last?last:""}&`+urlQuery;
+  axios
+    .get(url)
+    .then((res) => {
+      if(res.data.data && res.data.data.status==="fail")
+        return;
+      if(first)
+        dispatch(updatePage(1))
+      else if(last)
+        dispatch(updatePage(res.data.totalPage))
+      else
+        dispatch(updatePage(page));
+      dispatch({
+        type: SET_RESTAURANTS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      let errorMess;
+      if(err.response){
+        errorMess=err.response.data.message;
+      }
+      if(errorMess==="PAGE_DONT_EXIST"){
+        dispatch({type:STOP_LOADING_DATA})
+      }
+      else{
+        dispatch({
+          type: SET_RESTAURANTS,
+          payload: [],
+        });
+      }
     });
 };
 
@@ -154,6 +195,11 @@ export const addToCart = (itemData) => (dispatch) => {
   axios
     .post("/cart", itemData)
     .then((res) => {
+      // setSnackBar(true);
+      dispatch({
+        type:"SET_SNACKBAR",
+        payload:true
+      })
       dispatch({
         type: ADD_CART_SUCCESS,
         payload: itemData.itemId,
@@ -161,10 +207,20 @@ export const addToCart = (itemData) => (dispatch) => {
       dispatch(getCart());
     })
     .catch((err) => {
-      console.log(err.response);
-      dispatch({
-        type: ADD_CART_FAIL,
-      });
+      if(err.response){
+        if(err.response.data.message==="MIX_CART"){
+          dispatch({
+            type: ADD_CART_FAIL,
+            payload:"MIX_CART"
+          });
+        }
+
+      }
+      else{
+        dispatch({
+          type: ADD_CART_FAIL,
+        });
+      }
     });
 };
 
@@ -329,7 +385,7 @@ export const placeOrder = (sessionId) => (dispatch) => {
 export const getOrders = () => (dispatch) => {
   dispatch({ type: LOADING_DATA });
   axios
-    .get("/orders")
+    .get(`/orders`)
     .then((res) => {
       dispatch({
         type: SET_ORDERS,
@@ -337,6 +393,35 @@ export const getOrders = () => (dispatch) => {
       });
     })
     .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const getOrdersWithPagination = (page=null, limit=null, first=false, last=false) => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .get(`/orders?page=${page?page:''}&limit=${limit?limit:''}&first=${first?first:""}&last=${last?last:""}`)
+    .then((res) => {
+      if(res.data.orders.length)
+      {
+        if(first)
+          dispatch(updatePage(1))
+        else if(last)
+          dispatch(updatePage(res.data.totalPage))
+        else
+          dispatch(updatePage(page));
+
+        dispatch({
+          type: SET_ORDERS,
+          payload: res.data.orders,
+        });
+      }
+      else{
+        throw new Error("This page doesn't exist");
+      }
+    })
+    .catch((err) => {
+
       console.log(err.response);
     });
 };
@@ -361,3 +446,9 @@ export const socketStatusUpdate = (order) => (dispatch) => {
     payload: order,
   });
 };
+
+export const clearAddCartFailReason=()=>{
+  return {
+    type:"CLEAR_ADD_CART_FAIL_REASON",
+  }
+}

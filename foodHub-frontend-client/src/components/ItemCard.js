@@ -20,9 +20,13 @@ import EditIcon from "@material-ui/icons/Edit";
 import useForm from "../hooks/forms";
 
 import MyButton from "../util/MyButton";
-import { deleteItem, editItem } from "../redux/actions/dataActions";
+import { clearAddCartFailReason, deleteItem, editItem } from "../redux/actions/dataActions";
 import ItemDialog from "../components/ItemDialog";
 import { addToCart } from "../redux/actions/dataActions";
+import ConfirmationDialog from "./confirmDialog";
+import axios from "../util/axios";
+import {getCart} from "../redux/actions/dataActions";
+import { SET_CART } from "../redux/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,10 +71,11 @@ export default function ItemCard(props) {
     authenticated,
     account: { role },
   } = useSelector((state) => state.auth);
-  const { addCartSuccess } = useSelector((state) => state.data);
-
+  const { addCartSuccess, addCartFailReason } = useSelector((state) => state.data);
+  
   const [open, setOpen] = useState(false);
-  const [openSnackBar, setSnackBar] = useState(false);
+  let openSnackBar=useSelector(state=>state.data.snackbar);
+  // const [isOpenConfirmationDialog, setIsOpenConfirmationDialog] = useState(false);
   const [image, setImage] = useState(null);
   const { inputs, handleInputChange } = useForm({
     title: "",
@@ -121,15 +126,36 @@ export default function ItemCard(props) {
 
   const handleCloseSnackBar = (event, reason) => {
     if (reason === "clickaway") {
-      setSnackBar(false);
+      dispatch({
+        type:"SET_SNACKBAR",
+        payload:false
+      })
       return;
     }
 
-    setSnackBar(false);
+    // setSnackBar(false);
+    dispatch({
+      type:"SET_SNACKBAR",
+      payload:false
+    })
   };
 
-  const handleSnackBar = (event, reason) => {
-    if (addCartSuccess || addCartSuccess == null) setSnackBar(true);
+  // const handleSnackBar = (event, reason) => {
+  //   if (addCartSuccess || addCartSuccess == null) setSnackBar(true);
+  // };
+
+  const handleClearCart=()=>{
+    axios.delete(`/cart`)
+    .then((cart)=>{
+      // dispatch(getCart());
+      dispatch({
+        type: SET_CART,
+        payload:{
+          cart:[],
+          price:0
+        }
+      })
+    })
   };
 
   return (
@@ -168,7 +194,7 @@ export default function ItemCard(props) {
               }}
               onClick={() => {
                 handleCart();
-                handleSnackBar();
+                // handleSnackBar();
               }}
               variant="contained"
             >
@@ -219,6 +245,15 @@ export default function ItemCard(props) {
           </Alert>
         </Snackbar>
       </div>
+      {addCartFailReason==="MIX_CART"?(
+        <ConfirmationDialog 
+          open={true} 
+          onClose={() => {dispatch(clearAddCartFailReason())}} // Function to close it
+          onConfirm={handleClearCart} // Function to run on 'Yes' click
+          title="Confirm Deletion"
+          message="Cart can't contain mixed items from multiple stores. Do you want to clear the current cart?"
+        />
+      ):("")}
     </>
   );
 }

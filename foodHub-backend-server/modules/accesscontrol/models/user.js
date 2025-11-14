@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Item=require("../../menu/models/item");
 
 const deliveryInfo = {
   street: String,
@@ -43,12 +44,21 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.methods.addToCart = function (item) {
+userSchema.methods.addToCart = async function (item) {
   const cartItemIndex = this.cart.items.findIndex((cp) => {
     return cp.itemId.toString() === item._id.toString();
   });
   let newQuantity = 1;
   const updatedCartItems = [...this.cart.items];
+
+  //check if from the same seller
+  if(this.cart.items.length>0){
+    let firstItem=await Item.findById(this.cart.items[0].itemId.toString()).select("creator");
+    let newItem=await Item.findById(item._id.toString()).select("creator");
+    if(firstItem.creator.toString()!==newItem.creator.toString()){
+      throw new Error("MIX_CART");
+    }
+  }
 
   if (cartItemIndex >= 0) {
     newQuantity = this.cart.items[cartItemIndex].quantity + 1;
