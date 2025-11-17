@@ -7,12 +7,10 @@ const paymentSchema = new Schema({
   currency: { type: String, default: 'USD' }, // Thêm: Default USD cho Stripe US
   method: { type: String, enum: ["CASH", "CARD", "BANK_TRANSFER"], required: true },
   status: { type: String, enum: ["PENDING", "SUCCESS", "FAILED", "REFUNDED"], default: "PENDING" },
-  gatewayTransactionId: { type: String }, // ID từ Stripe
+  stripeSessionId: { type: String, index: true },
+  stripeTransferId: { type: String, index: true },
   paidAt: { type: Date },
-  commission: { type: Number, default: 0 }, // Hoa hồng 10% cho marketplace
   sellerAmount: { type: Number, default: 0 }, // 90% cho seller (giữ nguyên, hoặc dùng virtual thay)
-  user: { type: Schema.Types.ObjectId, ref: "User" },
-  seller: { type: Schema.Types.ObjectId, ref: "Seller" },
   transferredAt: { type: Date }, // Thời gian chuyển tiền cho seller
 }, { 
   timestamps: true,
