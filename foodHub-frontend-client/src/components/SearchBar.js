@@ -14,11 +14,12 @@ import debouncing from "../util/rateLimitting/debouncing";
 
 const processAutoComplete = debouncing(async (input, setSuggestions) => {
   const response = await axios.get(
-    `${process.env.REACT_APP_GOONG_AUTOCOMPLETE}?api_key=${
-      process.env.REACT_APP_GOONG_API_KEY
-    }&input=${encodeURIComponent(input)}`
+    `${process.env.REACT_APP_MAPBOX_GEOCODING}/forward?access_token=${
+      process.env.REACT_APP_MAPBOX_API_KEY
+    }&q=${encodeURIComponent(input)}&limit=${process.env.REACT_APP_AUTOCOMPLETE_LIMIT}`
   );
-  setSuggestions(response.data.predictions || []);
+  // setSuggestions(response.data.predictions || []); goong
+  setSuggestions(response.data.features || []);//mapbox
 }, 2000);
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +76,7 @@ export default function SearchBar(props) {
   get nearby restaurant
   */
   const getBrowserLocation = () => {
-    console.log(12);
+    // console.log(12);
     navigator.geolocation.getCurrentPosition(
       function (position) {
         getUserAddressBy(position.coords.latitude, position.coords.longitude);
@@ -98,7 +99,7 @@ export default function SearchBar(props) {
     else localStorage.setItem("location", value);
     setAddress(value);
     setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
-    const latlng = await getLatLngFromGoong(value); // Lấy tọa độ từ Goong API
+    const latlng = await getLatLngFromMapBox(value); // Lấy tọa độ từ Goong API
     if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
     fetchRestByLocation(latlng);
   };
@@ -112,25 +113,40 @@ export default function SearchBar(props) {
     props.handleSearch(event.target.value);
   };
 
-  const getUserAddressBy = (lat, long) => {
+  const getUserAddressBy = (lat, lng) => {
     const latlng = {
       lat: lat,
-      lng: long,
+      lng: lng,
     };
     axios
       .get(
-        `${process.env.REACT_APP_GOONG_GEOCODE}?latlng=${lat},${long}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+        // `${process.env.REACT_APP_GOONG_GEOCODE}?latlng=${lat},${long}&api_key=${process.env.REACT_APP_GOONG_API_KEY}` goong
+        `${process.env.REACT_APP_MAPBOX_GEOCODING}/reverse?longitude=${lng}&latitude=${lat}&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`
       )
+      //goong
+      // .then((result) => {
+      //   console.log(result.data);
+      //   if (result.data.results[0]?.formatted_address === "")
+      //     localStorage.removeItem("location");
+      //   else
+      //     localStorage.setItem(
+      //       "location",
+      //       result.data.results[0].formatted_address
+      //     );
+      //   setAddress(result.data.results[0].formatted_address);
+      //   fetchRestByLocation(latlng);
+      // })
+      //mapbox
       .then((result) => {
         console.log(result.data);
-        if (result.data.results[0]?.formatted_address === "")
+        if (result.data.features[0]?.properties.full_address === "")
           localStorage.removeItem("location");
         else
           localStorage.setItem(
             "location",
-            result.data.results[0].formatted_address
+            result.data.features[0].properties.full_address
           );
-        setAddress(result.data.results[0].formatted_address);
+        setAddress(result.data.features[0].properties.full_address);
         fetchRestByLocation(latlng);
       })
       .catch((err) => {
@@ -149,6 +165,27 @@ export default function SearchBar(props) {
       const results = response.data.results;
       if (results.length > 0) {
         return results[0].geometry.location;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching latlng from Goong:", error);
+      return null;
+    }
+  };
+
+  const getLatLngFromMapBox = async (address) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_MAPBOX_GEOCODING}/forward?q=${encodeURIComponent(
+          address
+        )}&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`
+      );
+      const results = response.data.features;
+      if (results.length > 0) {
+        return {
+          lng:results[0].geometry.coordinates[0],
+          lat:results[0].geometry.coordinates[1]
+        };
       }
       return null;
     } catch (error) {
@@ -224,10 +261,10 @@ export default function SearchBar(props) {
                   return (
                     <div
                       key={index}
-                      onClick={() => handleSelect(suggestion.description)}
+                      onClick={() => handleSelect(suggestion.properties.full_address)}
                       style={style}
                     >
-                      {suggestion.description}
+                      {suggestion.properties.full_address}
                     </div>
                   );
                 })}
