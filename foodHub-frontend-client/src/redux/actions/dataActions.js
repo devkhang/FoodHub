@@ -273,9 +273,9 @@ export const fetchAddress = (userData, history) => (dispatch) => {
   console.log("goong gecode endpoint", process.env.REACT_APP_GOONG_GEOCODE);
   console.log(userData);
   const location = `+${userData.street}`;
-  axiosNewInstance
+  
     //goong
-    // .get(process.env.REACT_APP_GOONG_GEOCODE, {
+    // axiosNewInstance.get(process.env.REACT_APP_GOONG_GEOCODE, {
     //   params: {
     //     address: location,
     //     api_key: process.env.REACT_APP_GOONG_API_KEY,
@@ -291,27 +291,32 @@ export const fetchAddress = (userData, history) => (dispatch) => {
     //   userData.formattedAddress = formattedAddress;
     //   dispatch(addAddress(userData, history));
     // })
+
     //mapbox
-    .get(process.env.REACT_APP_MAPBOX_GEOCODING, {
-      params: {
-        q: location,
-        access_token: process.env.REACT_APP_GOONG_API_KEY,
-      },
-    })
-    .then((result) => {
-      const formattedAddress = result.data.features[0].properties.full_address;
-      console.log(formattedAddress);
-      const lat = result.data.features[0].geometry.coordinates[1];
-      const lng = result.data.features[0].geometry.coordinates[0];
-      userData.lat = lat;
-      userData.lng = lng;
-      userData.formattedAddress = formattedAddress;
-      dispatch(addAddress(userData, history));
-    })
-    .catch((err) => {
-      console.log("fail");
-      console.log(err);
-    });
+    // axiosNewInstance.get(`${process.env.REACT_APP_MAPBOX_GEOCODING}/forward?autocomplete=true`, {
+    //   params: {
+    //     q: location,
+    //     access_token: process.env.REACT_APP_GOONG_API_KEY,
+    //   },
+    // })
+    // .then((result) => {
+    //   const formattedAddress = result.data.features[0].properties.full_address;
+    //   console.log(formattedAddress);
+    //   const lat = result.data.features[0].geometry.coordinates[1];
+    //   const lng = result.data.features[0].geometry.coordinates[0];
+    //   userData.lat = lat;
+    //   userData.lng = lng;
+    //   userData.formattedAddress = formattedAddress;
+    //   dispatch(addAddress(userData, history));
+    // })
+    // .catch((err) => {
+    //   console.log("fail");
+    //   console.log(err);
+    // });
+
+    //formatted address va (lng, lan) da duoc them vao khi nguoi dung chon dia diem giao o cart
+    dispatch(addAddress(userData, history));
+
 };
 
 // dataActions.js – createCheckoutSession

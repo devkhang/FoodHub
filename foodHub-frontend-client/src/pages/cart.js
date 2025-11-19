@@ -83,11 +83,6 @@ const Cart = (props) => {
   const handlePlaceOrder = async () => {
     console.log("handlePlaceOrder at cart.js");
 
-    const userData = {
-      street: inputs.street,
-      phoneNo: inputs.phoneNo,
-    };
-
     //check destination
     if(inputs.street=="" || inputs.street==null){
       setMyErrors(currentErrors=>{
@@ -100,6 +95,16 @@ const Cart = (props) => {
       })
       return;
     }
+
+    const userData = {
+      street: inputs.street,
+      phoneNo: inputs.phoneNo,
+    };
+    let currentPosition=localStorage.getItem("latlng").split(",");
+    userData.lat=currentPosition[0];
+    userData.lng=currentPosition[1];
+    userData.formattedAddress=inputs.street;
+
 
     //calculate delivery charge
     let myCart=allState;
@@ -284,6 +289,7 @@ const Cart = (props) => {
                       error={streetError ? true : false}
                       fullWidth
                       required
+                      style={{display:"none"}}
                     />
                     <TextField
                       id="phoneNo"
@@ -332,13 +338,6 @@ const Cart = (props) => {
                       </div>
                       <br />
                       <br />
-                      <div className={classes.spaceTypo}>
-                        {/* [not done: calculate delivery charge base on distance] */}
-                        <span>Delivery Charge</span>
-                        <span>
-                          {process.env.REACT_APP_CURRENCY} {deliveryCharge}
-                        </span>
-                      </div>
                       <br />
                     </Typography>
                   )}

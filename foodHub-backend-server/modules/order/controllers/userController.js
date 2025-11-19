@@ -628,8 +628,10 @@ async function selectNextSuitablDrone(orderId) {
           };
         }),
         {
-          lng: order.user.address.lng,
-          lat: order.user.address.lat,
+          // lng: order.user.address.lng,
+          // lat: order.user.address.lat,
+          lng: null,
+          lat: null,
         },
         parseInt(process.env.DISTANCE_ACCEPTED_RANGE),
         parseInt(process.env.MAX_DISTANCE_ACCEPTED_RANGE),
