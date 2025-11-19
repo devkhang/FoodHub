@@ -3,9 +3,6 @@ const Schema = mongoose.Schema;
 
 const addressInfo = {
   street: String,
-  aptName: String,
-  locality: String,
-  zip: String,
   lat: Number,
   lng: Number,
   phoneNo: Number,
@@ -34,17 +31,18 @@ const sellerSchema = new Schema(
     address: addressInfo,
     minOrderAmount: Number,
     costForOne: Number,
-    payment: [
-      {
-        type: String,
-        // enum: ["CASH", "ONLINE_PAYMENT", "UPI"],
-        required: true,
-      },
-    ],
+    // payment: [
+    //   {
+    //     type: String,
+    //     // enum: ["CASH", "ONLINE_PAYMENT", "UPI"],
+    //     default: "Card",
+    //     required: true,
+    //   },
+    // ],
     account: { type: Schema.Types.ObjectId, required: true, ref: "Account" },
     items: [{ type: Schema.Types.ObjectId, ref: "Item" }],
     stripeAccountId: { type: String },
-    isVerified: { type: Boolean, default: false }
+    // isVerified: { type: Boolean, default: false }
   },
   { timestamps: true }
 );

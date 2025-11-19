@@ -61,15 +61,11 @@ export default function AddRestaurant() {
   let passwordError = null;
   let confirmPasswordError = null;
   let streetError = null;
-  let aptError = null;
-  let localityError = null;
-  let zipError = null;
   let phoneNoError = null;
   let nameError = null;
   let tagsError = null;
   let costForOneError = null;
   let minOrderError = null;
-  let paymentError = null;
 
   if (errors) {
 
@@ -84,12 +80,8 @@ export default function AddRestaurant() {
       if (error.msg.includes("Minimum Order")) minOrderError = error.msg;
       if (error.msg.includes("Cost for one cannot"))
         costForOneError = error.msg;
-      if (error.msg.includes("Zipcode cannot")) zipError = error.msg;
-      if (error.msg.includes("Locality cannot")) localityError = error.msg;
-      if (error.msg.includes("Apartment name cannot")) aptError = error.msg;
       if (error.msg.includes("Street cannot")) streetError = error.msg;
       if (error.msg.includes("Tags cannot")) tagsError = error.msg;
-      if (error.msg.includes("Payment cannot be")) paymentError = error.msg;
       if (error.msg.includes("Restaurant Name")) nameError = error.msg;
     }
   }
@@ -109,13 +101,9 @@ export default function AddRestaurant() {
     formData.append("costForOne", inputs.costForOne);
     formData.append("minOrderAmount", inputs.minOrderAmount);
     formData.append("street", inputs.street);
-    formData.append("aptName", inputs.aptName);
-    formData.append("locality", inputs.locality);
-    formData.append("zip", inputs.zip);
     formData.append("phoneNo", inputs.phoneNo);
     formData.append("password", inputs.password);
     formData.append("confirmPassword", inputs.confirmPassword);
-    formData.append("payment", inputs.payment);
     formData.append("role", "ROLE_SELLER");
     dispatch(signupSeller(formData, history));
   };
@@ -128,11 +116,7 @@ export default function AddRestaurant() {
       costForOne: "",
       minOrderAmount: "",
       street: "",
-      aptName: "",
-      locality: "",
-      zip: "",
       phoneNo: "",
-      payment: "",
       password: "",
       confirmPassword: "",
     },
@@ -238,30 +222,6 @@ export default function AddRestaurant() {
                   </Typography>
                   <div className={classes.address}>
                     <TextField
-                      id="aptName"
-                      name="aptName"
-                      label="Floor/Apartment Name"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.aptName}
-                      helperText={aptError}
-                      error={aptError ? true : false}
-                      fullWidth
-                      required
-                    />
-                    <TextField
-                      id="locality"
-                      name="locality"
-                      label="Locality"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.locality}
-                      helperText={localityError}
-                      error={localityError ? true : false}
-                      fullWidth
-                      required
-                    />
-                    <TextField
                       id="street"
                       name="street"
                       label="Street"
@@ -270,19 +230,6 @@ export default function AddRestaurant() {
                       value={inputs.street}
                       helperText={streetError}
                       error={streetError ? true : false}
-                      fullWidth
-                      required
-                    />
-                    <TextField
-                      id="zipCode"
-                      name="zip"
-                      label="Zip Code"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.zip}
-                      helperText={zipError}
-                      error={zipError ? true : false}
-                      type="number"
                       fullWidth
                       required
                     />
@@ -300,19 +247,6 @@ export default function AddRestaurant() {
                       required
                     />
                   </div>
-                  <TextField
-                    id="payment"
-                    name="payment"
-                    label="Payment Mode"
-                    placeholder="Cash, Online"
-                    className={classes.textField}
-                    onChange={handleInputChange}
-                    value={inputs.payment}
-                    helperText={paymentError}
-                    error={paymentError ? true : false}
-                    fullWidth
-                    required
-                  />
                   <Typography
                     variant="body2"
                     component="p"

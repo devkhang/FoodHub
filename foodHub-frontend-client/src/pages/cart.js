@@ -66,9 +66,6 @@ const Cart = (props) => {
   let cartItems = cartPresent ? cart.length : 0;
 
   let streetError = null;
-  let aptError = null;
-  let localityError = null;
-  let zipError = null;
   let phoneNoError = null;
 
   if (price !== 0) deliveryCharge = 0;
@@ -78,9 +75,6 @@ const Cart = (props) => {
 
     const userData = {
       street: inputs.street,
-      aptName: inputs.aptName,
-      locality: inputs.locality,
-      zip: inputs.zip,
       phoneNo: inputs.phoneNo,
     };
     dispatch(fetchAddress(userData, history));
@@ -89,9 +83,6 @@ const Cart = (props) => {
   const initialAddress = props.location.state?.address || {};
   const { inputs, handleInputChange } = useForm({
     street: initialAddress.street || "",
-    locality: initialAddress.locality || "",
-    aptName: initialAddress.aptName || "",
-    zip: initialAddress.zip || "",
     phoneNo: initialAddress.phoneNo || "",
   });
 
@@ -111,9 +102,6 @@ const Cart = (props) => {
   if (errors) {
     for (let error of errors) {
       if (error.msg.includes("10 digit phone")) phoneNoError = error.msg;
-      if (error.msg.includes("Zipcode cannot")) zipError = error.msg;
-      if (error.msg.includes("Locality cannot")) localityError = error.msg;
-      if (error.msg.includes("Apartment name cannot")) aptError = error.msg;
       if (error.msg.includes("Street cannot")) streetError = error.msg;
     }
   }
@@ -152,51 +140,14 @@ const Cart = (props) => {
                   </Typography>
                   <div className={classes.address}>
                     <TextField
-                      id="aptName"
-                      name="aptName"
-                      label="Flat/Apartment Name"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.aptName}
-                      helperText={aptError}
-                      error={aptError ? true : false}
-                      fullWidth
-                      required
-                    />
-                    <TextField
-                      id="locality"
-                      name="locality"
-                      label="Locality"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.locality}
-                      helperText={localityError}
-                      error={localityError ? true : false}
-                      fullWidth
-                      required
-                    />
-                    <TextField
                       id="street"
                       name="street"
-                      label="Street"
+                      label="street"
                       className={classes.textField}
                       onChange={handleInputChange}
                       value={inputs.street}
                       helperText={streetError}
                       error={streetError ? true : false}
-                      fullWidth
-                      required
-                    />
-                    <TextField
-                      id="zipCode"
-                      name="zip"
-                      label="Zip Code"
-                      className={classes.textField}
-                      onChange={handleInputChange}
-                      value={inputs.zip}
-                      helperText={zipError}
-                      error={zipError ? true : false}
-                      type="number"
                       fullWidth
                       required
                     />

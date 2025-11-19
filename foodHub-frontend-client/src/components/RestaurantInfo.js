@@ -52,7 +52,7 @@ function Restaurant(props) {
 
   if (address) {
     phoneNo = address.phoneNo;
-    addressString = `${address.aptName}, ${address.locality}, ${address.street}`;
+    addressString = `${address.street}`;
   }
 
   if (payment ? payment.length === 1 : null)

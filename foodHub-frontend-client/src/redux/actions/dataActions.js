@@ -216,7 +216,7 @@ export const fetchAddress = (userData, history) => (dispatch) => {
   console.log("fetchAddress at dataAction.js");
   console.log("goong gecode endpoint", process.env.REACT_APP_GOONG_GEOCODE);
   console.log(userData);
-  const location = `+${userData.aptName},+${userData.locality},+${userData.street},+${userData.zip}`;
+  const location = `+${userData.street}`;
   axiosNewInstance
     .get(process.env.REACT_APP_GOONG_GEOCODE, {
       params: {

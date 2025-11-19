@@ -3,9 +3,6 @@ const Schema = mongoose.Schema;
 
 const deliveryInfo = {
   street: String,
-  locality: String,
-  aptName: String,
-  zip: String,
   phoneNo: Number,
   lat: Number,
   lng: Number,
