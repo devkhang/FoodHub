@@ -141,9 +141,7 @@ export const getUserData = () => (dispatch) => {
 
 
 export const signupSeller = (newSellerData, history) => (dispatch) => {
-  const location = `+${newSellerData.get("aptName")},+${newSellerData.get(
-    "locality"
-  )},+${newSellerData.get("street")},+${newSellerData.get("zip")}`;
+  const location = `${newSellerData.get("street")}`;
   axiosNewInstance
     .get("https://rsapi.goong.io/v2/geocode", {
       params: {

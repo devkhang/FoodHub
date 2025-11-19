@@ -34,9 +34,6 @@ router.post(
       .trim()
       .isLength({ min: 10, max: 10 }),
     body("street", "Street cannot be empty").trim().not().isEmpty(),
-    body("locality", "Locality cannot be empty").trim().not().isEmpty(),
-    body("aptName", "Apartment name cannot be empty").trim().not().isEmpty(),
-    body("zip", "Zipcode cannot be empty").trim().not().isEmpty(),
   ],
   userController.postAddress
 );

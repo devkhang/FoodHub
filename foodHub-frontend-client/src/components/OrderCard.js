@@ -148,9 +148,7 @@ const OrderCard = (props) => {
           <Typography gutterBottom variant="body1" color="textPrimary">
             Address -{" "}
             {
-              order.user.address.aptName + ", " + order.user.address.locality
-              // (`${order.user.address.aptName}, ${order.user.address.locality}`,
-              // `${order.user.address.street}`)
+              order.user.address.street
             }
           </Typography>
         )}

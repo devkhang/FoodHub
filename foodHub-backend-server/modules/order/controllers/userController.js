@@ -198,9 +198,6 @@ exports.postAddress = (req, res, next) => {
 
   const phoneNo = req.body.phoneNo;
   const street = req.body.street;
-  const locality = req.body.locality;
-  const aptName = req.body.aptName;
-  const zip = req.body.zip;
   const lat = req.body.lat;
   const lng = req.body.lng;
   const formattedAddress = req.body.formattedAddress;
@@ -215,10 +212,7 @@ exports.postAddress = (req, res, next) => {
         {
           address: {
             street: street,
-            locality: locality,
-            zip: zip,
             phoneNo: phoneNo,
-            aptName: aptName,
             lat: lat,
             lng: lng,
           },
@@ -947,11 +941,20 @@ exports.getAllOrders = async (req, res, next) => {
   }
 };
 
+/*
+B->A
+B:
+const resultA=0; //A()
+...tinha toan dua tren resultA
+*/
+
 exports.createCheckoutSession = async (req, res) => {
   try {
+    //nhan duoc delivery charge trong req
+    // const deliveryCharge=req...deliveryCharge | 0;
     const { items, total } = req.body;
     const userId = req.loggedInUserId;
-
+    const deliveryCharge = 1.5;
     console.log("total :", total);
     // Không cần tìm order → BỎ findOne
 
@@ -959,6 +962,7 @@ exports.createCheckoutSession = async (req, res) => {
       return res.status(400).json({ message: "Giỏ hàng trống!" });
     }
 
+    //them delivery charge nhu la mot lineItem
     const lineItems = items.map((it) => {
       if (!it.itemId) throw new Error("Thiếu itemId");
       return {
@@ -973,6 +977,17 @@ exports.createCheckoutSession = async (req, res) => {
         quantity: it.quantity,
       };
     });
+
+    if (deliveryCharge > 0) {
+      lineItems.push({
+        price_data: {
+          currency: "usd",
+          product_data: { name: "delivery charge" },
+          unit_amount: Math.round(deliveryCharge * 100),
+        },
+        quantity: 1,
+      });
+    }
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,

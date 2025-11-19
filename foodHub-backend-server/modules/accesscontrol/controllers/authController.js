@@ -312,9 +312,8 @@ exports.signupSeller = async (req, res, next) => {
 
   const images = req.files.map(f => f.path);
   const {
-    email, password, name, tags, payment,
-    phoneNo, street, aptName, locality, zip,
-    costForOne, minOrderAmount, formattedAddress, lat, lng
+    email, password, name, tags,
+    phoneNo, street,costForOne, minOrderAmount, formattedAddress, lat, lng
   } = req.body;
 
   try {
@@ -336,10 +335,9 @@ exports.signupSeller = async (req, res, next) => {
 
     const seller = new Seller({
       name, tags, imageUrl: images,
-      payment: payment.split(' '),
       minOrderAmount, costForOne,
       formattedAddress,
-      address: { street, aptName, locality, zip, phoneNo, lat, lng },
+      address: { street , phoneNo, lat, lng },
       account: savedAcc._id,
       stripeAccountId
     });

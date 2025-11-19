@@ -121,12 +121,8 @@ router.post(
       .trim()
       .isLength({ min: 6 }),
     body("name", "Restaurant Name cannot be empty").trim().not().isEmpty(),
-    body("payment", "Payment cannot be empty").trim().not().isEmpty(),
     body("tags", "Tags cannot be empty").trim().not().isEmpty(),
     body("street", "Street cannot be empty").trim().not().isEmpty(),
-    body("locality", "Locality cannot be empty").trim().not().isEmpty(),
-    body("aptName", "Apartment name cannot be empty").trim().not().isEmpty(),
-    body("zip", "Zipcode cannot be empty").trim().not().isEmpty(),
     body("costForOne", "Cost for one cannot be empty").trim().not().isEmpty(),
     body("minOrderAmount", "Minimum Order Amount cannot be empty")
       .trim()

@@ -57,10 +57,8 @@ router.post(
         currency: session.currency.toUpperCase(),
         method: "CARD",
         status: "SUCCESS",
-        gatewayTransactionId: session.payment_intent,
+        stripeSessionId: session.payment_intent,
         paidAt: new Date(),
-        user: order.user.userId,
-        seller: order.seller.sellerId,
       });
 
       await payment.save();
@@ -91,10 +89,9 @@ router.post(
       await Payment.findOneAndUpdate(
         { order: orderId },
         {
-          commission: order.commission,
           sellerAmount: order.sellerAmount,
           transferredAt: new Date(),
-          gatewayTransactionId: transfer.id,
+          stripeTransferId: transfer.id,
         }
       );
 

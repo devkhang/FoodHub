@@ -4,9 +4,6 @@ const Item=require("../../menu/models/item");
 
 const deliveryInfo = {
   street: String,
-  locality: String,
-  aptName: String,
-  zip: String,
   phoneNo: Number,
   lat: Number,
   lng: Number,
