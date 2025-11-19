@@ -36,13 +36,32 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
     backgroundColor: "#edebeb",
   },
+  rootCart:{
+    padding: "2px 4px",
+    display: "flex",
+    flexDirection:"column",
+    alignItems: "center",
+    width: 860,
+  },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
     position: "relative",
   },
+  inputCart:{
+    marginLeft: theme.spacing(1),
+    width:"100%",
+    position: "relative",
+  },
   results: {
     position: "absolute",
+    bottom: -166,
+    left: "26%",
+    zIndex: 999,
+    width: 760,
+    height: "15%",
+  },
+  resultsCart:{
     bottom: -166,
     left: "26%",
     zIndex: 999,
@@ -94,15 +113,33 @@ export default function SearchBar(props) {
   set the current (lng,lat) as the lng,lat) of the suggestion
   get restaurant closed to the current (lng, lat)
   */
-  const handleSelect = async (value) => {
-    if (value === "") localStorage.removeItem("location");
-    else localStorage.setItem("location", value);
-    setAddress(value);
-    setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
-    const latlng = await getLatLngFromMapBox(value); // Lấy tọa độ từ Goong API
-    if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
-    fetchRestByLocation(latlng);
-  };
+  let handleSelect;
+  if(props.onSelectAddress){
+    if(page==="cart"){
+      handleSelect = async (value) => {
+        if (value === "") localStorage.removeItem("location");
+        else localStorage.setItem("location", value);
+        setAddress(value);
+        setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
+        const latlng = await getLatLngFromMapBox(value); // Lấy tọa độ từ Goong API
+        if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
+        // fetchRestByLocation(latlng);
+        props.onSelectAddress(value);
+      };      
+    }
+  }
+  else{
+    //default: handleSelector for page===home
+    handleSelect = async (value) => {
+      if (value === "") localStorage.removeItem("location");
+      else localStorage.setItem("location", value);
+      setAddress(value);
+      setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
+      const latlng = await getLatLngFromMapBox(value); // Lấy tọa độ từ Goong API
+      if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
+      fetchRestByLocation(latlng);
+    };
+  }
 
   const fetchRestByLocation = (latlng) => {
     dispatch(fetchRestaurantsByAddress(latlng.lat, latlng.lng));
@@ -229,7 +266,11 @@ export default function SearchBar(props) {
     <>
       <Paper
         component="form"
-        className={page !== "items" ? classes.rootHome : classes.rootItems}
+        className={page == "items" ? classes.rootItems:(
+          page=="home"? classes.rootHome : (
+            page=="cart"? classes.rootCart: ""
+          )
+        )}
       >
         {page === "home" && <LocationOn className={classes.iconButton} />}
         {page === "items" && (
@@ -274,8 +315,42 @@ export default function SearchBar(props) {
           </>
           
         )}
+        {page ==="cart"  && (
+          <>
+            <InputBase
+              value={address}
+              onChange={handleInputChange}
+              placeholder="Enter delivery address"
+              className={classes.inputCart}
+              inputProps={{
+                "aria-label": "search goong maps for delivery address",
+              }}
+            />
+            {loading && <div>Loading...</div>}
+            {suggestions.length > 0 && (
+              <div className={classes.resultsCart}>
+                {suggestions.map((suggestion, index) => {
+                  const style = suggestion.active
+                    ? { backgroundColor: "#41b6e6", cursor: "pointer" }
+                    : { backgroundColor: "#fff", cursor: "pointer" };
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => handleSelect(suggestion.properties.full_address)}
+                      style={style}
+                    >
+                      {suggestion.properties.full_address}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            
+          </>
+          
+        )}
         <SearchIcon className={classes.iconButton} />
-        {page === "home" && (
+        {page === "home" && page!=="cart" && (
           <>
             <Divider className={classes.divider} orientation="vertical" />
             <IconButton
@@ -288,6 +363,7 @@ export default function SearchBar(props) {
             </IconButton>
           </>
         )}
+        
       </Paper>
       {/* {page==="home" && (
         <button class="current-position-suggestion-btn" onClick={()=>{}}>Current position</button>

@@ -18,6 +18,10 @@ import MyButton from "../util/MyButton";
 import useForm from "../hooks/forms";
 
 import CartItem from "../components/CartItem";
+import SearchBar from "../components/SearchBar";
+import axiosInstance from "../util/axios";
+import axios from "axios";
+import * as turf from '@turf/turf';
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -60,8 +64,11 @@ const Cart = (props) => {
   const { loading, cart, price } = useSelector((state) => state.data);
   const { errors } = useSelector((state) => state.UI);
   const history = useHistory();
+  
+  //debug
+  let allState=useSelector(state=>state);
 
-  let deliveryCharge = 0;
+  let deliveryCharge = useSelector(state=>state.deliveryData.deliveryCharge);
   let cartPresent = Array.isArray(cart) && cart.length > 0;
   let cartItems = cartPresent ? cart.length : 0;
 
@@ -71,9 +78,12 @@ const Cart = (props) => {
   let zipError = null;
   let phoneNoError = null;
 
-  if (price !== 0) deliveryCharge = 0;
+  let {myErrors, setMyErrors}=useState({});
 
-  const handlePlaceOrder = () => {
+  //who the fuck put this here
+  // if (price !== 0) deliveryCharge = 0;
+
+  const handlePlaceOrder = async () => {
     console.log("handlePlaceOrder at cart.js");
 
     const userData = {
@@ -83,11 +93,60 @@ const Cart = (props) => {
       zip: inputs.zip,
       phoneNo: inputs.phoneNo,
     };
+
+    //check destination
+    if(inputs.street=="" || inputs.street==null){
+      setMyErrors(currentErrors=>{
+        return{
+          ...currentErrors,
+          destination:{
+            message:"Destination is invalid"
+          }
+        }
+      })
+      return;
+    }
+
+    //calculate delivery charge
+    let myCart=allState;
+    // let sellerId=cart[0].itemId.creator;
+    // let result=await axiosInstance.get(`/delivery/get-seller-coordinate/${sellerId}`);
+    
+    // if(result.status!==200)
+    //   return;
+    // result=result.data;
+    // let sellerPosition=result.data.address;
+    // let currentPosition=localStorage.getItem("latlng").split(",");
+    // currentPosition={
+    //     lat:currentPosition[0],
+    //     lng:currentPosition[1]
+    // }
+    // let directionServiceURL=`${process.env.REACT_APP_MAPBOX_DIRECTION_URL}/driving/${currentPosition.lng},${currentPosition.lat};${sellerPosition.lng},${sellerPosition.lat}?geometries=geojson&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`;
+    // result=await axios.get(directionServiceURL);
+    // let data=result.data;
+    // const route = {
+    //   type: 'Feature',
+    //   geometry: data.routes[0].geometry
+    // };
+    // if(result.status!==200)
+    //   return;
+    // let sellerToCustomerDistKM=turf.length(route, { units: 'kilometers' });
+    // result=await axiosInstance.get(`/delivery/get-delivery-charge/${sellerToCustomerDistKM}`);
+    // if(result.status!==200)
+    //   return;
+    // let deliveryCharge=result.data.data;
+    // dispatch({
+    //   type:"SET_DELIVERY_CHARGE",
+    //   payload:deliveryCharge
+    // })
+
+
+
     dispatch(fetchAddress(userData, history));
   };
 
   const initialAddress = props.location.state?.address || {};
-  const { inputs, handleInputChange } = useForm({
+  const { inputs, handleInputChange, setInputAddress } = useForm({
     street: initialAddress.street || "",
     locality: initialAddress.locality || "",
     aptName: initialAddress.aptName || "",
@@ -99,6 +158,11 @@ const Cart = (props) => {
     console.log("in useEffect cart");
     dispatch(getCart());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(()=>{
+    if(step==2)
+      processDeliveryCharge();
+  },[step])
 
   const nextStep = () => {
     setStep(step + 1);
@@ -117,6 +181,76 @@ const Cart = (props) => {
       if (error.msg.includes("Street cannot")) streetError = error.msg;
     }
   }
+  const processDeliveryCharge=async ()=>{
+    if(cart.length==0)
+      return;
+    let sellerId=cart[0].itemId.creator;
+    let result=await axiosInstance.get(`/delivery/get-seller-coordinate/${sellerId}`);
+    
+    if(result.status!==200)
+      return;
+    result=result.data;
+    let sellerPosition=result.data.address;
+    let currentPosition=localStorage.getItem("latlng").split(",");
+    currentPosition={
+        lat:currentPosition[0],
+        lng:currentPosition[1]
+    }
+    let directionServiceURL=`${process.env.REACT_APP_MAPBOX_DIRECTION_URL}/driving/${currentPosition.lng},${currentPosition.lat};${sellerPosition.lng},${sellerPosition.lat}?geometries=geojson&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`;
+    result=await axios.get(directionServiceURL);
+    let data=result.data;
+    const route = {
+      type: 'Feature',
+      geometry: data.routes[0].geometry
+    };
+    if(result.status!==200)
+      return;
+    let sellerToCustomerDistKM=turf.length(route, { units: 'kilometers' });
+    result=await axiosInstance.get(`/delivery/get-delivery-charge/${sellerToCustomerDistKM}`);
+    if(result.status!==200)
+      return;
+    let deliveryCharge=result.data.data;
+    dispatch({
+      type:"SET_DELIVERY_CHARGE",
+      payload:deliveryCharge
+    })
+  }
+  const onSelectAddress=async (value) => {
+    setInputAddress(value);
+    processDeliveryCharge()
+    // let sellerId=cart[0].itemId.creator;
+    // let result=await axiosInstance.get(`/delivery/get-seller-coordinate/${sellerId}`);
+    
+    // if(result.status!==200)
+    //   return;
+    // result=result.data;
+    // let sellerPosition=result.data.address;
+    // let currentPosition=localStorage.getItem("latlng").split(",");
+    // currentPosition={
+    //     lat:currentPosition[0],
+    //     lng:currentPosition[1]
+    // }
+    // let directionServiceURL=`${process.env.REACT_APP_MAPBOX_DIRECTION_URL}/driving/${currentPosition.lng},${currentPosition.lat};${sellerPosition.lng},${sellerPosition.lat}?geometries=geojson&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`;
+    // result=await axios.get(directionServiceURL);
+    // let data=result.data;
+    // const route = {
+    //   type: 'Feature',
+    //   geometry: data.routes[0].geometry
+    // };
+    // if(result.status!==200)
+    //   return;
+    // let sellerToCustomerDistKM=turf.length(route, { units: 'kilometers' });
+    // result=await axiosInstance.get(`/delivery/get-delivery-charge/${sellerToCustomerDistKM}`);
+    // if(result.status!==200)
+    //   return;
+    // let deliveryCharge=result.data.data;
+    // dispatch({
+    //   type:"SET_DELIVERY_CHARGE",
+    //   payload:deliveryCharge
+    // })
+
+  };
+
 
   return (
     <>
@@ -216,6 +350,12 @@ const Cart = (props) => {
                   </div>
                 </form>
               )}
+              {step===2 &&(
+                <>
+                  <SearchBar onSelectAddress={onSelectAddress} actions={()=>{}} page="cart"/>
+                  {/* {myErrors.destination && <div style={{color:'red'}}>{myErrors.destination.message}</div>} */}
+                </>
+              )}
             </Grid>
             <Grid item sm={3}>
               <Paper
@@ -270,6 +410,15 @@ const Cart = (props) => {
                         </Typography>
                       );
                     })}
+                    {step===2 &&(
+                      <div className={classes.spaceTypo}>
+                        {/* [not done: calculate delivery charge base on distance] */}
+                        <span>Delivery Charge</span>
+                        <span>
+                          {process.env.REACT_APP_CURRENCY} {deliveryCharge}
+                        </span>
+                      </div>
+                    )}
                   <hr />
                   <Typography gutterBottom variant="h5" noWrap>
                     <div className={classes.spaceTypo}>

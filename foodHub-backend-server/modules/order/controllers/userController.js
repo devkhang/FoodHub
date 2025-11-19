@@ -949,7 +949,7 @@ exports.getAllOrders = async (req, res, next) => {
 
 exports.createCheckoutSession = async (req, res) => {
   try {
-    const { items, total } = req.body;
+    const { items, total, deliveryCharge } = req.body;
     const userId = req.loggedInUserId;
 
     console.log("total :", total);

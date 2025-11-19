@@ -94,7 +94,6 @@ export default function dataReducer(state = initialState, action) {
         ...state,
         snackbar:action.payload
       }
-
     default:
       return state;
   }

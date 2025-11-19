@@ -319,10 +319,11 @@ export const createCheckoutSession = (history) => (dispatch, getState) => {
   dispatch({ type: LOADING_UI });
 
   const { cart = [], price = 0 } = getState().data;
-  const deliveryCharge = price !== 0 ? 30000 : 0;
+  const {deliveryCharge}=getState().deliveryData;
+  // const deliveryCharge = price !== 0 ? 30000 : 0;
   console.log("cart :",cart);
 
-  const orderData = {
+  let orderData = {
     items: cart.map(c => ({
       itemId: c.itemId._id.toString(),   // chỉ ID (string)
       title:  c.itemId.title,            // tiêu đề ngắn
@@ -330,7 +331,9 @@ export const createCheckoutSession = (history) => (dispatch, getState) => {
       quantity: c.quantity,
     })),
     total: price + deliveryCharge,
+    deliveryCharge:deliveryCharge
   };
+  
 
   axios
     .post("/order/create-checkout-session", orderData)
