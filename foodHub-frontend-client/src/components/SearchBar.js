@@ -14,11 +14,12 @@ import debouncing from "../util/rateLimitting/debouncing";
 
 const processAutoComplete = debouncing(async (input, setSuggestions) => {
   const response = await axios.get(
-    `${process.env.REACT_APP_GOONG_AUTOCOMPLETE}?api_key=${
-      process.env.REACT_APP_GOONG_API_KEY
-    }&input=${encodeURIComponent(input)}`
+    `${process.env.REACT_APP_MAPBOX_GEOCODING}/forward?access_token=${
+      process.env.REACT_APP_MAPBOX_API_KEY
+    }&q=${encodeURIComponent(input)}&limit=${process.env.REACT_APP_AUTOCOMPLETE_LIMIT}`
   );
-  setSuggestions(response.data.predictions || []);
+  // setSuggestions(response.data.predictions || []); goong
+  setSuggestions(response.data.features || []);//mapbox
 }, 2000);
 
 const useStyles = makeStyles((theme) => ({
@@ -35,13 +36,32 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
     backgroundColor: "#edebeb",
   },
+  rootCart:{
+    padding: "2px 4px",
+    display: "flex",
+    flexDirection:"column",
+    alignItems: "center",
+    width: 860,
+  },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
     position: "relative",
   },
+  inputCart:{
+    marginLeft: theme.spacing(1),
+    width:"100%",
+    position: "relative",
+  },
   results: {
     position: "absolute",
+    bottom: -166,
+    left: "26%",
+    zIndex: 999,
+    width: 760,
+    height: "15%",
+  },
+  resultsCart:{
     bottom: -166,
     left: "26%",
     zIndex: 999,
@@ -75,7 +95,7 @@ export default function SearchBar(props) {
   get nearby restaurant
   */
   const getBrowserLocation = () => {
-    console.log(12);
+    // console.log(12);
     navigator.geolocation.getCurrentPosition(
       function (position) {
         getUserAddressBy(position.coords.latitude, position.coords.longitude);
@@ -93,15 +113,33 @@ export default function SearchBar(props) {
   set the current (lng,lat) as the lng,lat) of the suggestion
   get restaurant closed to the current (lng, lat)
   */
-  const handleSelect = async (value) => {
-    if (value === "") localStorage.removeItem("location");
-    else localStorage.setItem("location", value);
-    setAddress(value);
-    setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
-    const latlng = await getLatLngFromGoong(value); // Lấy tọa độ từ Goong API
-    if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
-    fetchRestByLocation(latlng);
-  };
+  let handleSelect;
+  if(props.onSelectAddress){
+    if(page==="cart"){
+      handleSelect = async (value) => {
+        if (value === "") localStorage.removeItem("location");
+        else localStorage.setItem("location", value);
+        setAddress(value);
+        setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
+        const latlng = await getLatLngFromMapBox(value); // Lấy tọa độ từ Goong API
+        if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
+        // fetchRestByLocation(latlng);
+        props.onSelectAddress(value);
+      };      
+    }
+  }
+  else{
+    //default: handleSelector for page===home
+    handleSelect = async (value) => {
+      if (value === "") localStorage.removeItem("location");
+      else localStorage.setItem("location", value);
+      setAddress(value);
+      setSuggestions([]); // Ẩn danh sách gợi ý sau khi chọn
+      const latlng = await getLatLngFromMapBox(value); // Lấy tọa độ từ Goong API
+      if (latlng) localStorage.setItem("latlng", `${latlng.lat}, ${latlng.lng}`);
+      fetchRestByLocation(latlng);
+    };
+  }
 
   const fetchRestByLocation = (latlng) => {
     dispatch(fetchRestaurantsByAddress(latlng.lat, latlng.lng));
@@ -112,25 +150,40 @@ export default function SearchBar(props) {
     props.handleSearch(event.target.value);
   };
 
-  const getUserAddressBy = (lat, long) => {
+  const getUserAddressBy = (lat, lng) => {
     const latlng = {
       lat: lat,
-      lng: long,
+      lng: lng,
     };
     axios
       .get(
-        `${process.env.REACT_APP_GOONG_GEOCODE}?latlng=${lat},${long}&api_key=${process.env.REACT_APP_GOONG_API_KEY}`
+        // `${process.env.REACT_APP_GOONG_GEOCODE}?latlng=${lat},${long}&api_key=${process.env.REACT_APP_GOONG_API_KEY}` goong
+        `${process.env.REACT_APP_MAPBOX_GEOCODING}/reverse?longitude=${lng}&latitude=${lat}&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`
       )
+      //goong
+      // .then((result) => {
+      //   console.log(result.data);
+      //   if (result.data.results[0]?.formatted_address === "")
+      //     localStorage.removeItem("location");
+      //   else
+      //     localStorage.setItem(
+      //       "location",
+      //       result.data.results[0].formatted_address
+      //     );
+      //   setAddress(result.data.results[0].formatted_address);
+      //   fetchRestByLocation(latlng);
+      // })
+      //mapbox
       .then((result) => {
         console.log(result.data);
-        if (result.data.results[0]?.formatted_address === "")
+        if (result.data.features[0]?.properties.full_address === "")
           localStorage.removeItem("location");
         else
           localStorage.setItem(
             "location",
-            result.data.results[0].formatted_address
+            result.data.features[0].properties.full_address
           );
-        setAddress(result.data.results[0].formatted_address);
+        setAddress(result.data.features[0].properties.full_address);
         fetchRestByLocation(latlng);
       })
       .catch((err) => {
@@ -149,6 +202,27 @@ export default function SearchBar(props) {
       const results = response.data.results;
       if (results.length > 0) {
         return results[0].geometry.location;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching latlng from Goong:", error);
+      return null;
+    }
+  };
+
+  const getLatLngFromMapBox = async (address) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_MAPBOX_GEOCODING}/forward?q=${encodeURIComponent(
+          address
+        )}&access_token=${process.env.REACT_APP_MAPBOX_API_KEY}`
+      );
+      const results = response.data.features;
+      if (results.length > 0) {
+        return {
+          lng:results[0].geometry.coordinates[0],
+          lat:results[0].geometry.coordinates[1]
+        };
       }
       return null;
     } catch (error) {
@@ -192,7 +266,11 @@ export default function SearchBar(props) {
     <>
       <Paper
         component="form"
-        className={page !== "items" ? classes.rootHome : classes.rootItems}
+        className={page == "items" ? classes.rootItems:(
+          page=="home"? classes.rootHome : (
+            page=="cart"? classes.rootCart: ""
+          )
+        )}
       >
         {page === "home" && <LocationOn className={classes.iconButton} />}
         {page === "items" && (
@@ -224,10 +302,44 @@ export default function SearchBar(props) {
                   return (
                     <div
                       key={index}
-                      onClick={() => handleSelect(suggestion.description)}
+                      onClick={() => handleSelect(suggestion.properties.full_address)}
                       style={style}
                     >
-                      {suggestion.description}
+                      {suggestion.properties.full_address}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            
+          </>
+          
+        )}
+        {page ==="cart"  && (
+          <>
+            <InputBase
+              value={address}
+              onChange={handleInputChange}
+              placeholder="Enter delivery address"
+              className={classes.inputCart}
+              inputProps={{
+                "aria-label": "search goong maps for delivery address",
+              }}
+            />
+            {loading && <div>Loading...</div>}
+            {suggestions.length > 0 && (
+              <div className={classes.resultsCart}>
+                {suggestions.map((suggestion, index) => {
+                  const style = suggestion.active
+                    ? { backgroundColor: "#41b6e6", cursor: "pointer" }
+                    : { backgroundColor: "#fff", cursor: "pointer" };
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => handleSelect(suggestion.properties.full_address)}
+                      style={style}
+                    >
+                      {suggestion.properties.full_address}
                     </div>
                   );
                 })}
@@ -238,7 +350,7 @@ export default function SearchBar(props) {
           
         )}
         <SearchIcon className={classes.iconButton} />
-        {page === "home" && (
+        {page === "home" && page!=="cart" && (
           <>
             <Divider className={classes.divider} orientation="vertical" />
             <IconButton
@@ -251,6 +363,7 @@ export default function SearchBar(props) {
             </IconButton>
           </>
         )}
+        
       </Paper>
       {/* {page==="home" && (
         <button class="current-position-suggestion-btn" onClick={()=>{}}>Current position</button>

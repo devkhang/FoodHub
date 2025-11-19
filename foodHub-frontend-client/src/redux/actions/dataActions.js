@@ -274,17 +274,35 @@ export const fetchAddress = (userData, history) => (dispatch) => {
   console.log(userData);
   const location = `+${userData.street}`;
   axiosNewInstance
-    .get(process.env.REACT_APP_GOONG_GEOCODE, {
+    //goong
+    // .get(process.env.REACT_APP_GOONG_GEOCODE, {
+    //   params: {
+    //     address: location,
+    //     api_key: process.env.REACT_APP_GOONG_API_KEY,
+    //   },
+    // })
+    // .then((result) => {
+    //   const formattedAddress = result.data.results[0].formatted_address;
+    //   console.log(formattedAddress);
+    //   const lat = result.data.results[0].geometry.location.lat;
+    //   const lng = result.data.results[0].geometry.location.lng;
+    //   userData.lat = lat;
+    //   userData.lng = lng;
+    //   userData.formattedAddress = formattedAddress;
+    //   dispatch(addAddress(userData, history));
+    // })
+    //mapbox
+    .get(process.env.REACT_APP_MAPBOX_GEOCODING, {
       params: {
-        address: location,
-        api_key: process.env.REACT_APP_GOONG_API_KEY,
+        q: location,
+        access_token: process.env.REACT_APP_GOONG_API_KEY,
       },
     })
     .then((result) => {
-      const formattedAddress = result.data.results[0].formatted_address;
+      const formattedAddress = result.data.features[0].properties.full_address;
       console.log(formattedAddress);
-      const lat = result.data.results[0].geometry.location.lat;
-      const lng = result.data.results[0].geometry.location.lng;
+      const lat = result.data.features[0].geometry.coordinates[1];
+      const lng = result.data.features[0].geometry.coordinates[0];
       userData.lat = lat;
       userData.lng = lng;
       userData.formattedAddress = formattedAddress;
@@ -301,10 +319,11 @@ export const createCheckoutSession = (history) => (dispatch, getState) => {
   dispatch({ type: LOADING_UI });
 
   const { cart = [], price = 0 } = getState().data;
-  const deliveryCharge = price !== 0 ? 30000 : 0;
+  const {deliveryCharge}=getState().deliveryData;
+  // const deliveryCharge = price !== 0 ? 30000 : 0;
   console.log("cart :",cart);
 
-  const orderData = {
+  let orderData = {
     items: cart.map(c => ({
       itemId: c.itemId._id.toString(),   // chỉ ID (string)
       title:  c.itemId.title,            // tiêu đề ngắn
@@ -312,7 +331,9 @@ export const createCheckoutSession = (history) => (dispatch, getState) => {
       quantity: c.quantity,
     })),
     total: price + deliveryCharge,
+    deliveryCharge:deliveryCharge
   };
+  
 
   axios
     .post("/order/create-checkout-session", orderData)

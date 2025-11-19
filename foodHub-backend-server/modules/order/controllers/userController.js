@@ -950,11 +950,9 @@ const resultA=0; //A()
 
 exports.createCheckoutSession = async (req, res) => {
   try {
-    //nhan duoc delivery charge trong req
-    // const deliveryCharge=req...deliveryCharge | 0;
-    const { items, total } = req.body;
+    const { items, total, deliveryCharge } = req.body;
     const userId = req.loggedInUserId;
-    const deliveryCharge = 1.5;
+    // const deliveryCharge = 1.5;
     console.log("total :", total);
     // Không cần tìm order → BỎ findOne
 

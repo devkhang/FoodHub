@@ -71,7 +71,7 @@ const DeliveryJobNotification=(props)=>{
                 "lng":pos.coords.longitude,
                 "lat":pos.coords.latitude
             }
-            console.log("url", `${process.env.REACT_APP_GOONG_DISTANCEMATRIX}?origins=${currentPosition.lat},${currentPosition.lng}&destinations=${sellerAddress.pos.lat},${sellerAddress.pos.lng}&vehicle=car&api_key=${process.env.REACT_APP_GOONG_API_KEY}`);
+            // console.log("url", `${process.env.REACT_APP_GOONG_DISTANCEMATRIX}?origins=${currentPosition.lat},${currentPosition.lng}&destinations=${sellerAddress.pos.lat},${sellerAddress.pos.lng}&vehicle=car&api_key=${process.env.REACT_APP_GOONG_API_KEY}`);
             
             let distancesMatrix=await axios.get(`${process.env.REACT_APP_GOONG_DISTANCEMATRIX}?origins=${currentPosition.lat},${currentPosition.lng}&destinations=${sellerAddress.pos.lat},${sellerAddress.pos.lng}&vehicle=car&api_key=${process.env.REACT_APP_GOONG_API_KEY}`)
             distancesMatrix=distancesMatrix.data;

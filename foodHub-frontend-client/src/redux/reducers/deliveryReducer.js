@@ -16,7 +16,8 @@ const initialState=
             lat:null,
             lng:null
         }
-    }
+    },
+    deliveryCharge:null
 }
 
 
@@ -31,6 +32,11 @@ export default function deliveryDataReducer(state=initialState, action){
                 ...(action.payload)
             };
             break;
+        case "SET_DELIVERY_CHARGE":
+            return{
+                ...state,
+                deliveryCharge:action.payload
+            }
         case "removeDeliveryJobNotification":
             return initialState
         default:

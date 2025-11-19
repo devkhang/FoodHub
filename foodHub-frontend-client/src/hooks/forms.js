@@ -18,10 +18,17 @@ const useForm = (initialValues, submitCallback) => {
       [event.target.name]: event.target.value,
     }));
   };
+  const setInputAddress=(address)=>{
+    setInputs({
+      ...inputs,
+      street:address
+    })
+  }
   return {
     handleSubmit,
     handleInputChange,
     inputs,
+    setInputAddress
   };
 };
 export default useForm;

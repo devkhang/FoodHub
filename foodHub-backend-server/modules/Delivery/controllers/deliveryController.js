@@ -511,7 +511,7 @@ exports.finishDeliveryJob=async (req, res, next)=>{
     order.status="Completed";
 
     deliveryDetail.endTime=new Date();
-    deliveryDetail.deliveryCharge=parseInt(process.env.DELIVERY_CHARGE_BASE)+travelDistance*parseInt(process.env.DELIVERY_CHARGE_RATE_PER_KM);//[not done: get actual delivery charge in backend]
+    // deliveryDetail.deliveryCharge=parseInt(process.env.DELIVERY_CHARGE_BASE)+travelDistance*parseInt(process.env.DELIVERY_CHARGE_RATE_PER_KM);//[not done: get actual delivery charge in backend]
     await deliveryDetail.save();
 
     if (order.status === "Completed" && !order.transferId && order.seller?.sellerId?.stripeAccountId) {
@@ -566,4 +566,39 @@ exports.finishDeliveryJob=async (req, res, next)=>{
   }
 
 
+}
+
+exports.getSellerCoordinate=async (req, res, next)=>{
+  try {
+    let sellerId=req.params.sellerId;
+    let sellerCoordinate=await Seller.findById(sellerId)
+    .select("address.lng address.lat");
+
+    if(!sellerCoordinate){
+      throw new Error("No seller is found");
+    }
+
+    res.status(200).json({
+      status:"ok",
+      data:sellerCoordinate
+    })
+    
+  } catch (error) {
+    next(error, req, res, next);
+  }
+
+}
+
+exports.getDeliveryCharge=(req, res, next)=>{
+  try {
+    let travelDistKM=parseFloat(req.params.travelDistKM);
+    let deliveryCharge=parseInt(process.env.DELIVERY_CHARGE_BASE)+travelDistKM*parseInt(process.env.DELIVERY_CHARGE_RATE_PER_KM);
+    res.status(200).json({
+      status:"ok",
+      data:deliveryCharge
+    })
+
+  } catch (error) {
+    next(error, req, res, next);
+  }
 }
