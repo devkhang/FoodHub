@@ -539,6 +539,7 @@ exports.finishDeliveryJob=async (req, res, next)=>{
         // Có thể gửi thông báo admin sau
       }
     }
+    order.isArrived="false";
     let updatedOrder=await order.save();
     io.getIO().emit("orders", { action: "update", order: updatedOrder });   
     //untrack the order assignment
@@ -601,4 +602,31 @@ exports.getDeliveryCharge=(req, res, next)=>{
   } catch (error) {
     next(error, req, res, next);
   }
+}
+
+exports.deliveryArrive=async (req, res, next)=>{
+  try {
+    //check drone identity
+    const {orderId, droneId}=req.body;
+    let deliveryDetail=await DeliveryDetail.findOne({
+      order:orderId,
+      drone:droneId
+    });
+    if(!deliveryDetail){
+      throw new Error("something are wrong with order, droneId");
+    }
+    await Order.findByIdAndUpdate(
+      orderId,
+      {
+        isArrived:"true"
+      }
+    );
+    res.status(200).json({
+      status:"ok"
+    })
+
+  } catch (error) {
+    next(error, req, res, next);
+  }
+
 }

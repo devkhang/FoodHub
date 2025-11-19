@@ -13,7 +13,7 @@ const accountSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["ROLE_USER","ROLE_SELLER","ROLE_DELIVERY"],
+      enum: ["ROLE_USER","ROLE_SELLER"],
       required: true,
     },
     accountVerifyToken: String,

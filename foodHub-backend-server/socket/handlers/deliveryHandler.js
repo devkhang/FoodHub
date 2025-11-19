@@ -1,4 +1,6 @@
+const Order = require("../../modules/order/models/order");
 const {getIO}=require("../../util/socket");
+const { accountIdToSocket } = require("../sources/clientSource");
 const {droneOrderAssignment, socketToDrone}=require("../sources/droneSource");
 
 exports.registerTrackDelivery=()=>{
@@ -37,5 +39,19 @@ exports.trackDelivery=()=>{
             
         })
     })
+}
+
+exports.deliveryArrive=()=>{
+    const io=getIO();
+    io.on("connection",(socket)=>{
+        socket.on("delivery:arrive",async ({orderId})=>{
+            let order=await Order.findById(orderId);
+            let sellerId=order.seller.sellerId.toString();
+            let socketId=accountIdToSocket.get(sellerId);
+            io.to(socketId).emit("delivery:arrive",{
+                orderId:orderId
+            })
+        })
+    })    
 }
 

@@ -22,6 +22,7 @@ const initialState = {
   orders: [],
   addCartFailReason:String,
   snackbar:false,
+  deliveryArrivedOrders:[]
 };
 
 export default function dataReducer(state = initialState, action) {

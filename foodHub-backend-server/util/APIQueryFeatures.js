@@ -9,7 +9,7 @@ class APIQueryFeatures{
         this.model=model//Mongoose Model
     }
     filter(){
-        const excludedFields=["fields", "sort", "page", "limit"];
+        const excludedFields=["fields", "sort", "page", "limit","first","last"];
         let queryObj={...this.queryString};
         excludedFields.forEach(el=>delete queryObj[el]);
 

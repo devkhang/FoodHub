@@ -20,4 +20,6 @@ router.post("/drone-accept-job", deliveryControllers.droneAcceptDeliveryJob);
 router.put("/finishDeliveryJob", deliveryControllers.finishDeliveryJob);
 router.get("/get-seller-coordinate/:sellerId", auth.verifyUser, deliveryControllers.getSellerCoordinate);
 router.get("/get-delivery-charge/:travelDistKM", auth.verifyUser, deliveryControllers.getDeliveryCharge)
+router.put("/delivery-arrive",deliveryControllers.deliveryArrive);
+
 module.exports = router; 

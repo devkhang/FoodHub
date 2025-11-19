@@ -10,6 +10,14 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import PaginationWithRedux from "../components/paginationWithRedux";
+import axiosInstance from "../util/axios";
+import { SET_ORDERS } from "../redux/types";
+import { deliveryArrive } from "../socket/deliveryHandler";
+import { useState } from "react";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
+import { initSocket, getSocket } from "../socket/socket";
+
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -25,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Orders = (props) => {
+  const [openSnackBar, setOpenSnackBar]=useState(false);
+  const [arriveOrderID, setArriveOrderID]=useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const { orders} = useSelector((state) => state.data);
@@ -65,12 +75,71 @@ const Orders = (props) => {
         dispatch(getOrders());
       }
     });
+
+    socket.removeAllListeners("delivery:arrive");
+    socket.on("delivery:arrive",({orderId})=>{
+      setArriveOrderID(orderId);
+      setOpenSnackBar(true);  
+    })
+
+    // deliveryArrive((orderId)=>{
+    //   setArriveOrderID(orderId);
+    //   setOpenSnackBar(true);
+    // });
+
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleSearchOrderById=async (e)=>{
+    e.preventDefault();
+    let formData=new FormData(e.target);
+    let searchOrderId=formData.get("orderID");
+    let result= await axiosInstance.get(`/order/${searchOrderId}`);
+    if(result.status!==200){
+      return;
+    }
+    let order=result.data.data;
+    dispatch({
+      type:SET_ORDERS,
+      payload:[order]
+    });
+  }
+
+  const handleClickDeliveryArrive=async ()=>{
+    let result=await axiosInstance.get(`/orders?isArrived=true`);
+    if(result.status!==200)
+      return;
+    dispatch({
+      type:SET_ORDERS,
+      payload:result.data.orders
+    });
+  }
+
 
   return (
     <>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={3600}
+        onClose={()=>{
+          setOpenSnackBar(false);
+        }}
+      >
+        <Alert
+          style={{ backgroundColor: "#157a21" }}
+        >
+          {`Delivery for order ${arriveOrderID} has arrived`}
+        </Alert>
+      </Snackbar>
       <Typography variant="h5" className={classes.title}>
         Order History
+        <form class="SearchOrderById" onSubmit={handleSearchOrderById}>
+          <input placeholder="order id" name="orderID"></input>
+          <br></br>
+          <button type="submit">Search</button>
+        </form>
+        {role==="ROLE_SELLER" &&(
+          <button onClick={handleClickDeliveryArrive}>Delivery Arrived</button>
+        )}
       </Typography>
       <Grid item container direction="row">
         <Grid item xs={12} sm={1} />

@@ -12,6 +12,7 @@ const { init, getIO } = require("./util/socket");
 let io;
 const {registerDeliveryPartner, trackDeliveryPartnerLocation}=require("./socket/handlers/deliveryPartnerHandler");
 const {droneUpdatePositionHandler, droneSocketRegistration, droneCutConnection}=require("./socket/handlers/droneHandler")
+const {accountIdToSocket}=require("./socket/sources/clientSource")
 
 //Route
 const authRoutes = require("./modules/accesscontrol/route/auth");
@@ -22,7 +23,7 @@ const authController = require("./modules/accesscontrol/controllers/authControll
 const stripeRoutes = require("./modules/Payment/route/stripe");
 const webhook = require("./modules/Payment/route/webhook")
 const droneRoute=require("./modules/accesscontrol/route/droneRoute");
-const { trackDelivery, registerTrackDelivery, unRegisterTrackDelivery } = require("./socket/handlers/deliveryHandler");
+const { trackDelivery, registerTrackDelivery, unRegisterTrackDelivery, deliveryArrive } = require("./socket/handlers/deliveryHandler");
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     //[not done: this is still relative to the CWD]
@@ -121,6 +122,7 @@ mongoose
         clients[data.userId] = {
           socket: socket.id,
         };
+        accountIdToSocket.set(data.userId, socket.id)
       });
 
       //Removing the socket on disconnect
@@ -144,6 +146,7 @@ mongoose
     registerTrackDelivery();
     unRegisterTrackDelivery();
     trackDelivery();
+    deliveryArrive();
 
   })
   .catch((err) => console.log(err));

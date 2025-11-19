@@ -138,3 +138,11 @@ export const unTrackDelivery=()=>{
     const socket=getSocket();
     socket.removeAllListeners("drone-delivery-progress");
 }
+
+export const deliveryArrive=(cb)=>{
+  const socket=getSocket();
+  socket.removeAllListeners("delivery:arrive");
+  socket.on("delivery:arrive",({orderId})=>{
+    cb(orderId)
+  })
+}

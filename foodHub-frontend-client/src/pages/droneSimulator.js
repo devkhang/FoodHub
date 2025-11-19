@@ -7,6 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import "../css/droneSimulator.css"
 import * as turf from '@turf/turf';
 import delay from "../util/delay";
+import axiosInstance from "../util/axios";
 const io= require("socket.io-client");
 
 export default function DroneSimulator(props){
@@ -213,6 +214,13 @@ export default function DroneSimulator(props){
         await simulateDroneToSeller(map);
         isArriveAtSeller.current=true;
         // await simulateDroneToCustomer(map);
+        await axiosInstance.put("/delivery/delivery-arrive",{
+            orderId:orderId,
+            droneId:droneInfo.droneId
+        });
+        socket.current.emit("delivery:arrive",{
+            orderId:orderId
+        })
         
     }
 
