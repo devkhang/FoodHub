@@ -39,11 +39,10 @@ router.post(
 );
 
 router.get("/user", userController.getLoggedInUser);
-router.get("/order/:orderId", userController.getOrderById);
 router.post("/order", auth.verifyUser, userController.postOrder);
 router.get("/orders", userController.getOrders);
 
-router.post("/order-status/:orderId",userController.postOrderStatus);
+router.post("/order-status/:orderId", userController.postOrderStatus);
 
 router.get("/clients/connected", userController.getConnectedClients);
 
@@ -66,5 +65,7 @@ router.post(
   body("session_id", "Session ID không hợp lệ").trim().not().isEmpty(),
   userController.verifySession
 );
+
+router.get("/order/:orderId", userController.getOrderById);
 
 module.exports = router;

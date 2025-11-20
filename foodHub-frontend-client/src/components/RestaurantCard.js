@@ -23,7 +23,6 @@ export default function RestaurantCard(props) {
     tags,
     costForOne,
     minOrderAmount,
-    payment,
     imageUrl,
     _id,
   } = props;
@@ -33,11 +32,6 @@ export default function RestaurantCard(props) {
   const classes = useStyles();
   let paymentString;
 
-  if (payment.length === 1)
-    paymentString = `Accepts ${payment[0].toLowerCase()} payment`;
-
-  if (payment.length === 2)
-    paymentString = `Accepts ${payment[0].toLowerCase()} & ${payment[1].toLowerCase()} payments`;
 
   return (
     <Card variant="outlined">
@@ -54,9 +48,6 @@ export default function RestaurantCard(props) {
         </Typography>
         <Typography variant="body2" color="textPrimary">
           Minimum order Rs.{minOrderAmount}
-        </Typography>
-        <Typography variant="body2" color="textPrimary">
-          {paymentString}
         </Typography>
       </CardContent>
       <hr />

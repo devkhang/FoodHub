@@ -15,7 +15,7 @@ const app = require("../../../app");
 const DeliveryPartner = require("../../accesscontrol/models/deliveryPartner");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-const APIQueryFeatures=require("../../../util/APIQueryFeatures");
+const APIQueryFeatures = require("../../../util/APIQueryFeatures");
 
 //socket
 const DeliveyPartnerSocketMap = require("../../../socket/sources/DeliveryPartnerSource");
@@ -23,8 +23,13 @@ const { getIO } = require("../../../util/socket");
 const { getClosestObjectBetweenOriginDest } = require("../../../util/delivery");
 const order = require("../../order/models/order");
 const deliveryPartnerMap = require("../../../socket/sources/DeliveryPartnerSource");
-const deliveryAssignmentMap=require("../../../socket/sources/DeliveryAssignmentMap");
-const {availableDrones, readyDrone, busyDrone, droneOrderAssignment}=require("../../../socket/sources/droneSource");
+const deliveryAssignmentMap = require("../../../socket/sources/DeliveryAssignmentMap");
+const {
+  availableDrones,
+  readyDrone,
+  busyDrone,
+  droneOrderAssignment,
+} = require("../../../socket/sources/droneSource");
 const DeliveryDetail = require("../../Delivery/models/deliveryDetail");
 
 exports.getRestaurants = (req, res, next) => {
@@ -91,7 +96,9 @@ exports.postCart = (req, res, next) => {
       return user.addToCart(targetItem);
     })
     .then((result) => {
-      return res.status(200).json({ message: "Item successfully added to cart." });
+      return res
+        .status(200)
+        .json({ message: "Item successfully added to cart." });
     })
     .catch((err) => {
       if (!err.statusCode) err.statusCode = 500;
@@ -419,51 +426,49 @@ exports.getOrders = (req, res, next) => {
     })
     .then(async (result) => {
       let query;
-      let limit=req.query.limit*1 || 1;
+      let limit = req.query.limit * 1 || 1;
       let orders;
-      if (result instanceof User){
-        totalPage=await Order.find({ "user.userId": result._id });
-        totalPage=Math.ceil(totalPage.length/limit);
+      if (result instanceof User) {
+        totalPage = await Order.find({ "user.userId": result._id });
+        totalPage = Math.ceil(totalPage.length / limit);
 
-        query=Order.find({ "user.userId": result._id }).sort({
+        query = Order.find({ "user.userId": result._id }).sort({
           createdAt: -1,
         });
-        let features=new APIQueryFeatures(query, req.query, User);
+        let features = new APIQueryFeatures(query, req.query, User);
         features.filter().sorting();
-        await features.pagination()
+        await features.pagination();
         return query;
       }
-      if (result instanceof Seller){
-        totalPage=await Order.find({ "seller.sellerId": result._id });
-        totalPage=Math.ceil(totalPage.length/limit);
+      if (result instanceof Seller) {
+        totalPage = await Order.find({ "seller.sellerId": result._id });
+        totalPage = Math.ceil(totalPage.length / limit);
 
-        query=Order.find({ "seller.sellerId": result._id }).sort({
+        query = Order.find({ "seller.sellerId": result._id }).sort({
           createdAt: -1,
         });
-        let features=new APIQueryFeatures(query, req.query, Seller);
+        let features = new APIQueryFeatures(query, req.query, Seller);
         features.filter().sorting();
-        await features.pagination()
+        await features.pagination();
         return query;
       }
-      return orders
-      
+      return orders;
     })
     .then(async (orders) => {
-      let result=[];
-      for(let order of orders){
-        let objOrder=order.toObject();
-        let deliveryDetail=await DeliveryDetail.findOne({
-          order:order._id
-        })
-        .select("drone");
-        if(deliveryDetail){
-          objOrder.droneId=deliveryDetail.drone;
+      let result = [];
+      for (let order of orders) {
+        let objOrder = order.toObject();
+        let deliveryDetail = await DeliveryDetail.findOne({
+          order: order._id,
+        }).select("drone");
+        if (deliveryDetail) {
+          objOrder.droneId = deliveryDetail.drone;
         }
         result.push(objOrder);
       }
       res.status(200).json({
-        orders:result,
-        totalPage:totalPage
+        orders: result,
+        totalPage: totalPage,
       });
     })
     .catch((err) => {
@@ -472,10 +477,10 @@ exports.getOrders = (req, res, next) => {
     });
 };
 
-exports.getOrderById=async (req, res, next)=>{
+exports.getOrderById = async (req, res, next) => {
   try {
     // let account=await Account.findById(req.loggedInUserId);
-    let order=await Order.findById(req.params.orderId);
+    let order = await Order.findById(req.params.orderId);
     //check valid accessibility
     // if(account.role==="ROLE_USER"){
     //   let user=await User.find({
@@ -496,14 +501,13 @@ exports.getOrderById=async (req, res, next)=>{
     //   }
     // }
     res.status(200).json({
-      status:"ok",
-      data:order
+      status: "ok",
+      data: order,
     });
-
   } catch (error) {
     next(error, req, res, next);
   }
-}
+};
 
 //HERE HERE HERE HERE
 function selectNextSuitableDeliveryPartner(orderId) {
@@ -744,7 +748,6 @@ exports.postOrderStatus = (req, res, next) => {
   }
   //[not done: postOrderStatus ko co quyen cap nhat status thanh complete]
 
-
   const token = authHeader.split(" ")[1];
   let decodedToken;
   try {
@@ -818,15 +821,14 @@ exports.postOrderStatus = (req, res, next) => {
     })
     .then((updatedOrder) => {
       io.getIO().emit("orders", { action: "update", order: updatedOrder });
-      if(status==="Ready"){
+      if (status === "Ready") {
         // selectNextSuitableDeliveryPartner(orderId);
         selectNextSuitablDrone(orderId);
-      }
-      else if(status==="Out For Delivery"){
-        let droneSocketId=droneOrderAssignment.get(orderId).droneId;
-        droneSocketId=availableDrones.get(droneSocketId).socketId;
-        io.getIO().to(droneSocketId).emit("order_hand_over",{
-          handOverOrderId:orderId
+      } else if (status === "Out For Delivery") {
+        let droneSocketId = droneOrderAssignment.get(orderId).droneId;
+        droneSocketId = availableDrones.get(droneSocketId).socketId;
+        io.getIO().to(droneSocketId).emit("order_hand_over", {
+          handOverOrderId: orderId,
         });
       }
       res.status(200).json({ updatedOrder });
@@ -845,18 +847,18 @@ exports.getRestaurantsByAddress = (req, res, next) => {
   const lat1 = req.params.lat;
   const lon1 = req.params.lng;
 
-  let isFirst=req.query.first;
-  let isLast=req.query.last;
-  let page=req.query.page*1 || 1;//(1)
-  let limit=req.query.limit*1 || parseInt(process.env.MAX_ITEM_PER_PAGE);//(2)
-  let skip=(page-1)*limit;
+  let isFirst = req.query.first;
+  let isLast = req.query.last;
+  let page = req.query.page * 1 || 1; //(1)
+  let limit = req.query.limit * 1 || parseInt(process.env.MAX_ITEM_PER_PAGE); //(2)
+  let skip = (page - 1) * limit;
   let totalPage;
-  let storeName=req.query.storeName;
-  let queryObj={};
-  if(storeName){
-    queryObj.name={
-      $regex:storeName
-    }
+  let storeName = req.query.storeName;
+  let queryObj = {};
+  if (storeName) {
+    queryObj.name = {
+      $regex: storeName,
+    };
   }
 
   Seller.find(queryObj)
@@ -870,7 +872,7 @@ exports.getRestaurantsByAddress = (req, res, next) => {
         return restaurant.account.isVerified === true;
       });
 
-      if(sellersVerified.length==0){
+      if (sellersVerified.length == 0) {
         throw new Error("NO_SUITABLE_SELLER");
       }
 
@@ -890,55 +892,52 @@ exports.getRestaurantsByAddress = (req, res, next) => {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         const d = R * c; // in km
-        if (d < process.env.MAX_RESTAURANT_ACCEPT_RANGE*1) result.push(seller);
+        if (d < process.env.MAX_RESTAURANT_ACCEPT_RANGE * 1)
+          result.push(seller);
 
         return result;
       }, []);
 
-      totalPage=sellersFinal.length/(process.env.MAX_ITEM_PER_PAGE*1);
-      totalPage=Math.ceil(totalPage);
+      totalPage = sellersFinal.length / (process.env.MAX_ITEM_PER_PAGE * 1);
+      totalPage = Math.ceil(totalPage);
 
-      if(isFirst){
-        skip=0;
-      }
-      else if(isLast){
-        skip=sellersFinal.length-limit;
-        skip=(skip>0)?skip:0;
+      if (isFirst) {
+        skip = 0;
+      } else if (isLast) {
+        skip = sellersFinal.length - limit;
+        skip = skip > 0 ? skip : 0;
       }
 
-      if(skip>= sellersFinal.length){
-          // return res.status(400).json({
-          //   status:"fail",
-          //   message:"this page doesn't exist"
-          // });
-          throw new Error("PAGE_DONT_EXIST");
+      if (skip >= sellersFinal.length) {
+        // return res.status(400).json({
+        //   status:"fail",
+        //   message:"this page doesn't exist"
+        // });
+        throw new Error("PAGE_DONT_EXIST");
       }
-      let sellersFinalForPage=[]
+      let sellersFinalForPage = [];
       //[not done: this code is inefficient]
       // hints: use index for faster seller retrieval
-      for(let seller of sellersFinal){
-        if(skip){
+      for (let seller of sellersFinal) {
+        if (skip) {
           --skip;
-        }
-        else{
-          if(limit){  
+        } else {
+          if (limit) {
             sellersFinalForPage.push(seller);
             --limit;
-          }
-          else{
+          } else {
             break;
           }
         }
       }
-      
+
       return sellersFinalForPage;
     })
     .then((results) => {
-
       return res.status(200).json({
         restaurants: results,
         totalItems: results.length,
-        totalPage:totalPage
+        totalPage: totalPage,
       });
     })
     .catch((err) => {
@@ -955,7 +954,6 @@ exports.getAllOrders = async (req, res, next) => {
       .populate("user.userId", "firstName lastName phone")
       .populate("seller.sellerId", "name imageUrl");
     // .lean();
-
     // 3. Tính tổng tiền
     const result = orders.map((order) => {
       return {
@@ -1046,12 +1044,11 @@ exports.clearCart = (req, res, next) => {
     .then((user) => {
       user.clearCart();
       return res.status(200).json({
-        status:"ok",
-      })
+        status: "ok",
+      });
     })
     .catch((err) => {
       if (!err.statusCode) err.statusCode = 500;
       next(err);
     });
 };
-

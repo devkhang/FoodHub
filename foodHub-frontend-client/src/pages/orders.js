@@ -1,10 +1,14 @@
-import React, { useEffect,useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import openSocket from "socket.io-client";
 
-import { getOrders, socketStatusUpdate, verifySessionAndPlaceOrder} from "../redux/actions/dataActions";
+import {
+  getOrders,
+  socketStatusUpdate,
+  verifySessionAndPlaceOrder,
+} from "../redux/actions/dataActions";
 import OrderCard from "../components/OrderCard";
-import { useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 //material-ui
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Typography from "@material-ui/core/Typography";
@@ -17,7 +21,6 @@ import { useState } from "react";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { initSocket, getSocket } from "../socket/socket";
-
 
 const useStyles = makeStyles((theme) => ({
   ...theme.spreadThis,
@@ -33,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Orders = (props) => {
-  const [openSnackBar, setOpenSnackBar]=useState(false);
-  const [arriveOrderID, setArriveOrderID]=useState(null);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [arriveOrderID, setArriveOrderID] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
-  const { orders} = useSelector((state) => state.data);
+  const { orders } = useSelector((state) => state.data);
   const {
     account: { role },
     _id,
@@ -45,18 +48,18 @@ const Orders = (props) => {
   const classes = useStyles();
   useLayoutEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const sessionId = urlParams.get('session_id');
-    console.log('sessionId :',sessionId); // Lấy từ URL ?session_id=xxx
+    const sessionId = urlParams.get("session_id");
+    console.log("sessionId :", sessionId); // Lấy từ URL ?session_id=xxx
     if (sessionId) {
       dispatch(verifySessionAndPlaceOrder(sessionId))
-      .then(() => {
-          history.push('/orders'); // ← REDIRECT Ở ĐÂY
+        .then(() => {
+          history.push("/orders"); // ← REDIRECT Ở ĐÂY
         })
         .catch(() => {
-          history.push('/cart');
+          history.push("/cart");
         }); // ← GỌI Ở ĐÂY: Verify + placeOrder nếu paid
       // Clear URL để sạch (không hiện param nữa)
-      window.history.replaceState({}, document.title, '/orders');
+      window.history.replaceState({}, document.title, "/orders");
     } else {
       dispatch(getOrders()); // Bình thường, nếu không có session_id
     }
@@ -77,56 +80,53 @@ const Orders = (props) => {
     });
 
     socket.removeAllListeners("delivery:arrive");
-    socket.on("delivery:arrive",({orderId})=>{
+    socket.on("delivery:arrive", ({ orderId }) => {
       setArriveOrderID(orderId);
-      setOpenSnackBar(true);  
-    })
+      setOpenSnackBar(true);
+    });
 
     // deliveryArrive((orderId)=>{
     //   setArriveOrderID(orderId);
     //   setOpenSnackBar(true);
     // });
-
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSearchOrderById=async (e)=>{
+  const handleSearchOrderById = async (e) => {
     e.preventDefault();
-    let formData=new FormData(e.target);
-    let searchOrderId=formData.get("orderID") || null;
-    let result= await axiosInstance.get(`/order/${searchOrderId}`);
-    if(result.status!==200){
-      return;
-    }
-    let order=result.data.data;
-    dispatch({
-      type:SET_ORDERS,
-      payload:[order]
-    });
-  }
+    try {
+      let formData = new FormData(e.target);
+      let searchOrderId = formData.get("orderID") || null;
+      let result = await axiosInstance.get(`/order/${searchOrderId}`);
+      if (result.status !== 200) {
+        return;
+      }
+      let order = result.data.data;
+      dispatch({
+        type: SET_ORDERS,
+        payload: [order],
+      });
+    } catch (error) {}
+  };
 
-  const handleClickDeliveryArrive=async ()=>{
-    let result=await axiosInstance.get(`/orders?isArrived=true`);
-    if(result.status!==200)
-      return;
+  const handleClickDeliveryArrive = async () => {
+    let result = await axiosInstance.get(`/orders?isArrived=true`);
+    if (result.status !== 200) return;
     dispatch({
-      type:SET_ORDERS,
-      payload:result.data.orders
+      type: SET_ORDERS,
+      payload: result.data.orders,
     });
-  }
-
+  };
 
   return (
     <>
       <Snackbar
         open={openSnackBar}
         autoHideDuration={3600}
-        onClose={()=>{
+        onClose={() => {
           setOpenSnackBar(false);
         }}
       >
-        <Alert
-          style={{ backgroundColor: "#157a21" }}
-        >
+        <Alert style={{ backgroundColor: "#157a21" }}>
           {`Delivery for order ${arriveOrderID} has arrived`}
         </Alert>
       </Snackbar>
@@ -137,7 +137,7 @@ const Orders = (props) => {
           <br></br>
           <button type="submit">Search</button>
         </form>
-        {role==="ROLE_SELLER" &&(
+        {role === "ROLE_SELLER" && (
           <button onClick={handleClickDeliveryArrive}>Delivery Arrived</button>
         )}
       </Typography>
@@ -160,9 +160,7 @@ const Orders = (props) => {
         </Grid>
         <Grid item xs={12} sm={1} />
       </Grid>
-        {(orders && orders.length>0)?(
-          <PaginationWithRedux for="order"/>
-        ):("")}
+      {orders && orders.length > 0 ? <PaginationWithRedux for="order" /> : ""}
     </>
   );
 };
