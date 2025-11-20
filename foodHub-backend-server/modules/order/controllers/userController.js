@@ -474,27 +474,27 @@ exports.getOrders = (req, res, next) => {
 
 exports.getOrderById=async (req, res, next)=>{
   try {
-    let account=await Account.findById(req.loggedInUserId);
+    // let account=await Account.findById(req.loggedInUserId);
     let order=await Order.findById(req.params.orderId);
     //check valid accessibility
-    if(account.role==="ROLE_USER"){
-      let user=await User.find({
-        account:req.loggedInUserId
-      });
-      user=user[0];
-      if(order.user.userId.toString()!==user.id){
-        throw new Error("Unauthorized");
-      }
-    }
-    else if(account.role==="ROLE_SELLER"){
-      let seller=await Seller.find({
-        account:req.loggedInUserId
-      });
-      seller=seller[0];
-      if(order.seller.sellerId.toString()!==seller.id){
-        throw new Error("Unauthorized");
-      }
-    }
+    // if(account.role==="ROLE_USER"){
+    //   let user=await User.find({
+    //     account:req.loggedInUserId
+    //   });
+    //   user=user[0];
+    //   if(order.user.userId.toString()!==user.id){
+    //     throw new Error("Unauthorized");
+    //   }
+    // }
+    // else if(account.role==="ROLE_SELLER"){
+    //   let seller=await Seller.find({
+    //     account:req.loggedInUserId
+    //   });
+    //   seller=seller[0];
+    //   if(order.seller.sellerId.toString()!==seller.id){
+    //     throw new Error("Unauthorized");
+    //   }
+    // }
     res.status(200).json({
       status:"ok",
       data:order

@@ -39,7 +39,7 @@ router.post(
 );
 
 router.get("/user", userController.getLoggedInUser);
-router.get("/order/:orderId", auth.verifySeller, userController.getOrderById);
+router.get("/order/:orderId", userController.getOrderById);
 router.post("/order", auth.verifyUser, userController.postOrder);
 router.get("/orders", userController.getOrders);
 
