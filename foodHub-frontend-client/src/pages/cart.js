@@ -75,7 +75,7 @@ const Cart = (props) => {
   let streetError = null;
   let phoneNoError = null;
 
-  let {myErrors, setMyErrors}=useState({});
+  let [myErrors, setMyErrors]=useState({});
 
   //who the fuck put this here
   // if (price !== 0) deliveryCharge = 0;
@@ -153,6 +153,8 @@ const Cart = (props) => {
   useEffect(() => {
     console.log("in useEffect cart");
     dispatch(getCart());
+    let street=localStorage().get("location");
+    inputs.street=street;
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(()=>{

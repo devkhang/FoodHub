@@ -124,7 +124,7 @@ export const trackDelivery=(map, positionSource, routeSource)=>{
         map.getSource(routeSource).setData(geojsonRoute);
         map.flyTo({
             center: geoJsonPosition.features[0].geometry.coordinates,
-            zoom: 9,
+            zoom: 12,
             speed: 1.5,
             curve: 1,
             easing(t) {
