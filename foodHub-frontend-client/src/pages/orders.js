@@ -92,7 +92,7 @@ const Orders = (props) => {
   const handleSearchOrderById=async (e)=>{
     e.preventDefault();
     let formData=new FormData(e.target);
-    let searchOrderId=formData.get("orderID");
+    let searchOrderId=formData.get("orderID") || null;
     let result= await axiosInstance.get(`/order/${searchOrderId}`);
     if(result.status!==200){
       return;

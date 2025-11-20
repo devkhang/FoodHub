@@ -98,6 +98,7 @@ export default function SearchBar(props) {
     // console.log(12);
     navigator.geolocation.getCurrentPosition(
       function (position) {
+        localStorage.setItem("latlng", `${position.coords.latitude}, ${position.coords.longitude}`);
         getUserAddressBy(position.coords.latitude, position.coords.longitude);
       },
       function (error) {
