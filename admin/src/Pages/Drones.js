@@ -4,7 +4,7 @@ import { Card, Table, Spin, Alert, Modal, Form, Input, Select, Button, message, 
 import axios from 'axios';
 
 const { Option } = Select;
-const API_BASE = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+const API_BASE = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001';
 
 export default function Drones() {
   const [drones, setDrones] = useState([]);
