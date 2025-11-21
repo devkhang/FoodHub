@@ -32,11 +32,11 @@
       const sellerId = localStorage.getItem('sellerId');
       if (!sellerId) {
         alert('Không tìm thấy thông tin. Vui lòng đăng ký lại.');
-        window.location.href = 'localhost:3000/addrestaurant';
+        window.location.href = 'https://foodhub-front-end.onrender.com/addrestaurant';
         return;
       }
 
-      fetch('http://localhost:3000/seller/retry-onboarding', {
+      fetch('https://foodhub-front-end.onrender.com/seller/retry-onboarding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sellerId })

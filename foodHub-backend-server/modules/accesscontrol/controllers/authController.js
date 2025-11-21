@@ -363,8 +363,8 @@ exports.refreshOnboarding = async (req, res) => {
 
   const accountLink = await stripe.accountLinks.create({
     account: stripeAccountId,
-    return_url: `http://localhost:3000/onboarding/success?accountId=${stripeAccountId}`,
-    refresh_url: `http://localhost:3000/onboarding/refresh?accountId=${stripeAccountId}`,
+    return_url: `${process.env.FRONT_END_URL}/onboarding/success?accountId=${stripeAccountId}`,
+    refresh_url: `${process.env.FRONT_END_URL}/onboarding/refresh?accountId=${stripeAccountId}`,
     type: 'account_onboarding'
   });
 
