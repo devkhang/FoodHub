@@ -387,8 +387,8 @@ exports.createStripeAccount = async (req, res, next) => {
     // BƯỚC 2: TẠO LINK ONBOARDING
     const accountLink = await stripe.accountLinks.create({
         account: account.id,
-        return_url: `http://localhost:3000/onboarding/success?accountId=${account.id}`,
-        refresh_url: `http://localhost:3000/onboarding/refresh?accountId=${account.id}`,
+        return_url: `${process.env.FRONT_END_URL}/onboarding/success?accountId=${account.id}`,
+        refresh_url: `${process.env.FRONT_END_URL}/onboarding/refresh?accountId=${account.id}`,
         type: 'account_onboarding'
     });
     // BƯỚC 3: GẮN VÀO req ĐỂ DÙNG TIẾP
