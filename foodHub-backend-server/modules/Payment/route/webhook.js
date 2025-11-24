@@ -44,7 +44,7 @@ router.post(
       const sessionId = session.id;
       console.log("session :",session);
       console.log(`[WEBHOOK] Session completed: ${sessionId}`);
-      const order = await findOrderWithRetry(sessionId, 5, 2000);
+      const order = await findOrderWithRetry(sessionId, 15, 2000);
       if (!order) {
         console.warn(`[WEBHOOK] Không tìm thấy Order với sessionId: ${sessionId}`);
         return res.json({ received: true });
