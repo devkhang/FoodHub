@@ -45,6 +45,64 @@ exports.getAccountInfo = async (req, res) => {
   }
 };
 
+exports.getAllPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find({})
+      .populate({
+        path: "order",
+        select: "user seller commission sellerAmount totalItemMoney",
+        populate: [
+          { path: "user.userId", select: "name" },
+          { path: "seller.sellerId", select: "name" },
+        ],
+      })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    const result = payments.map((p) => {
+      const order = p.order || {};
+
+      // Lấy commission thật từ Order (đã lưu lúc tạo đơn)
+      // → Đây là % thật (10%, 15%, 0%, v.v.) – không bao giờ là cố định
+      const platformFee = order.commission ?? 0;
+
+      // Tiền seller nhận = tổng tiền - phí platform
+      // Nếu có sellerAmount → dùng (để chắc chắn)
+      // Nếu không → tự tính: amount - platformFee
+      const sellerPayout = order.sellerAmount > 0 
+        ? order.sellerAmount 
+        : (p.amount || 0) - platformFee;
+
+      return {
+        _id: p._id,
+        amount: p.amount || 0,
+        status: p.status,
+        method: p.method,
+        paidAt: p.paidAt || p.createdAt,
+        transferredAt: p.transferredAt,
+        createdAt: p.createdAt,
+
+        userName: order.user?.name || "Khách lẻ",
+        sellerName: order.seller?.name || "Không rõ quán",
+
+        // CHÍNH XÁC TUYỆT ĐỐI – CHỈ DÙNG % – KHÔNG CỐ ĐỊNH
+        commission: platformFee,        // ← Platform Fee (luôn là %)
+        netAmount: sellerPayout,        // ← Tiền chuyển cho seller
+      };
+    });
+
+    res.json({
+      success: true,
+      payments: result,
+    });
+  } catch (error) {
+    console.error("Lỗi getAllPayments:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server",
+    });
+  }
+};
 
 // routes/stripe.js
 exports.deleteOnlyInStripe = async (req, res) => {

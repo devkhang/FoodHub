@@ -48,7 +48,6 @@ const fileFilter = (req, file, cb) => {
 };
 
 const app = express();
-app.use("/webhook",webhook);
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
 app.use(bodyParser.json());
 app.use(
@@ -59,7 +58,6 @@ app.use(
   },
   express.static(path.join(__dirname, "images"))
 );
-app.use("/api/stripe", stripeRoutes);
 //set headers
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -70,6 +68,8 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+app.use("/webhook",webhook);
+app.use("/Payment", stripeRoutes);
 
 app.use("/auth", authRoutes);
 app.use("/delivery", deliveryRoutes);
