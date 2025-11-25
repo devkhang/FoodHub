@@ -41,8 +41,6 @@ function Restaurant(props) {
     name,
     imageUrl,
     tags,
-    costForOne,
-    minOrderAmount,
     payment,
     address,
   } = props;
@@ -80,12 +78,6 @@ function Restaurant(props) {
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
                 {tags}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Costs Rs.{costForOne} for one
-              </Typography>
-              <Typography variant="body2" color="textPrimary">
-                Minimum order Rs.{minOrderAmount}
               </Typography>
               <Typography variant="body2" color="textPrimary">
                 {paymentString}

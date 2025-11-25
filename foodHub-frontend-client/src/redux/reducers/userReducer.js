@@ -22,8 +22,6 @@ const initialState = {
   payment: [],
   items: [],
   tags: "",
-  minOrderAmount: "",
-  costForOne: "",
   cart: {},
   _id: "",
   firstName: "",

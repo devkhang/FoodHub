@@ -313,7 +313,7 @@ exports.signupSeller = async (req, res, next) => {
   const images = req.files.map(f => f.path);
   const {
     email, password, name, tags,
-    phoneNo, street,costForOne, minOrderAmount, formattedAddress, lat, lng
+    phoneNo, street,formattedAddress, lat, lng
   } = req.body;
 
   try {
@@ -335,7 +335,6 @@ exports.signupSeller = async (req, res, next) => {
 
     const seller = new Seller({
       name, tags, imageUrl: images,
-      minOrderAmount, costForOne,
       formattedAddress,
       address: { street , phoneNo, lat, lng },
       account: savedAcc._id,

@@ -29,8 +29,6 @@ const sellerSchema = new Schema(
       },
     ],
     address: addressInfo,
-    minOrderAmount: Number,
-    costForOne: Number,
     // payment: [
     //   {
     //     type: String,

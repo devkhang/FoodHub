@@ -49,6 +49,7 @@ const fileFilter = (req, file, cb) => {
 
 const app = express();
 const upload = multer({ storage: fileStorage, fileFilter: fileFilter });
+app.use("/webhook",webhook);
 app.use(bodyParser.json());
 app.use(
   "/images",
@@ -68,7 +69,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-app.use("/webhook",webhook);
 app.use("/Payment", stripeRoutes);
 
 app.use("/auth", authRoutes);

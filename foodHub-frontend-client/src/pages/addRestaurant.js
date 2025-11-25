@@ -64,8 +64,6 @@ export default function AddRestaurant() {
   let phoneNoError = null;
   let nameError = null;
   let tagsError = null;
-  let costForOneError = null;
-  let minOrderError = null;
 
   if (errors) {
 
@@ -77,9 +75,6 @@ export default function AddRestaurant() {
       if (error.msg.includes("Passwords have to"))
         confirmPasswordError = error.msg;
       if (error.msg.includes("10 digit phone")) phoneNoError = error.msg;
-      if (error.msg.includes("Minimum Order")) minOrderError = error.msg;
-      if (error.msg.includes("Cost for one cannot"))
-        costForOneError = error.msg;
       if (error.msg.includes("Street cannot")) streetError = error.msg;
       if (error.msg.includes("Tags cannot")) tagsError = error.msg;
       if (error.msg.includes("Restaurant Name")) nameError = error.msg;
@@ -98,8 +93,6 @@ export default function AddRestaurant() {
     formData.append("name", inputs.name);
     formData.append("email", inputs.email);
     formData.append("tags", inputs.tags);
-    formData.append("costForOne", inputs.costForOne);
-    formData.append("minOrderAmount", inputs.minOrderAmount);
     formData.append("street", inputs.street);
     formData.append("phoneNo", inputs.phoneNo);
     formData.append("password", inputs.password);
@@ -113,7 +106,6 @@ export default function AddRestaurant() {
       name: "",
       email: "",
       tags: "",
-      costForOne: "",
       minOrderAmount: "",
       street: "",
       phoneNo: "",
@@ -182,34 +174,6 @@ export default function AddRestaurant() {
                     value={inputs.tags}
                     helperText={tagsError}
                     error={tagsError ? true : false}
-                    fullWidth
-                    required
-                  />
-                  <TextField
-                    id="costForOne"
-                    name="costForOne"
-                    label="Cost For One"
-                    placeholder="Cost for single person"
-                    className={classes.textField}
-                    onChange={handleInputChange}
-                    value={inputs.costForOne}
-                    helperText={costForOneError}
-                    error={costForOneError ? true : false}
-                    type="number"
-                    fullWidth
-                    required
-                  />
-                  <TextField
-                    id="minOrderAmount"
-                    name="minOrderAmount"
-                    label="Min Order Amount"
-                    placeholder="Minimum amount to place order"
-                    className={classes.textField}
-                    onChange={handleInputChange}
-                    value={inputs.minOrderAmount}
-                    helperText={minOrderError}
-                    error={minOrderError ? true : false}
-                    type="number"
                     fullWidth
                     required
                   />

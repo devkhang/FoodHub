@@ -123,11 +123,6 @@ router.post(
     body("name", "Restaurant Name cannot be empty").trim().not().isEmpty(),
     body("tags", "Tags cannot be empty").trim().not().isEmpty(),
     body("street", "Street cannot be empty").trim().not().isEmpty(),
-    body("costForOne", "Cost for one cannot be empty").trim().not().isEmpty(),
-    body("minOrderAmount", "Minimum Order Amount cannot be empty")
-      .trim()
-      .not()
-      .isEmpty(),
     body("confirmPassword")
       .trim()
       .custom((value, { req }) => {

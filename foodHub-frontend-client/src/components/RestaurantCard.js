@@ -21,8 +21,6 @@ export default function RestaurantCard(props) {
   const {
     name,
     tags,
-    costForOne,
-    minOrderAmount,
     imageUrl,
     _id,
   } = props;
@@ -42,12 +40,6 @@ export default function RestaurantCard(props) {
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p" noWrap>
           {tags}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          Costs Rs.{costForOne} for one
-        </Typography>
-        <Typography variant="body2" color="textPrimary">
-          Minimum order Rs.{minOrderAmount}
         </Typography>
       </CardContent>
       <hr />
