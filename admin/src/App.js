@@ -3,12 +3,14 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { DashboardOutlined, ShopOutlined, CarOutlined } from '@ant-design/icons';
+import { DollarOutlined } from '@ant-design/icons'; // Thêm icon tiền
 import 'antd/dist/reset.css';
 
 // Import các trang đã tách
 import Dashboard from './Pages/Dashboard';
 import Sellers from './Pages/Sellers';
 import Drones from './Pages/Drones';
+import Payments from './Pages/Payments'
 
 const { Header, Sider, Content } = Layout;
 
@@ -20,6 +22,7 @@ const AdminLayout = () => {
     { key: '/', icon: <DashboardOutlined />, label: 'Tổng quan' },
     { key: '/sellers', icon: <ShopOutlined />, label: 'Quán ăn' },
     { key: '/drones', icon: <CarOutlined />, label: 'Quản lý Drone' },
+    { key: '/Payment', icon: <DollarOutlined />, label: 'Theo dõi thanh toán' }, // Dòng mới
   ];
 
   return (
@@ -47,6 +50,7 @@ const AdminLayout = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/sellers" element={<Sellers />} />
             <Route path="/drones" element={<Drones />} />
+            <Route path="/Payment" element={<Payments />} /> {/* Dòng mới */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Content>
