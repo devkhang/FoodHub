@@ -1,6 +1,6 @@
 // src/Pages/Sellers.jsx (updated)
 import { useState, useEffect } from 'react';
-import { Card, Table, Spin, Alert, Input } from 'antd';
+import { Card, Table, Spin, Alert, Input, Switch } from 'antd';
 import axios from 'axios';
 
 const { Search } = Input;
@@ -12,32 +12,35 @@ export default function Sellers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const fetchSellers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const { data } = await axios.get(API_URL);
+      const rawSellers = data.sellers || [];
+
+      const formattedSellers = rawSellers.map(s => ({
+        name: s.name,
+        email: s.email,
+        formattedAddress: s.formattedAddress,
+        key: s.email,
+        isActive:s.isActive,
+        _id:s._id
+      }));
+
+      setSellers(formattedSellers);
+      setFilteredSellers(formattedSellers);
+    } catch (err) {
+      setError('Không thể tải danh sách quán ăn');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSellers = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const { data } = await axios.get(API_URL);
-        const rawSellers = data.sellers || [];
-
-        const formattedSellers = rawSellers.map(s => ({
-          name: s.name,
-          email: s.email,
-          formattedAddress: s.formattedAddress,
-          key: s.email,
-        }));
-
-        setSellers(formattedSellers);
-        setFilteredSellers(formattedSellers);
-      } catch (err) {
-        setError('Không thể tải danh sách quán ăn');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     fetchSellers();
   }, []);
@@ -56,6 +59,46 @@ export default function Sellers() {
     setFilteredSellers(filtered);
   };
 
+  const handleToggleActive=async (email, isActive, targetChecked, _id)=>{
+    try {
+      if(isActive!==targetChecked){
+        if(!targetChecked){
+          //check if seller has any order
+          let response=await axios.get(`${process.env.REACT_APP_SERVER_URL}/seller/has-order`,{
+            params:{
+              sellerId:_id
+            }
+          });
+          if(response.status!==200)
+            return;
+          let isHasOrder=response.data.data;
+          if(isHasOrder){
+              await axios.patch(`${process.env.REACT_APP_SERVER_URL}/seller/status`,{
+              status:"inactive",
+              email:email
+            })
+          }
+          else{
+            await axios.delete(`${process.env.REACT_APP_SERVER_URL}/seller/delete-seller-via-email/${email}`)
+          }
+        }
+        else{
+          await axios.patch(`${process.env.REACT_APP_SERVER_URL}/seller/status`,{
+            status:"active",
+            email:email
+          })
+        }
+        fetchSellers()
+      }
+
+      
+    } catch (error) {
+      //[not done: nothing for now]
+      console.log(error.message);
+      
+    }
+  }
+
   const columns = [
     { title: 'Tên quán', dataIndex: 'name', key: 'name' },
     { title: 'Email', dataIndex: 'email', key: 'email' },
@@ -65,6 +108,19 @@ export default function Sellers() {
       key: 'formattedAddress',
       ellipsis: true,
     },
+    {
+      title:"Xóa",
+      key: 'status',
+      render: (_, record) => (
+        <Switch
+          checked={record.isActive}
+          onChange={(targetChecked) => handleToggleActive(record.email, record.isActive, targetChecked, record._id)} // Sử dụng targetChecked (giá trị mới)
+          checkedChildren="Hoạt động"
+          unCheckedChildren="Không hoạt động"
+          loading={loading}
+        />
+      ),
+    }
   ];
 
   if (loading) return <Spin tip="Đang tải..." style={{ margin: '50px auto', display: 'block' }} />;

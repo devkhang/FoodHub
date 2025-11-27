@@ -2,6 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 
 const itemController = require("../controllers/itemController");
+const sellerController=require("../../accesscontrol/controllers/sellerController");
 const auth = require("../../../middleware/auth");
 const Seller = require("../../accesscontrol/models/seller")
 
@@ -46,13 +47,15 @@ router.get("/get-item/:itemId", auth.verifySeller, itemController.getItem);
 router.get('/getAllInfo', async (req, res) => {
   try {
     const sellers = await Seller.find({})
-      .select('name formattedAddress account') // chỉ lấy cần thiết
+      .select('_id name formattedAddress account isActive') // chỉ lấy cần thiết
       .populate('account', 'email'); // lấy email từ Account
 
     const result = sellers.map(s => ({
       name: s.name,
       email: s.account?.email || 'N/A', // phòng trường hợp không có account
       formattedAddress: s.formattedAddress,
+      isActive:s.isActive,
+      _id:s._id
     }));
 
     res.json({
@@ -64,5 +67,9 @@ router.get('/getAllInfo', async (req, res) => {
     res.status(500).json({ success: false, message: 'Lỗi server' });
   }
 });
+
+router.patch("/status",sellerController.updateStatus)
+router.delete("/delete-seller-via-email/:email", sellerController.deleteSellerViaEmail)
+router.get("/has-order/", sellerController.hasOrder)
 
 module.exports = router;

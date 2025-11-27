@@ -40,6 +40,10 @@ const sellerSchema = new Schema(
     account: { type: Schema.Types.ObjectId, required: true, ref: "Account" },
     items: [{ type: Schema.Types.ObjectId, ref: "Item" }],
     stripeAccountId: { type: String },
+    isActive:{
+      type:Boolean,
+      default:true
+    }
     // isVerified: { type: Boolean, default: false }
   },
   { timestamps: true }

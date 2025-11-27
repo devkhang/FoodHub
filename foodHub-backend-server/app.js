@@ -75,8 +75,9 @@ app.use("/auth", authRoutes);
 app.use("/delivery", deliveryRoutes);
 // app.use("/auth", authRoutes);
 app.use("/seller", upload.single("image"), itemRoutes);
-app.use(userRoutes);
 app.use("/drone", droneRoute);
+app.use(userRoutes);
+
 
 
 //error middleware
