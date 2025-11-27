@@ -56,7 +56,7 @@ router.post(
         amount: session.amount_total/100,
         currency: session.currency.toUpperCase(),
         method: "CARD",
-        status: "SUCCESS",
+        status: "PENDING",
         stripeSessionId: session.payment_intent,
         paidAt: new Date(),
       });
@@ -92,6 +92,7 @@ router.post(
           sellerAmount: order.sellerAmount,
           transferredAt: new Date(),
           stripeTransferId: transfer.id,
+          status: "SUCCESS"
         }
       );
 
