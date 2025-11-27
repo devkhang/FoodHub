@@ -162,6 +162,7 @@ export default function Payments() {
             <Select value={statusFilter} onChange={handleStatusChange} style={{ width: 160 }}>
               <Select.Option value="all">All Status</Select.Option>
               <Select.Option value="SUCCESS">Success</Select.Option>
+              <Select.Option value="PENDING">Pending</Select.Option>
             </Select>
           </div>
         }
