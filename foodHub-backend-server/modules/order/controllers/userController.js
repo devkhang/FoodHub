@@ -31,6 +31,7 @@ const {
   droneOrderAssignment,
 } = require("../../../socket/sources/droneSource");
 const DeliveryDetail = require("../../Delivery/models/deliveryDetail");
+const sleep = require("../../../util/sleep");
 
 exports.getRestaurants = (req, res, next) => {
   Seller.find()
@@ -648,7 +649,18 @@ async function selectNextSuitablDrone(orderId) {
         //   new:true
         // });
         // io.getIO().emit("orders", { action: "update", order: updatedOrder });
-        CancelOrderCauseNoSuitableDrone(orderId);
+        // CancelOrderCauseNoSuitableDrone(orderId);
+        if (droneAssigment) {
+          droneAssigment.count += 1;
+        } else {
+          droneOrderAssignment.set(orderId, {
+            count: 1,
+          });
+        }
+        //retry after a certain amount of type if no suitable drone is found
+        return setTimeout(() => {
+          selectNextSuitablDrone(orderId);
+        }, 5000);
 
         return;
       }
@@ -687,7 +699,7 @@ async function selectNextSuitablDrone(orderId) {
         //retry after a certain amount of type if no suitable drone is found
         return setTimeout(() => {
           selectNextSuitablDrone(orderId);
-        }, parseInt(process.env.NO_SUITABLE_DRONE_RETRY) * 1000);
+        }, 5000);
       }
       console.log("Suitable driver:", ans);
 
