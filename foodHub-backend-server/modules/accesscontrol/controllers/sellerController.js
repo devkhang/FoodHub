@@ -68,3 +68,30 @@ exports.hasOrder=async (req, res, next)=>{
         next(error, req, res, next);
     }
 }
+
+exports.hasIncompletedOrder=async (req, res, next)=>{
+    try {
+        let sellerId=req.query.sellerId;
+        let order=await Order.findOne({
+            "seller.sellerId":sellerId,
+            status:{
+                $nin:["Cancelled", "Completed"]
+            }
+        })
+        if(order){
+            res.status(200).json({
+                status:"ok",
+                data:true
+            })
+        }
+        else{
+            res.status(200).json({
+                status:"ok",
+                data:false
+            })
+        }
+        
+    } catch (error) {
+        next(error, req, res, next);
+    }
+}

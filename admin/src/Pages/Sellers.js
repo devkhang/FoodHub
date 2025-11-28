@@ -71,7 +71,20 @@ export default function Sellers() {
           });
           if(response.status!==200)
             return;
+          //check if seller as non-complete order
+          let response1=await axios.get(`${process.env.REACT_APP_SERVER_URL}/seller/has-incompleted-order`,{
+            params:{
+              sellerId:_id
+            }
+          });
+          if(response1.status!==200)
+            return;
+
           let isHasOrder=response.data.data;
+          let isHasIncompletedOrder=response1.data.data;
+          if(isHasIncompletedOrder)
+            return;
+
           if(isHasOrder){
               await axios.patch(`${process.env.REACT_APP_SERVER_URL}/seller/status`,{
               status:"inactive",

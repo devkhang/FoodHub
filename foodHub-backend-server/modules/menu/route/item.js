@@ -71,5 +71,6 @@ router.get('/getAllInfo', async (req, res) => {
 router.patch("/status",sellerController.updateStatus)
 router.delete("/delete-seller-via-email/:email", sellerController.deleteSellerViaEmail)
 router.get("/has-order/", sellerController.hasOrder)
+router.get("/has-incompleted-order/", sellerController.hasIncompletedOrder)
 
 module.exports = router;
