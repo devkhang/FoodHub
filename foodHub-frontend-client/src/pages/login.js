@@ -59,10 +59,12 @@ export default function Login() {
 
   let incorrectCredentialsError = null;
   let verifyEmailError = null;
+  let isUnActiveError = null;
   if (errors) {
     if (errors.includes("Invalid email/password"))
       incorrectCredentialsError = errors;
     if (errors.includes("Verify your email")) verifyEmailError = errors;
+    if(errors.includes("Seller is inactive")) isUnActiveError = errors;
   }
 
   return (
@@ -118,6 +120,12 @@ export default function Login() {
           {incorrectCredentialsError && (
             <Typography variant="body2" className={classes.customError}>
               {incorrectCredentialsError}
+            </Typography>
+          )}
+
+          {isUnActiveError && (
+            <Typography variant="body2" className={classes.customError}>
+              {isUnActiveError}
             </Typography>
           )}
 
