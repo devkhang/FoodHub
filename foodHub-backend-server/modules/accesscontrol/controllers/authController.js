@@ -264,13 +264,27 @@ exports.login = (req, res, next) => {
   let loadedUser;
 
   Account.findOne({ email: email })
-    .then((account) => {
+    .then(async (account) => {
       if (!account) {
         const error = new Error("Invalid email/password combination.");
         error.statusCode = 401;
         throw error;
       }
       loadedUser = account;
+
+      //refuse to let inactive seller to signin
+      if(account.role==="ROLE_SELLER"){
+        let seller=await Seller.findOne({
+          account:account._id
+        })
+        if(!seller.isActive){
+          // throw new Error("Seller is inactive");
+          const error = new Error("Seller is inactive");;
+          error.statusCode = 401;
+          throw error;
+        }
+      }
+
       return bcrypt.compare(password, account.password);
     })
     .then((isEqual) => {
@@ -286,6 +300,8 @@ exports.login = (req, res, next) => {
         error.statusCode = 401;
         throw error;
       }
+      
+      
       const token = jwt.sign(
         { accountId: loadedUser._id.toString() },
         process.env.JWT_SECRET_KEY,

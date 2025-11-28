@@ -866,7 +866,9 @@ exports.getRestaurantsByAddress = (req, res, next) => {
   let skip = (page - 1) * limit;
   let totalPage;
   let storeName = req.query.storeName;
-  let queryObj = {};
+  let queryObj = {//exclude inactive seller
+    isActive:true
+  };
   if (storeName) {
     queryObj.name = {
       $regex: storeName,
