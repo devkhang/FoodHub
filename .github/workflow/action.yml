@@ -1,0 +1,32 @@
+# .github/workflows/require-testing.yml
+name: Require TESTING variable in Production
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  check-testing-var:
+    runs-on: ubuntu-latest
+    
+    environment: production   # ← Bắt buộc có biến TESTING ở đây
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Kiểm tra biến TESTING (Variables)
+        run: |
+          echo "Kiểm tra biến TESTING trong environment production..."
+          if [[ -z "${{ vars.TESTING }}" ]]; then
+            echo "THIẾU BIẾN TESTING!"
+            echo "→ Vào Settings → Environments → production → Add variable"
+            echo "→ Tên: TESTING   Giá trị: true"
+            exit 1
+          else
+            echo "BIẾN TESTING đã có: ${{ vars.TESTING }}"
+            echo "An toàn để deploy production!"
+          fi
