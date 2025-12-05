@@ -1,7 +1,7 @@
 // __tests__/health.test.js   (đặt trong thư mục __tests__ của backend)
 
 const request = require('supertest');
-const app = require('./app.js');   // nếu file chính là index.js hoặc server.js thì đổi thành ../index.js
+const app = require('../app.js');   // nếu file chính là index.js hoặc server.js thì đổi thành ../index.js
 
 describe('Health Check - Server khởi động thành công', () => {
   // Test đơn giản nhất: chỉ kiểm tra server có chạy được không
