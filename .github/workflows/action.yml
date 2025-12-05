@@ -29,18 +29,9 @@ jobs:
       - name: Xem các biến môi trường
         run: |
           echo "Kiểm tra biến từ vars:"
-          echo "FRONT_END_URL: ${{ vars.FRONT_END_URL }}"
+          echo "STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}"
           # Lưu ý: Các Secret (như STRIPE_SECRET_KEY) KHÔNG hiển thị ở đây
           # nhưng chúng có thể được tiêm vào step Run tests
 
       - name: Run tests
         run: npm run test --if-present
-
-  deploy-production:
-    needs: test
-    environment: production       # ← tự inject biến production thật
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to Render Production
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
