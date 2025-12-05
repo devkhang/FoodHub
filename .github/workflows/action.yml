@@ -2,14 +2,14 @@ name: CI/CD với Environments (siêu sạch)
 
 on:
   push:
-    branches: [ main,AddTestCase]
+    branches: [ main, AddTestCase ]
   pull_request:
-    branches: [ main,AddTestCase]
+    branches: [ main, AddTestCase ]
   workflow_dispatch:
 
 jobs:
   test:
-    environment: test               # ← GitHub tự inject MONGODB_URL, STRIPE_SECRET_KEY, v.v.
+    environment: test             # ← GitHub tự inject MONGODB_URL, STRIPE_SECRET_KEY, v.v.
     runs-on: ubuntu-latest
     defaults:
       run: 
@@ -22,8 +22,31 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
+          
       - run: npm ci
-      - name: xem biến
-      - run: |
-          echo "kiểm tra biến"
-          echo "biến : ${{vars.FRONT_END_URL}}"
+      
+      # ⭐️ SỬA LỖI CÚ PHÁP YML VÀ KIỂM TRA BIẾN
+      - name: Xem các biến môi trường
+        run: |
+          echo "Kiểm tra biến từ vars:"
+          echo "FRONT_END_URL: ${{ vars.FRONT_END_URL }}"
+          # Lưu ý: Các Secret (như STRIPE_SECRET_KEY) KHÔNG hiển thị ở đây
+          # nhưng chúng có thể được tiêm vào step Run tests
+
+      - name: Run tests
+        run: npm run test --if-present
+        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
+          NODE_ENV: 'test' # Quan trọng để các điều kiện code trong app.js được kích hoạt
+          MONGODH_URL: ${{ secrets.MONGODH_URL }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          # Thêm bất kỳ Secret/Var bắt buộc nào khác ở đây
+
+  deploy-production:
+    needs: test
+    environment: production       # ← tự inject biến production thật
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Render Production
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
