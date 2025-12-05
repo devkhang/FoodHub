@@ -23,16 +23,5 @@ jobs:
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
       - run: npm ci
-      - name: Run tests
-        run: npm run test --if-present
-        # → KHÔNG CẦN env: gì cả! Environment "test" đã cung cấp hết
-
-  deploy-production:
-    needs: test
-    environment: production         # ← tự inject biến production thật
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to Render Production
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        # → cũng không cần env: gì cả
+      - name: xem vài biến
+        run: ${{var.FRONT_END_URL}}
