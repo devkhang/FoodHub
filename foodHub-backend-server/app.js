@@ -153,3 +153,5 @@ mongoose
   .catch((err) => console.log(err));
 
 exports.clients = clients;
+
+module.exports = app;
