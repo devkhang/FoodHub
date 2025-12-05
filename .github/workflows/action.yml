@@ -2,45 +2,37 @@ name: CI/CD - Test & Deploy Render
 
 on:
   push:
-    branches: [ main, AddTestCase ]   # chạy cả nhánh hiện tại của bạn
+    branches: [ main, AddTestCase ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: foodHub-backend-server   # ← đổi nếu tên folder khác
+        working-directory: foodHub-backend-server   # ← CHỈ CẦN DÒNG NÀY LÀ XANH!!!
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 20 + Cache
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Run tests (dùng biến thật từ Secrets → không bị chặn push)
+      - name: Run tests
         run: npm run test --if-present
         env:
           NODE_ENV: test
-          PORT: 3001
           MONGODH_URL: ${{ secrets.MONGODB_URL_TEST }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY_TEST }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY_TEST }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET_TEST }}
-          # các biến khác thêm vào đây nếu cần
 
-      - name: Deploy to Render (chỉ chạy khi push vào main)
-        if: github.ref == 'refs/heads/AddTestCase' && github.event_name == 'push'
-        run: |
-          echo "Deploying to Render Production..."
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      - name: Deploy to Render
+        if: github.ref == 'refs/heads/AddTestCase'
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
