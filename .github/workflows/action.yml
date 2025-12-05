@@ -24,7 +24,6 @@ jobs:
           cache-dependency-path: foodHub-backend-server/package-lock.json
       - run: npm ci
       - name: Run app
-        run: npm run start
       - name: Run tests
         run: npm run test --if-present
         # → KHÔNG CẦN env: gì cả! Environment "test" đã cung cấp hết
