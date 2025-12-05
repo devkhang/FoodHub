@@ -78,7 +78,9 @@ app.use("/seller", upload.single("image"), itemRoutes);
 app.use("/drone", droneRoute);
 app.use(userRoutes);
 
-
+app.get('/greet', (req, res) => {
+  res.send('Hello, World!');
+});
 
 //error middleware
 const handleMixCart=(req,res)=>{

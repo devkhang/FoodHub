@@ -35,12 +35,6 @@ jobs:
 
       - name: Run tests
         run: npm run test --if-present
-        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
-          NODE_ENV: 'test' # Quan trọng để các điều kiện code trong app.js được kích hoạt
-          MONGODH_URL: ${{ secrets.MONGODH_URL }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          # Thêm bất kỳ Secret/Var bắt buộc nào khác ở đây
 
   deploy-production:
     needs: test
