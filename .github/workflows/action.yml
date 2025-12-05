@@ -2,9 +2,9 @@ name: CI/CD với Environments (siêu sạch)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ,AddTestCase]
   pull_request:
-    branches: [ main ]
+    branches: [ main,AddTestCase]
   workflow_dispatch:
 
 jobs:
