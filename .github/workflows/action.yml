@@ -12,7 +12,8 @@ jobs:
     environment: test               # ← GitHub tự inject MONGODB_URL, STRIPE_SECRET_KEY, v.v.
     runs-on: ubuntu-latest
     defaults:
-      working-directory: foodHub-backend-server
+      run: 
+        working-directory: foodHub-backend-server
 
     steps:
       - uses: actions/checkout@v4
