@@ -23,5 +23,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
       - run: npm ci
-      - name: xem vài biến
-        run: ${{vars.FRONT_END_URL}}
+      - name: xem biến
+      - run: |
+          echo "kiểm tra biến"
+          echo "biến : ${{vars.FRONT_END_URL}}"
