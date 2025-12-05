@@ -1,38 +1,37 @@
-name: CI/CD - Test & Deploy Render
+name: CI/CD với Environments (siêu sạch)
 
 on:
   push:
-    branches: [ main, AddTestCase ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  test-and-deploy:
+  test:
+    environment: test               # ← GitHub tự inject MONGODB_URL, STRIPE_SECRET_KEY, v.v.
     runs-on: ubuntu-latest
     defaults:
-      run:
-        working-directory: foodHub-backend-server   # ← CHỈ CẦN DÒNG NÀY LÀ XANH!!!
+      working-directory: foodHub-backend-server
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
-
       - run: npm ci
-
       - name: Run tests
         run: npm run test --if-present
-        env:
-          NODE_ENV: test
-          MONGODH_URL: ${{ secrets.MONGODB_URL_TEST }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY_TEST }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY_TEST }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET_TEST }}
+        # → KHÔNG CẦN env: gì cả! Environment "test" đã cung cấp hết
 
-      - name: Deploy to Render
-        if: github.ref == 'refs/heads/AddTestCase'
+  deploy-production:
+    needs: test
+    environment: production         # ← tự inject biến production thật
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Render Production
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        # → cũng không cần env: gì cả
