@@ -115,10 +115,11 @@ mongoose
   .connect(process.env.MONGODH_URL)
   .then((result) => {
     console.log("Connected to db");
-    const server = app.listen(process.env.PORT, () => {
-      console.log(`Server starts at port ${process.env.PORT}`);
-    });
-
+    if (process.env.NODE_ENV !== 'test') {
+      const server = app.listen(process.env.PORT || 3001, () => {
+        console.log(`Server running on port ${process.env.PORT || 3001}`);
+      });
+    }
     let io = init(server);
     io.on("connection", (socket) => {
       socket.on("add-user", (data) => {
@@ -137,8 +138,7 @@ mongoose
           }
         }
       });
-    });
-
+    }); 
     // registerDeliveryPartner();
     // trackDeliveryPartnerLocation();
     droneUpdatePositionHandler();
@@ -150,7 +150,6 @@ mongoose
     unRegisterTrackDelivery();
     trackDelivery();
     deliveryArrive();
-
   })
   .catch((err) => console.log(err));
 
