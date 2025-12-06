@@ -9,4 +9,11 @@ describe('API FoodHub – Test thật nhưng vẫn không cần DB thật', () =
     expect(res.statusCode).toEqual(200);
     expect(res.text).toBe('Hello, World!');
   });
+  it('POST /auth/login đúng mật khẩu', async () => {
+    const res = await request(app)
+      .post('/auth/login')
+      .send({ email: 'c1@gmail.com', password: '12345678' });
+    expect(res.status).toBe(200);
+    expect(res.body.message).toContain('Logged-in successfully');
+  },10000);
 });
