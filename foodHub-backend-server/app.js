@@ -110,48 +110,50 @@ app.use((error, req, res, next) => {
 });
 
 const clients = {};
-
-mongoose
-  .connect(process.env.MONGODH_URL)
-  .then((result) => {
-    console.log("Connected to db");
-    if (process.env.NODE_ENV !== 'test') {
-      const server = app.listen(process.env.PORT || 3001, () => {
-        console.log(`Server running on port ${process.env.PORT || 3001}`);
-      });
-    }
-    let io = init(server);
-    io.on("connection", (socket) => {
-      socket.on("add-user", (data) => {
-        clients[data.userId] = {
-          socket: socket.id,
-        };
-        accountIdToSocket.set(data.userId, socket.id)
+if (process.env.NODE_ENV !== "test") {
+  mongoose
+    .connect(process.env.MONGODH_URL)
+    .then((result) => {
+      console.log("Connected to db");
+      const server = app.listen(process.env.PORT, () => {
+        console.log(`Server starts at port ${process.env.PORT}`);
       });
 
-      //Removing the socket on disconnect
-      socket.on("disconnect", () => {
-        for (const userId in clients) {
-          if (clients[userId].socket === socket.id) {
-            delete clients[userId];
-            break;
+      let io = init(server);
+      io.on("connection", (socket) => {
+        socket.on("add-user", (data) => {
+          clients[data.userId] = {
+            socket: socket.id,
+          };
+          accountIdToSocket.set(data.userId, socket.id)
+        });
+
+        //Removing the socket on disconnect
+        socket.on("disconnect", () => {
+          for (const userId in clients) {
+            if (clients[userId].socket === socket.id) {
+              delete clients[userId];
+              break;
+            }
           }
-        }
+        });
       });
-    }); 
-    // registerDeliveryPartner();
-    // trackDeliveryPartnerLocation();
-    droneUpdatePositionHandler();
-    droneSocketRegistration();
-    droneCutConnection();
 
-    //drone delivery
-    registerTrackDelivery();
-    unRegisterTrackDelivery();
-    trackDelivery();
-    deliveryArrive();
+      // registerDeliveryPartner();
+      // trackDeliveryPartnerLocation();
+      droneUpdatePositionHandler();
+      droneSocketRegistration();
+      droneCutConnection();
+
+      //drone delivery
+      registerTrackDelivery();
+      unRegisterTrackDelivery();
+      trackDelivery();
+      deliveryArrive();
+
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err));  
+}
 
 exports.clients = clients;
 
