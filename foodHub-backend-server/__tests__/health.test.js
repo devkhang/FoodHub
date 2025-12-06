@@ -6,16 +6,15 @@ describe('API FoodHub – Test thật nhưng vẫn không cần DB thật', () =
     
     // ⭐️ HOOK QUAN TRỌNG: Đóng kết nối Mongoose sau khi tất cả các test hoàn tất.
     // Việc này giải phóng handle mở của DB và cho phép Jest thoát.
-    afterAll(async () => {
-        // Kiểm tra trạng thái kết nối Mongoose trước khi đóng
-        if (mongoose.connection.readyState !== 0) {
-            console.log("-> Đóng kết nối Mongoose sau khi kiểm thử...");
-            await mongoose.disconnect();
-        }
-        done()
-        // Vì server được khởi tạo bên trong .then() của mongoose.connect, 
-        // Jest sẽ tự động xử lý server handle sau khi mongoose bị đóng.
-    });
+    beforeAll(done => {
+      done()
+    })
+
+    afterAll(done => {
+      // Closing the DB connection allows Jest to exit successfully.
+      mongoose.connection.close()
+      done()
+    })
 
     it('should respond with "Hello, World!"', async () => {
         const res = await request(app).get('/greet');
