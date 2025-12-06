@@ -53,5 +53,5 @@ jobs:
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
           MONGODH_URL: ${{ secrets.MONGODB_URL }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          # STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
