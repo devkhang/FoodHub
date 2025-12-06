@@ -12,7 +12,7 @@ describe('API FoodHub – Test thật nhưng vẫn không cần DB thật', () =
             console.log("-> Đóng kết nối Mongoose sau khi kiểm thử...");
             await mongoose.disconnect();
         }
-        
+        done()
         // Vì server được khởi tạo bên trong .then() của mongoose.connect, 
         // Jest sẽ tự động xử lý server handle sau khi mongoose bị đóng.
     });
