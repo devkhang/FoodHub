@@ -110,7 +110,6 @@ app.use((error, req, res, next) => {
 });
 
 const clients = {};
-if (process.env.NODE_ENV !== "test") {
   mongoose
     .connect(process.env.MONGODH_URL)
     .then((result) => {
@@ -153,7 +152,6 @@ if (process.env.NODE_ENV !== "test") {
 
   })
   .catch((err) => console.log(err));  
-}
 
 exports.clients = clients;
 
