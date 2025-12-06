@@ -51,8 +51,6 @@ jobs:
           NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
           NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
-
-          # Secrets (bí mật)
           MONGODH_URL: ${{ secrets.MONGODB_URL }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
