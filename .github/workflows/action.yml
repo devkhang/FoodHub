@@ -29,7 +29,7 @@ jobs:
       - name: Xem các biến môi trường
         run: |
           echo "Kiểm tra biến từ vars:"
-          echo "STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}"
+          echo "MONGODH_URL: ${{ secrets.MONGODH_URL }}"
           # Lưu ý: Các Secret (như STRIPE_SECRET_KEY) KHÔNG hiển thị ở đây
           # nhưng chúng có thể được tiêm vào step Run tests
 
@@ -53,5 +53,5 @@ jobs:
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
           MONGODH_URL: ${{ secrets.MONGODB_URL }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          # STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
