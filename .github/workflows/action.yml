@@ -60,7 +60,7 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/AddTestCase'
     runs-on: ubuntu-latest
     environment:
-      name: development
+      name: test
       url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}   # link vào chính job này
     defaults:
       run:
@@ -86,7 +86,7 @@ jobs:
           # Dùng ngrok để tạo link công khai trỏ vào localhost:5000
           curl -sL https://ngrok.com/download | tar -xz
           ./ngrok authtoken 2nY...your-ngrok-token...   # ← bạn thêm token 1 lần thôi
-          ./ngrok http 5000 --log=stdout > ngrok.log 2>&1 &
+          ./ngrok http 3001 --log=stdout > ngrok.log 2>&1 &
           
           echo "Chờ 10 giây để ngrok tạo link..."
           sleep 10
