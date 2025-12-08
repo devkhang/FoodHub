@@ -110,10 +110,12 @@ app.use((error, req, res, next) => {
 });
 
 const clients = {};
+if (process.env.NODE_ENV !== 'test') {
   mongoose
     .connect(process.env.MONGODH_URL)
     .then((result) => {
       console.log("Connected to db");
+      if (process.env.NODE_ENV !== "test") {
       const server = app.listen(process.env.PORT, () => {
         console.log(`Server starts at port ${process.env.PORT}`);
       });
@@ -149,10 +151,10 @@ const clients = {};
       unRegisterTrackDelivery();
       trackDelivery();
       deliveryArrive();
-
+    }
   })
-  .catch((err) => console.log(err));  
-
+  .catch((err) => console.log(err));
+}  
 exports.clients = clients;
 
 module.exports = app;

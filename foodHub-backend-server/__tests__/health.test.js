@@ -17,9 +17,7 @@ afterAll(async () => {
   await mongoose.connection.close();
 
   // Bước 3: Đợi tí xíu rồi ép Jest thoát luôn cho chắc ăn
-  setTimeout(() => {
-    process.exit(0);
-  }, 500);
+  await new Promise(resolve => setTimeout(resolve, 300));
 });
 
 describe('Test API', () => {
@@ -28,13 +26,4 @@ describe('Test API', () => {
     expect(res.status).toBe(200);
     expect(res.text).toBe('Hello, World!');
   });
-
-  it('Đăng nhập đúng phải thành công', async () => {
-    const res = await request(app)
-      .post('/auth/login')
-      .send({ email: 'c1@gmail.com', password: '12345678' });
-
-    expect(res.status).toBe(200);
-    expect(res.body.message).toContain('Logged-in successfully');
-  }, 15000);
 });

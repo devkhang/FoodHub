@@ -55,3 +55,63 @@ jobs:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+  development:
+    needs: test
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/AddTestCase'
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}   # link vào chính job này
+    defaults:
+      run:
+        working-directory: foodHub-backend-server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm ci
+
+      # BƯỚC THẦN THÁNH: Chạy server thật + expose ra internet
+      - name: Chạy server FoodHub (localhost → có link công khai!)
+        run: |
+          echo "Đang khởi động server FoodHub..."
+          npm run start &
+          echo "Server đang chạy ở background..."
+          
+          # Dùng ngrok để tạo link công khai trỏ vào localhost:5000
+          curl -sL https://ngrok.com/download | tar -xz
+          ./ngrok authtoken 2nY...your-ngrok-token...   # ← bạn thêm token 1 lần thôi
+          ./ngrok http 5000 --log=stdout > ngrok.log 2>&1 &
+          
+          echo "Chờ 10 giây để ngrok tạo link..."
+          sleep 10
+          
+          echo "Lấy link công khai..."
+          NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+          echo "LINK CÔNG KHAI CỦA BẠN (chạy thật 100%):"
+          echo "$NGROK_URL"
+          echo "LINK_NGROK=$NGROK_URL" >> $GITHUB_ENV
+          
+      # Hiện link đẹp nhất có thể trên GitHub
+      - name: Thông báo server đang chạy thật!
+        run: |
+          echo "SERVER FOODHUB ĐÃ CHẠY THẬT RỒI! (localhost nhưng ai cũng vào được)"
+          echo "Link truy cập (có hiệu lực 6–8 tiếng):"
+          echo "$LINK_NGROK"
+          echo ""
+          
+      # Tạo summary đẹp nhất
+      - name: Summary
+        run: |
+          echo "# Server Development đang chạy!" >> $GITHUB_STEP_SUMMARY
+          echo "Link công khai: **$LINK_NGROK**" >> $GITHUB_STEP_SUMMARY
+          echo "- GET $LINK_NGROK/greet" >> $GITHUB_STEP_SUMMARY
+          echo "- POST $LINK_NGROK/auth/login" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "_Link tự động tắt sau ~6 tiếng (khi job kết thúc)_" >> $GITHUB_STEP_SUMMARY
+
