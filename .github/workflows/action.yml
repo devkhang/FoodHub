@@ -79,7 +79,7 @@ jobs:
       - name: Khởi động server + tạo link công khai
         run: |
           echo "Khởi động server FoodHub..."
-          npm start &                                          # Dùng đúng lệnh trong package.json
+          node app.js &                                          # Dùng đúng lệnh trong package.json
 
           echo "Tải ngrok phiên bản mới nhất..."
           wget -q https://bin.equinox.io/c/bNyj1mQVYHo/ngrok-v3-stable-linux-amd64.tgz
