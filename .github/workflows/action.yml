@@ -77,11 +77,6 @@ jobs:
 
       # BƯỚC THẦN THÁNH – CHẠY SERVER + NGROK (ĐÃ FIX CHO DỰ ÁN CỦA BẠN)
       - name: Khởi động server + tạo link công khai
-        env:
-          # Nếu bạn có .env cần dùng, thêm vào đây (hoặc để trống cũng được)
-          PORT: 3001
-          MONGODH_URL: ${{ secrets.MONGODH_URL }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         run: |
           echo "Khởi động server FoodHub..."
           npm start &                                          # Dùng đúng lệnh trong package.json
@@ -111,6 +106,46 @@ jobs:
           echo "LINK CÔNG KHAI (CHẠY THẬT 100%):"
           echo "$NGROK_URL"
           echo "LINK_NGROK=$NGROK_URL" >> $GITHUB_ENV
+              env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
+          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
+          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
+          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
+          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
+          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
+          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
+          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
+          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
+          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
+          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
+          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          MONGODH_URL: ${{ secrets.MONGODH_URL }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
+          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
+          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
+          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
+          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
+          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
+          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
+          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
+          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
+          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
+          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
+          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          MONGODH_URL: ${{ secrets.MONGODH_URL }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
       - name: Thông báo thành công (đẹp nhất)
         run: |
