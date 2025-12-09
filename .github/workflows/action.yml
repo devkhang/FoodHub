@@ -83,7 +83,7 @@ jobs:
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
 
   create-issue-on-fail:
-    needs: test-backend
+    needs: test
     if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
