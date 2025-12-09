@@ -30,6 +30,7 @@ jobs:
 
       - name: Run Tests
         run: npm run test
+        continue-on-error: false
         env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
           NODE_ENV: ${{ vars.NODE_ENV }}
           PORT: ${{ vars.PORT }}
