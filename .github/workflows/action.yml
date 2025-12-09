@@ -1,18 +1,24 @@
+# Tên của Workflow
 name: CI/CD với Environments (siêu sạch)
 
 on:
   push:
-    branches: [ main, AddTestCase ]
+    # Thêm 'develop' để kích hoạt job development nếu bạn có nhánh này
+    branches: [ main, develop, AddTestCase ] 
   pull_request:
-    branches: [ main, AddTestCase ]
+    branches: [ main, develop, AddTestCase ]
   workflow_dispatch:
 
 jobs:
+  # ===============================================
+  # GIAI ĐOẠN 1: TEST VÀ BUILD (CI)
+  # ===============================================
   test:
-    environment: test             # ← GitHub tự inject MONGODB_URL, STRIPE_SECRET_KEY, v.v.
+    name: 1. Test và Build Artifact
+    environment: test
     runs-on: ubuntu-latest
     defaults:
-      run: 
+      run:
         working-directory: foodHub-backend-server
 
     steps:
@@ -22,20 +28,17 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
-          
+
       - run: npm ci
-      
-      # ⭐️ SỬA LỖI CÚ PHÁP YML VÀ KIỂM TRA BIẾN
-      - name: Xem các biến môi trường
+
+      - name: Xem các biến môi trường (Debug)
         run: |
-          echo "Kiểm tra biến từ vars:"
-          echo "MONGODH_URL: ${{ secrets.MONGODH_URL }}"
-          # Lưu ý: Các Secret (như STRIPE_SECRET_KEY) KHÔNG hiển thị ở đây
-          # nhưng chúng có thể được tiêm vào step Run tests
+          echo "Kiểm tra biến từ vars: ${{ vars.NODE_ENV }}"
+          echo "MONGODH_URL: BÍ MẬT ĐÃ ĐƯỢC NẠP"
 
       - name: Run tests
         run: npm run test --if-present
-        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
+        env: # Buộc tiêm các Vars và Secrets vào process.env
           NODE_ENV: ${{ vars.NODE_ENV }}
           PORT: ${{ vars.PORT }}
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
@@ -55,9 +58,29 @@ jobs:
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-  development:
+      
+      # ⭐️ Bước Build sau khi Test thành công
+      - name: Build Sản Phẩm
+        run: npm run build # Giả định lệnh build là 'npm run build'
+
+      # ⭐️ Lưu trữ kết quả build làm Artifact
+      - name: Lưu trữ Artifacts (Kết quả Build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: foodhub-build-package
+          # Thay 'dist' bằng thư mục build thực tế nếu khác
+          path: foodHub-backend-server/dist 
+
+  # =======================================================
+  # GIAI ĐOẠN 2: TRIỂN KHAI DEV/NGROK (Deploy Tự động)
+  # =======================================================
+  deploy_development:
+    name: 2. Deploy DEV (Ngrok Live Demo)
     needs: test
     runs-on: ubuntu-latest
+    # Chỉ chạy khi push vào develop hoặc chạy thủ công
+    if: github.ref == 'refs/heads/AddTestCase' || github.event_name == 'workflow_dispatch'
+    
     environment:
       name: development
       url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -73,13 +96,34 @@ jobs:
         with:
           node-version: '20'
 
-      - run: npm ci
+      - run: npm ci # Vẫn cần npm ci nếu chạy từ source code
 
-      # BƯỚC THẦN THÁNH – CHẠY SERVER + NGROK (ĐÃ FIX CHO DỰ ÁN CỦA BẠN)
+      # BƯỚC KHỞI ĐỘNG SERVER + NGROK
       - name: Khởi động server + tạo link công khai
+        env: # Buộc tiêm các Vars/Secrets tương tự như job test
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
+          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
+          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
+          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
+          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
+          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
+          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
+          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
+          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
+          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
+          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
+          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          MONGODH_URL: ${{ secrets.MONGODH_URL }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }} # Tiêm NGROK_TOKEN
         run: |
           echo "Khởi động server FoodHub..."
-          node app.js &                                          # Dùng đúng lệnh trong package.json
+          node app.js &
 
           echo "Tải ngrok phiên bản mới nhất..."
           wget -q https://bin.equinox.io/c/bNyj1mQVYHo/ngrok-v3-stable-linux-amd64.tgz
@@ -87,7 +131,8 @@ jobs:
           chmod +x ngrok
 
           echo "Đăng nhập ngrok..."
-          ./ngrok authtoken ${{ secrets.NGROK_TOKEN }}
+          # ❌ ĐÃ SỬA LỖI CÚ PHÁP: Sử dụng biến môi trường $NGROK_TOKEN
+          ./ngrok authtoken $NGROK_TOKEN
 
           echo "Mở đường hầm tới cổng 3001..."
           ./ngrok http 3001 > /dev/null 2>&1 &
@@ -103,58 +148,84 @@ jobs:
             exit 1
           fi
 
-          echo "LINK CÔNG KHAI (CHẠY THẬT 100%):"
-          echo "$NGROK_URL"
+          echo "LINK CÔNG KHAI (CHẠY THẬT 100%): $NGROK_URL"
           echo "LINK_NGROK=$NGROK_URL" >> $GITHUB_ENV
-              env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
-          NODE_ENV: ${{ vars.NODE_ENV }}
-          PORT: ${{ vars.PORT }}
-          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
-          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
-          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
-          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
-          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
-          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
-          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
-          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
-          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
-          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
-          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
-          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
-          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
-          MONGODH_URL: ${{ secrets.MONGODH_URL }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
-          NODE_ENV: ${{ vars.NODE_ENV }}
-          PORT: ${{ vars.PORT }}
-          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
-          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
-          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
-          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
-          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
-          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
-          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
-          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
-          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
-          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
-          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
-          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
-          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
-          MONGODH_URL: ${{ secrets.MONGODH_URL }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
-      - name: Thông báo thành công (đẹp nhất)
+      - name: Thông báo thành công & URL
         run: |
           echo "# SERVER FOODHUB ĐÃ CHẠY THẬT!" >> $GITHUB_STEP_SUMMARY
-          echo "**Link công khai (6–8 tiếng):**" >> $GITHUB_STEP_SUMMARY
-          echo "$LINK_NGROK" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Link công khai (6–8 tiếng):** $LINK_NGROK" >> $GITHUB_STEP_SUMMARY
           echo "- GET $LINK_NGROK/greet" >> $GITHUB_STEP_SUMMARY
           echo "- POST $LINK_NGROK/auth/login" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "_Link tự tắt khi job kết thúc_" >> $GITHUB_STEP_SUMMARY
 
+  # ==========================================================
+  # GIAI ĐOẠN 3: TRIỂN KHAI PRODUCTION (Cần Phê duyệt Thủ công)
+  # ==========================================================
+  deploy_production:
+    name: 3. Deploy Production (Cần Phê duyệt)
+    # Phải chạy sau khi job test thành công
+    needs: test 
+    # Chỉ chạy khi push vào main hoặc chạy thủ công
+    if: github.ref == 'refs/heads/AddTestCase' || github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-latest
+    environment:
+      # Nếu môi trường 'Production' có quy tắc bảo vệ, nó sẽ tự động chờ phê duyệt
+      name: test
+      url: https://prod.yourdomain.com
+
+    defaults:
+      run:
+        working-directory: foodHub-backend-server
+
+    steps:
+      - name: Yêu Cầu Phê Duyệt Thủ Công
+        # Dừng lại và chờ phê duyệt từ người có thẩm quyền
+        uses: trstringer/manual-approval@v1
+        with:
+          # Thay thế bằng GitHub Username thực tế của admin/leader
+          approvers: "admin1,leader-name,devkhang" 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          minimum-approvals: 1
+          
+      # ⭐️ Tải Artifact đã được Build/Test
+      - name: Tải Artifacts Build
+        uses: actions/download-artifact@v4
+        with:
+          name: foodhub-build-package
+          # Tải vào thư mục hiện tại (foodHub-backend-server/dist)
+          path: dist 
+
+      - name: Triển Khai lên Production Server
+        env: # Cần tiêm lại các Secret và Vars cho bước deploy
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
+          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
+          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
+          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
+          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
+          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
+          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
+          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
+          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
+          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
+          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
+          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          MONGODH_URL: ${{ secrets.MONGODH_URL }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }} # Tiêm NGROK_TOKEN
+          # Thêm các biến môi trường Production khác nếu cần
+          
+        run: |
+          echo "Bắt đầu triển khai lên môi trường Production..."
+          # Giả lập lệnh triển khai, sử dụng SSH key đã được lưu trữ trong Secrets
+          # Đảm bảo bạn đã cấu hình SSH key để rsync/scp hoạt động
+          rsync -avz dist/ foodHub-backend-server/ ${{ secrets.PROD_DEPLOY_SERVER }}:/var/www/prod 
+          # Chạy lệnh khởi động/restart server từ xa (ví dụ qua SSH)
+          # ssh ${{ secrets.PROD_DEPLOY_SERVER }} "pm2 restart foodhub-prod" 
+          echo "Triển khai Production thành công!"
