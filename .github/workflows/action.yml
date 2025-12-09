@@ -82,48 +82,42 @@ jobs:
       - name: Production Live
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
 
+  # ==================== TẠO ISSUE + ASSIGN KHI TEST FAIL ====================
   create-issue-on-fail:
-    needs: test
-    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write # Cần quyền ghi Issue
-      contents: read # Cần quyền đọc Contents (mặc định)
+    needs: test
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
 
-    steps:
-      # BƯỚC 1: Tạo/Cập nhật issue và LẤY RA issue_number
-      - name: Tạo Issue khi test fail
-        id: create_issue
-        uses: peter-evans/create-or-update-issue@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "TEST FAIL – Sửa gấp! (Commit: ${{ github.sha }})"
-          body: |
-            Test backend fail sau khi merge vào main.
-            **Commit:** `${{ github.sha }}`
-            **Người push:** @${{ github.actor }}
-            **Log:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          issue-number: ${{ steps.create_issue.outputs.issue-number }} # Tùy chọn: dùng để update issue cũ nếu đã tồn tại
+    steps:
+      # BƯỚC 1: Tạo issue mới (dùng action chính chủ, siêu ổn định)
+      - name: Tạo Issue khi test fail
+        id: create_issue
+        uses: peter-evans/create-issue-from-file@v4   # Dùng v4 mới nhất
+        with:
+          title: "TEST FAIL – Sửa gấp! (Commit: ${{ github.sha }})"
+          content-filepath: false
+          body: |
+            ### Test backend bị fail sau khi merge vào main
 
-      # BƯỚC 2: Assign issue cho người gây lỗi bằng GitHub API
-      - name: Assign issue cho người gây lỗi
-        uses: actions/github-script@v6 # Dùng để chạy mã JavaScript truy cập GitHub API
-        if: always() && steps.create_issue.outputs.issue-number # Chỉ chạy nếu Issue được tạo thành công
-        with:
-          script: |
-            const issueNumber = ${{ steps.create_issue.outputs.issue-number }};
-            const assignee = "${{ github.actor }}";
-            
-            console.log(`Assigning Issue #${issueNumber} to user: ${assignee}`);
+            - **Commit**: `${{ github.sha }}`
+            - **Người gây lỗi**: @${{ github.actor }}
+            - **Link log**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            try {
-              await github.rest.issues.addAssignees({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                assignees: [assignee],
-              });
-              console.log("Issue successfully assigned.");
-            } catch (error) {
-              console.error("Error assigning issue:", error.message);
-            }
+            @${{ github.actor }} sửa gấp trong 24h nhé!
+
+      # BƯỚC 2: Assign người gây lỗi (dùng github-script – chính chủ, không lỗi)
+      - name: Assign issue cho người gây lỗi
+        if: ${{ steps.create_issue.outputs.issue-number != '' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ steps.create_issue.outputs.issue-number }},
+              assignees: ["${{ github.actor }}"]
+            });
+            console.log("Đã assign issue #${{ steps.create_issue.outputs.issue-number }} cho @${{ github.actor }}");
