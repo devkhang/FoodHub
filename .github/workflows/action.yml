@@ -105,17 +105,3 @@ jobs:
             Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           # ⚠️ Lưu ý: `dacbd/create-issue-action@v1` trả về issue number dưới dạng output tên là 'issue'
           # Cần chắc chắn bạn sử dụng đúng tên output: `steps.create_issue.outputs.issue` hoặc `steps.create_issue.outputs.issue_number`
-
-      # BƯỚC 1.5: Xuất Issue Number vừa tạo thành Biến Môi Trường (ENV)
-      - name: Export Issue Number to ENV
-        if: always() && steps.create_issue.outputs.issue-number
-        run: |
-          echo "CREATED_ISSUE_NUMBER=${{ steps.create_issue.outputs.issue-number }}" >> $GITHUB_ENV
-
-      # BƯỚC 2: Dùng issue_number vừa tạo để assign
-      - name: Assign issue cho người gây lỗi
-        uses: pozil/auto-assign-issue@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ env.CREATED_ISSUE_NUMBER }}
-          assignees: ${{ github.actor }}
