@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon app.js",
-    "debug": "ndb node app.js",
-    "build": "mkdir -p dist && echo 'Node.js build complete' > dist/build_info.txt"
+    "debug": "ndb node app.js"
   },
   "keywords": [
     "online",
