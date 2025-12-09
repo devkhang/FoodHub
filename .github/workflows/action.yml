@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   # ==================== 1. TEST ====================
   test:
     runs-on: ubuntu-latest
@@ -30,7 +29,7 @@ jobs:
 
       - name: Run Tests
         run: npm run test
-        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
+        env:
           NODE_ENV: ${{ vars.NODE_ENV }}
           PORT: ${{ vars.PORT }}
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
@@ -57,10 +56,10 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
-
     steps:
-      - name: hiện tại biến secrets
-        run : echo "RENDER_STAGING_DEPLOY_HOOK :${{secrets.RENDER_BACKEND_DEPLOY_HOOK_URL}}"
+      - name: Hiện tại biến secrets
+        run: echo "RENDER_STAGING_DEPLOY_HOOK :${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}"
+
       - name: Deploy to Staging
         run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
 
@@ -74,7 +73,6 @@ jobs:
     environment:
       name: production
       url: https://foodhub-6342.onrender.com
-
     steps:
       - name: Deploy to Production
         run: curl -X POST ${{ secrets.RENDER_PROD_DEPLOY_HOOK }}
@@ -82,7 +80,7 @@ jobs:
       - name: Production Live
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
 
-# ==================== TẠO ISSUE + ASSIGN KHI TEST FAIL ====================
+  # ==================== TẠO ISSUE + ASSIGN KHI TEST FAIL ====================
   create-issue-on-fail:
     needs: test
     if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -92,7 +90,7 @@ jobs:
       contents: read
 
     steps:
-      # Bước 1: Tạo issue bằng action cũ (dacbd) – output tên là "issue"
+      # Bước 1: Tạo issue
       - name: Tạo Issue khi test fail
         id: create_issue
         uses: dacbd/create-issue-action@v1
@@ -105,12 +103,12 @@ jobs:
             Người push: @${{ github.actor }}
             Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      # Bước 2: Assign bằng pozil – dùng đúng tên output là "issue" (không phải issue-number)
+      # Bước 2: Assign người gây lỗi (dùng đúng output tên "issue")
       - name: Assign issue cho người gây lỗi
         uses: pozil/auto-assign-issue@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.create_issue.outputs.issue }}   # ← ĐÚNG RỒI ĐÂY!
+          issue-number: ${{ steps.create_issue.outputs.issue }}   # ← CHÍNH XÁC: output tên là "issue"
           assignees: ${{ github.actor }}
           numOfAssignee: 1
           allowSelfAssign: true
