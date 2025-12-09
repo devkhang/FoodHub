@@ -60,9 +60,9 @@ jobs:
 
     steps:
       - name: hiện tại biến secrets
-        run : echo "RENDER_STAGING_DEPLOY_HOOK :${{secrets.RENDER_STAGING_DEPLOY_HOOK}}"
+        run : echo "RENDER_STAGING_DEPLOY_HOOK :${{secrets.RENDER_BACKEND_DEPLOY_HOOK_URL}}"
       - name: Deploy to Staging
-        run: curl -X POST ${{ secrets.RENDER_STAGING_DEPLOY_HOOK }}
+        run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
 
       - name: Staging Live
         run: echo "Staging đã lên sóng → https://foodhub-3.onrender.com"
