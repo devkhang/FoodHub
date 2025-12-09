@@ -1,14 +1,16 @@
-name: CI/CD - Merge vào main → Staging tự động → Production phải duyệt
+# File phải đặt tên đúng: .github/workflows/deploy.yml  (hoặc bất kỳ tên gì .yml đều được)
+
+name: CI/CD - Staging tự động • Production cần duyệt
 
 on:
   push:
-    branches: [ main ]                  # Khi merge PR vào main → chạy tự động
-  workflow_dispatch:                    # Bấm tay để chạy production
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  # ==================== 1. CHẠY TEST (bắt buộc) ====================
+
+  # ==================== 1. TEST ====================
   test:
-    name: Run Tests
     runs-on: ubuntu-latest
     environment: test
     defaults:
@@ -25,9 +27,10 @@ jobs:
           cache: 'npm'
           cache-dependency-path: foodHub-backend-server/package-lock.json
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Run Tests (fail = dừng hết)
+      - name: Run Tests
         run: npm run test
         env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
           NODE_ENV: ${{ vars.NODE_ENV }}
@@ -50,35 +53,32 @@ jobs:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
-  # ==================== 2. STAGING – TỰ ĐỘNG KHI TEST PASS ====================
+  # ==================== 2. STAGING TỰ ĐỘNG ====================
   deploy-staging:
-    name: Deploy → Staging (tự động)
-    needs: test                              # Chỉ chạy khi test PASS
+    needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
+
     steps:
-      - name: Trigger Staging Deploy
+      - name: Deploy to Staging
         run: curl -X POST ${{ secrets.RENDER_STAGING_DEPLOY_HOOK }}
 
-      - name: Thông báo Staging thành công
-        run: echo "STAGING ĐÃ LÊN SÓNG → https://foodhub-3.onrender.com"
+      - name: Staging Live
+        run: echo "Staging đã lên sóng → https://foodhub-3.onrender.com"
 
-  # ==================== 3. PRODUCTION – BẮT BUỘC CÓ NGƯỜI DUYỆT ====================
+  # ==================== 3. PRODUCTION CẦN DUYỆT ====================
   deploy-production:
-    name: Deploy → Production (cần duyệt thủ công)
-    needs: test                              # Vẫn phải pass test trước
-    if: github.event_name == 'workflow_dispatch'   # Chỉ chạy khi bấm Run workflow
+    needs: test
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://foodhub-6342.onrender.com    # hiện luôn link trên GitHub
+      url: https://foodhub-6342.onrender.com
 
     steps:
-      - name: Đang chờ người có quyền duyệt...
-        run: echo "Job này sẽ KHÔNG chạy nếu chưa có người bấm Approve trong Environment production"
-
-      - name: Trigger Production Deploy
+      - name: Deploy to Production
         run: curl -X POST ${{ secrets.RENDER_PROD_DEPLOY_HOOK }}
 
-      - run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
+      - name: Production Live
+        run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
