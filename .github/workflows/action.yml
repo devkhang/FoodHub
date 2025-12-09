@@ -54,7 +54,7 @@ jobs:
   # ==================== 2. STAGING TỰ ĐỘNG ====================
   deploy-staging:
     needs: test
-    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
 
@@ -69,8 +69,7 @@ jobs:
 
   # ==================== 3. PRODUCTION CẦN DUYỆT ====================
   deploy-production:
-    needs: deploy-staging
-    if: github.event_name == 'workflow_dispatch'
+    needs: [test, deploy-staging]
     runs-on: ubuntu-latest
     environment:
       name: production
