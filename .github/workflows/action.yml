@@ -30,7 +30,6 @@ jobs:
 
       - name: Run Tests
         run: npm run test
-        continue-on-error: false
         env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
           NODE_ENV: ${{ vars.NODE_ENV }}
           PORT: ${{ vars.PORT }}
@@ -63,7 +62,7 @@ jobs:
       - name: hiện tại biến secrets
         run : echo "RENDER_STAGING_DEPLOY_HOOK :${{secrets.RENDER_BACKEND_DEPLOY_HOOK_URL}}"
       - name: Deploy to Staging
-        run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
+        run: curl -X POST ${{ secrets.BACKEND_DEPLOY_HOOK_URL }}
 
       - name: Staging Live
         run: echo "Staging đã lên sóng → https://foodhub-3.onrender.com"
