@@ -83,41 +83,47 @@ jobs:
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
 
   create-issue-on-fail:
-    needs: test
-    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write  # Bắt buộc để assign
+    needs: test
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write # Cần quyền ghi Issue
+      contents: read # Cần quyền đọc Contents (mặc định)
 
-    steps:
-      # Bước 1: Tạo issue trước (dùng action tạo issue, lấy output)
-      - name: Tạo Issue
-        id: create_issue  # ID để lấy output sau
-        uses: actions/github-script@v7  # Hoặc action tạo issue khác
-        with:
-          script: |
-            const result = await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: "Test Fail - Sửa gấp!",
-              body: "Chi tiết lỗi test ở đây."
-            });
-            return result.data.number;  # Trả về số issue
+    steps:
+      # BƯỚC 1: Tạo/Cập nhật issue và LẤY RA issue_number
+      - name: Tạo Issue khi test fail
+        id: create_issue
+        uses: peter-evans/create-or-update-issue@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "TEST FAIL – Sửa gấp! (Commit: ${{ github.sha }})"
+          body: |
+            Test backend fail sau khi merge vào main.
+            **Commit:** `${{ github.sha }}`
+            **Người push:** @${{ github.actor }}
+            **Log:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          issue-number: ${{ steps.create_issue.outputs.issue-number }} # Tùy chọn: dùng để update issue cũ nếu đã tồn tại
 
-      # Bước 2: Assign bằng pozil/auto-assign-action@v2
-      - name: Assign người sửa
-        uses: pozil/auto-assign-action@v2  # ← Đây chính là action bạn muốn
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}  # Token mặc định
-          issue-number: ${{ steps.create_issue.outputs.result }}  # ← LẤY SỐ ISSUE TỪ BƯỚC TRƯỚC (đây là chìa khóa!)
-          assignees: |  # Danh sách người assign (cách nhau dòng mới)
-            ${{ github.actor }}  # Ví dụ: assign cho người gây lỗi
-            techlead-abc  # Hoặc thêm người khác
+      # BƯỚC 2: Assign issue cho người gây lỗi bằng GitHub API
+      - name: Assign issue cho người gây lỗi
+        uses: actions/github-script@v6 # Dùng để chạy mã JavaScript truy cập GitHub API
+        if: always() && steps.create_issue.outputs.issue-number # Chỉ chạy nếu Issue được tạo thành công
+        with:
+          script: |
+            const issueNumber = ${{ steps.create_issue.outputs.issue-number }};
+            const assignee = "${{ github.actor }}";
+            
+            console.log(`Assigning Issue #${issueNumber} to user: ${assignee}`);
 
-      # Hoặc nếu không có số issue, tìm theo title (cách cứu cánh)
-      - name: Assign theo title (nếu không có số)
-        uses: pozil/auto-assign-action@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          title: "Test Fail - Sửa gấp!"  # Tìm issue có title chứa từ này
-          assignees: ${{ github.actor }}
+            try {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                assignees: [assignee],
+              });
+              console.log("Issue successfully assigned.");
+            } catch (error) {
+              console.error("Error assigning issue:", error.message);
+            }
