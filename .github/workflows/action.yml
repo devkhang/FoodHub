@@ -83,31 +83,30 @@ jobs:
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
 
   create-issue-on-fail:
-    needs: test                 # Chờ job test chạy xong
+    needs: test-backend
     if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      issues: write                         # Cho phép tạo + assign issue
+      issues: write
 
     steps:
+      # BƯỚC 1: Tạo issue và LẤY RA issue_number
       - name: Tạo Issue khi test fail
+        id: create_issue              # ← QUAN TRỌNG: đặt id để lấy output
         uses: dacbd/create-issue-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: "TEST FAIL – Cần sửa gấp! (Commit: ${{ github.sha }})"
+          title: "TEST FAIL – Sửa gấp! (Commit: ${{ github.sha }})"
           body: |
-            ### Test backend bị fail sau khi merge vào main
-            
-            - **Commit**: ${{ github.sha }}
-            - **Người push**: @${{ github.actor }}
-            - **Link log chi tiết**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            Ai làm hỏng thì người đó sửa nhé! 
-            
-            @${{ github.actor }} vui lòng sửa trong 24h để không block deploy.
+            Test backend fail sau khi merge vào main.
+            Commit: ${{ github.sha }}
+            Người push: @${{ github.actor }}
+            Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      - name: Assign tự động cho người gây lỗi
+      # BƯỚC 2: Dùng issue_number vừa tạo để assign
+      - name: Assign issue cho người gây lỗi
         uses: pozil/auto-assign-issue@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          assignees: ${{ github.actor }}      # ← Gán cho chính người vừa merge code hỏng
+          issue-number: ${{ steps.create_issue.outputs.issue-number }}  # ← ĐỌC ĐÚNG ISSUE VỪA TẠO
+          assignees: ${{ github.actor }}
