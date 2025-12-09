@@ -105,3 +105,6 @@ jobs:
             Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           # ⚠️ Lưu ý: `dacbd/create-issue-action@v1` trả về issue number dưới dạng output tên là 'issue'
           # Cần chắc chắn bạn sử dụng đúng tên output: `steps.create_issue.outputs.issue` hoặc `steps.create_issue.outputs.issue_number`
+      - name: hiện thị issue number
+        run: echo "issue number:${{steps.create_issue.outputs.number}}"
+        
