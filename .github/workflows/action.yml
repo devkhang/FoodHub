@@ -81,3 +81,33 @@ jobs:
 
       - name: Production Live
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
+
+  create-issue-on-fail:
+    needs: test                 # Chờ job test chạy xong
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write                         # Cho phép tạo + assign issue
+
+    steps:
+      - name: Tạo Issue khi test fail
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "TEST FAIL – Cần sửa gấp! (Commit: ${{ github.sha }})"
+          body: |
+            ### Test backend bị fail sau khi merge vào main
+            
+            - **Commit**: ${{ github.sha }}
+            - **Người push**: @${{ github.actor }}
+            - **Link log chi tiết**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            Ai làm hỏng thì người đó sửa nhé! 
+            
+            @${{ github.actor }} vui lòng sửa trong 24h để không block deploy.
+
+      - name: Assign tự động cho người gây lỗi
+        uses: pozil/auto-assign-issue@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: ${{ github.actor }}      # ← Gán cho chính người vừa merge code hỏng
