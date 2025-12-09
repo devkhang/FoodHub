@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
+
   # ==================== 1. TEST ====================
   test:
     runs-on: ubuntu-latest
@@ -56,10 +57,10 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
-    steps:
-      - name: Hiện tại biến secrets
-        run: echo "RENDER_STAGING_DEPLOY_HOOK :${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}"
 
+    steps:
+      - name: hiện tại biến secrets
+        run: echo "RENDER_STAGING_DEPLOY_HOOK :${{secrets.RENDER_BACKEND_DEPLOY_HOOK_URL}}"
       - name: Deploy to Staging
         run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
 
@@ -73,6 +74,7 @@ jobs:
     environment:
       name: production
       url: https://foodhub-6342.onrender.com
+
     steps:
       - name: Deploy to Production
         run: curl -X POST ${{ secrets.RENDER_PROD_DEPLOY_HOOK }}
@@ -87,10 +89,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-      contents: read
 
     steps:
-      # Bước 1: Tạo issue
+      # BƯỚC 1: Tạo issue và LẤY RA issue_number
       - name: Tạo Issue khi test fail
         id: create_issue
         uses: dacbd/create-issue-action@v1
@@ -102,13 +103,19 @@ jobs:
             Commit: ${{ github.sha }}
             Người push: @${{ github.actor }}
             Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          # ⚠️ Lưu ý: `dacbd/create-issue-action@v1` trả về issue number dưới dạng output tên là 'issue'
+          # Cần chắc chắn bạn sử dụng đúng tên output: `steps.create_issue.outputs.issue` hoặc `steps.create_issue.outputs.issue_number`
 
-      # Bước 2: Assign người gây lỗi (dùng đúng output tên "issue")
+      # BƯỚC 1.5: Xuất Issue Number vừa tạo thành Biến Môi Trường (ENV)
+      - name: Export Issue Number to ENV
+        if: always() && steps.create_issue.outputs.issue-number
+        run: |
+          echo "CREATED_ISSUE_NUMBER=${{ steps.create_issue.outputs.issue-number }}" >> $GITHUB_ENV
+
+      # BƯỚC 2: Dùng issue_number vừa tạo để assign
       - name: Assign issue cho người gây lỗi
         uses: pozil/auto-assign-issue@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ steps.create_issue.outputs.issue }}   # ← CHÍNH XÁC: output tên là "issue"
+          issue-number: ${{ env.CREATED_ISSUE_NUMBER }}
           assignees: ${{ github.actor }}
-          numOfAssignee: 1
-          allowSelfAssign: true
