@@ -51,7 +51,7 @@ jobs:
           REACT_APP_MAPBOX_GEOCODING: ${{ vars.REACT_APP_MAPBOX_GEOCODING }}
           REACT_APP_AUTOCOMPLETE_LIMIT: ${{ vars.REACT_APP_AUTOCOMPLETE_LIMIT }}
           REACT_APP_CURRENCY: ${{ vars.REACT_APP_CURRENCY }}
-          PING_TIMEOUT: ${{vars.PING_TIMEOUT}}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT}}
           REACT_APP_SERVER_URL: ${{ vars.REACT_APP_SERVER_URL }}
 
       # Upload build artifact để deploy dùng lại
