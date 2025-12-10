@@ -1,9 +1,8 @@
 name: CI/CD - Staging tự động • Production cần duyệt
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
 
 jobs:
 
