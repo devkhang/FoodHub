@@ -1,24 +1,21 @@
 name: Frontend - Staging tự động • Production cần duyệt
 
-# Chạy khi có push hoặc PR vào main
 on:
   pull_request:
     branches: [ main ]
     paths:
-    - 'foodHub-frontend-client/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
-    - '.github/workflows/frontendCICD.yml'
-
-# Cho phép chạy thủ công từ tab Actions
+      - 'foodHub-frontend-client/**'
+      - '.github/workflows/frontendCICD.yml'
   workflow_dispatch:
 
 jobs:
-  # ==================== 1. BUILD & TEST FRONTEND ====================
   build-test:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: foodHub-frontend-client    # ← Thay tên thư mục frontend của bạn ở đây
+        working-directory: foodHub-frontend-client
     environment: test
+
     steps:
       - uses: actions/checkout@v4
 
@@ -27,23 +24,21 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: foodHub-frontend/package-lock.json
+          cache-dependency-path: foodHub-frontend-client/package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      # Nếu bạn có test (Vitest, Jest, Cypress...)
       - name: Run Tests (nếu có)
         run: npm run test --if-present || echo "Không có test, bỏ qua"
 
-      - name: Build Frontend
+      - name: Build Frontend Build
         run: npm run build
         env:
           REACT_APP_GOONG_API_KEY: ${{ secrets.REACT_APP_GOONG_API_KEY }}
           REACT_APP_MAPBOX_API_KEY: ${{ secrets.REACT_APP_MAPBOX_API_KEY }}
           REACT_APP_STRIPE_PUBLIC_KEY: ${{ secrets.REACT_APP_STRIPE_PUBLIC_KEY }}
 
-          # Các cái còn lại GitHub tự inject từ Variables theo environment
           REACT_APP_GOONG_GEOCODE: ${{ vars.REACT_APP_GOONG_GEOCODE }}
           REACT_APP_GOONG_AUTOCOMPLETE: ${{ vars.REACT_APP_GOONG_AUTOCOMPLETE }}
           REACT_APP_GOONG_DISTANCEMATRIX: ${{ vars.REACT_APP_GOONG_DISTANCEMATRIX }}
@@ -51,17 +46,15 @@ jobs:
           REACT_APP_MAPBOX_GEOCODING: ${{ vars.REACT_APP_MAPBOX_GEOCODING }}
           REACT_APP_AUTOCOMPLETE_LIMIT: ${{ vars.REACT_APP_AUTOCOMPLETE_LIMIT }}
           REACT_APP_CURRENCY: ${{ vars.REACT_APP_CURRENCY }}
-          PING_TIMEOUT: ${{ vars.PING_TIMEOUT}}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
           REACT_APP_SERVER_URL: ${{ vars.REACT_APP_SERVER_URL }}
 
-      # Upload build artifact để deploy dùng lại
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: foodHub-frontend/dist/        # hoặc build/ nếu dùng CRA
+          path: foodHub-frontend-client/dist
 
-  # ==================== 2. DEPLOY STAGING TỰ ĐỘNG ====================
   deploy-staging:
     needs: build-test
     if: ${{ needs.build-test.result == 'success' }}
@@ -69,43 +62,34 @@ jobs:
     environment: staging
 
     steps:
-      - name: Download build artifact
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: frontend-build
           path: dist
 
-      # Cách 1: Dùng Render Deploy Hook (nhanh nhất)
-      - name: Trigger Render Staging Deploy
-        run: |
-          curl -X POST ${{ secrets.RENDER_FRONTEND_STAGING_HOOK }}
+      - name: Trigger Render Staging
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_STAGING_HOOK }}
 
-      - name: Staging Frontend Live
-        run: echo 'Frontend Staging đã lên: https://foodhub-frontend-staging.onrender.com'
-
-  # ==================== 3. DEPLOY PRODUCTION (CẦN DUYỆT THỦ CÔNG) ====================
   deploy-production:
     needs: [build-test, deploy-staging]
     if: ${{ needs.build-test.result == 'success' && needs.deploy-staging.result == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://foodhub.vn          # ← URL thật của bạn
+      url: https://foodhub.vn
 
-    # Bắt buộc phải có người duyệt tay trước khi chạy
-    # → Vào GitHub → Actions → Chọn run → Bấm "Review deployments" → Approve production
-    steps:
-      - name: Download build artifact
+    steps:                                    # ← Chỉ để 1 lần steps duy nhất!
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: frontend-build
           path: dist
 
-      - name: Trigger Render Production Deploy
-        run: |
-          curl -X POST ${{ secrets.RENDER_FRONTEND_PROD_HOOK }}
+      - name: Trigger Render Production
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_PROD_HOOK }}
 
-      - name: Production Frontend LIVE
+      - name: Production LIVE
         run: |
-          echo "FRONTEND PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
-          echo "Truy cập ngay: https://foodhub.vn"
+          echo "Frontend Production đã deploy thành công!"
+          echo "Truy cập: https://foodhub.vn"
