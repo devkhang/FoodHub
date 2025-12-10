@@ -2,12 +2,6 @@
 name: Frontend - Staging tự động • Production cần duyệt
 
 on:
-  push:
-    # ⭐️ THÊM: Kích hoạt triển khai Production sau khi code đã được merge vào main
-    branches: [ main ] 
-    paths:
-      - 'foodHub-frontend-client/**'
-      - '.github/workflows/frontendCICD.yml'
   pull_request:
     # Kích hoạt test và staging khi có PR nhắm vào main
     branches: [ main ]
