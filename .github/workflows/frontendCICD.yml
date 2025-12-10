@@ -5,8 +5,8 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - 'foodHub-frontend-client/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
-      - '.github/workflows/frontendCICD.yml'
+    - 'foodHub-frontend-client/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
+    - '.github/workflows/frontendCICD.yml'
 
 # Cho phép chạy thủ công từ tab Actions
   workflow_dispatch:
@@ -79,15 +79,6 @@ jobs:
       - name: Trigger Render Staging Deploy
         run: |
           curl -X POST ${{ secrets.RENDER_FRONTEND_STAGING_HOOK }}
-
-      # Cách 2: Nếu bạn deploy lên Vercel / Netlify (có thể dùng cả 2 cách)
-      # - name: Deploy to Vercel
-      #   uses: amondnet/vercel-action@v25
-      #   with:
-      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
-      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
-      #     working-directory: foodHub-frontend
 
       - name: Staging Frontend Live
         run: echo "Frontend Staging đã lên: https://foodhub-frontend-staging.onrender.com"

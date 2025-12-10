@@ -4,8 +4,8 @@ on:
   pull_request:
     branches: [main]
   paths:
-      - 'foodHub-backend-server/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
-      - '.github/workflows/backendCICD.yml'
+    - 'foodHub-backend-server/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
+    - '.github/workflows/backendCICD.yml'
 jobs:
 
   # ==================== 1. TEST ====================
