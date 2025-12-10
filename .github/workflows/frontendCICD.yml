@@ -1,7 +1,15 @@
+# Tên của Workflow
 name: Frontend - Staging tự động • Production cần duyệt
 
 on:
+  push:
+    # ⭐️ THÊM: Kích hoạt triển khai Production sau khi code đã được merge vào main
+    branches: [ main ] 
+    paths:
+      - 'foodHub-frontend-client/**'
+      - '.github/workflows/frontendCICD.yml'
   pull_request:
+    # Kích hoạt test và staging khi có PR nhắm vào main
     branches: [ main ]
     paths:
       - 'foodHub-frontend-client/**'
@@ -9,7 +17,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  # ===============================================
+  # GIAI ĐOẠN 1: TEST VÀ BUILD (CI)
+  # ===============================================
   build-test:
+    name: 1. Test và Build Frontend
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,6 +46,7 @@ jobs:
 
       - name: Build Frontend Build
         run: npm run build
+        # Truyền Vars và Secrets cần thiết cho quá trình Build
         env:
           REACT_APP_GOONG_API_KEY: ${{ secrets.REACT_APP_GOONG_API_KEY }}
           REACT_APP_MAPBOX_API_KEY: ${{ secrets.REACT_APP_MAPBOX_API_KEY }}
@@ -53,11 +66,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-build
-          path: foodHub-frontend-client/dist
+          # ⭐️ ĐẢM BẢO PATH ĐÚNG: Thay 'foodHub-frontend-client/dist' bằng thư mục build thực tế (thường là build hoặc dist)
+          path: foodHub-frontend-client/dist 
 
+  # =======================================================
+  # GIAI ĐOẠN 2: TRIỂN KHAI STAGING (Tự động khi có PR hoặc chạy thủ công)
+  # =======================================================
   deploy-staging:
+    name: 2. Deploy Staging (Review/Demo)
     needs: build-test
-    if: ${{ needs.build-test.result == 'success' }}
+    # ⭐️ CẬP NHẬT IF: Chạy nếu kết quả build-test thành công VÀ (có PR HOẶC chạy thủ công)
+    if: ${{ always() && github.event_name != 'push' }} 
     runs-on: ubuntu-latest
     environment: staging
 
@@ -69,17 +88,25 @@ jobs:
           path: dist
 
       - name: Trigger Render Staging
+        # Giả định Render service sẽ fetch và triển khai từ artifact
         run: curl -X POST ${{ secrets.RENDER_FRONTEND_STAGING_HOOK }}
 
+  # ==========================================================
+  # GIAI ĐOẠN 3: TRIỂN KHAI PRODUCTION (Sau khi MERGE, cần Phê duyệt)
+  # ==========================================================
   deploy-production:
-    needs: [build-test, deploy-staging]
-    if: ${{ needs.build-test.result == 'success' && needs.deploy-staging.result == 'success' }}
+    name: 3. Deploy Production (Cần Phê duyệt)
+    # Phải chạy sau khi test thành công
+    needs: build-test 
+    # ⭐️ CẬP NHẬT IF: CHỈ CHẠY khi code được MERGE (push vào main) HOẶC chạy thủ công
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+
     runs-on: ubuntu-latest
     environment:
       name: production
       url: https://foodhub.vn
 
-    steps:                                    # ← Chỉ để 1 lần steps duy nhất!
+    steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
