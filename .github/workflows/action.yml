@@ -53,7 +53,7 @@ jobs:
   # ==================== 2. STAGING TỰ ĐỘNG ====================
   deploy-staging:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
 
