@@ -53,7 +53,7 @@ describe('API Login - Mock 100%', () => {
       .post('/auth/login')
       .send({ email: 'c1@gmail.com', password: 'sai' });
 
-    expect(res.status).toBe(403);
+    expect(res.status).toBe(401);
   });
 });
 
