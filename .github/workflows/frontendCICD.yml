@@ -46,7 +46,6 @@ jobs:
 
       - name: Build Frontend Build
         run: npm run build
-        # Truyền Vars và Secrets cần thiết cho quá trình Build
         env:
           REACT_APP_GOONG_API_KEY: ${{ secrets.REACT_APP_GOONG_API_KEY }}
           REACT_APP_MAPBOX_API_KEY: ${{ secrets.REACT_APP_MAPBOX_API_KEY }}
@@ -96,7 +95,6 @@ jobs:
   # ==========================================================
   deploy-production:
     name: 3. Deploy Production (Cần Phê duyệt)
-    # Phải chạy sau khi test thành công
     needs: build-test 
     # ⭐️ CẬP NHẬT IF: CHỈ CHẠY khi code được MERGE (push vào main) HOẶC chạy thủ công
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
