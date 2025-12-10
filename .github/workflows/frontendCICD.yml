@@ -117,3 +117,42 @@ jobs:
         run: |
           echo "Frontend Production đã deploy thành công!"
           echo "Truy cập: https://foodhub.vn"
+
+
+  create-issue-on-fail:
+    needs: test
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      # Bước 1: Tạo issue bằng action cũ (dacbd) – output tên là "issue"
+      - name: Tạo Issue khi test fail
+        id: create_issue
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "TEST FAIL – Sửa gấp! (Commit: ${{ github.sha }})"
+          body: |
+            Test frontend fail khi merge vào main.
+            Commit: ${{ github.sha }}
+            Người push: @${{ github.actor }}
+            Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      # Bước 2: Assign bằng pozil – dùng đúng tên output là "issue" (không phải issue-number)
+      - name: Assign issue cho người gây lỗi
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNum = "${{ steps.create_issue.outputs.issue || steps.create_issue.outputs.number }}";
+            if (issueNum) {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNum),
+                assignees: ["${{ github.actor }}"]
+              });
+              console.log(`Đã assign issue #${issueNum} cho @${{ github.actor }}`);
+            }
