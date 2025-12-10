@@ -3,7 +3,9 @@ name: CI/CD - Staging tự động • Production cần duyệt
 on:
   pull_request:
     branches: [main]
-
+  paths:
+      - 'foodHub-backend-server/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
+      - '.github/workflows/backendCICD.yml'
 jobs:
 
   # ==================== 1. TEST ====================
