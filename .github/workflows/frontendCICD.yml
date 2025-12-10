@@ -81,7 +81,7 @@ jobs:
           curl -X POST ${{ secrets.RENDER_FRONTEND_STAGING_HOOK }}
 
       - name: Staging Frontend Live
-        run: echo "Frontend Staging đã lên: https://foodhub-frontend-staging.onrender.com"
+        run: echo 'Frontend Staging đã lên: https://foodhub-frontend-staging.onrender.com'
 
   # ==================== 3. DEPLOY PRODUCTION (CẦN DUYỆT THỦ CÔNG) ====================
   deploy-production:
