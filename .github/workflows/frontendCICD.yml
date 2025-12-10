@@ -120,7 +120,7 @@ jobs:
 
 
   create-issue-on-fail:
-    needs: test
+    needs: build-test
     if: failure()
     runs-on: ubuntu-latest
     permissions:
