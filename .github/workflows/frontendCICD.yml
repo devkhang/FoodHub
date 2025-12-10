@@ -96,7 +96,7 @@ jobs:
   # ==========================================================
   deploy-production:
     name: 3. Deploy Production (Cần Phê duyệt)
-    needs: build-deploy-staging 
+    needs: deploy-staging 
     # ⭐️ CẬP NHẬT IF: CHỈ CHẠY khi code được MERGE (push vào main) HOẶC chạy thủ công
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
