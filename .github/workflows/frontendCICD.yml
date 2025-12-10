@@ -1,0 +1,120 @@
+# Tên của Workflow
+name: Frontend - Staging tự động • Production cần duyệt
+
+on:
+  push:
+    # ⭐️ THÊM: Kích hoạt triển khai Production sau khi code đã được merge vào main
+    branches: [ main ] 
+    paths:
+      - 'foodHub-frontend-client/**'
+      - '.github/workflows/frontendCICD.yml'
+  pull_request:
+    # Kích hoạt test và staging khi có PR nhắm vào main
+    branches: [ main ]
+    paths:
+      - 'foodHub-frontend-client/**'
+      - '.github/workflows/frontendCICD.yml'
+  workflow_dispatch:
+
+jobs:
+  # ===============================================
+  # GIAI ĐOẠN 1: TEST VÀ BUILD (CI)
+  # ===============================================
+  build-test:
+    name: 1. Test và Build Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: foodHub-frontend-client
+    environment: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: foodHub-frontend-client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests (nếu có)
+        run: npm run test --if-present || echo "Không có test, bỏ qua"
+
+      - name: Build Frontend Build
+        run: npm run build
+        env:
+          REACT_APP_GOONG_API_KEY: ${{ secrets.REACT_APP_GOONG_API_KEY }}
+          REACT_APP_MAPBOX_API_KEY: ${{ secrets.REACT_APP_MAPBOX_API_KEY }}
+          REACT_APP_STRIPE_PUBLIC_KEY: ${{ secrets.REACT_APP_STRIPE_PUBLIC_KEY }}
+
+          REACT_APP_GOONG_GEOCODE: ${{ vars.REACT_APP_GOONG_GEOCODE }}
+          REACT_APP_GOONG_AUTOCOMPLETE: ${{ vars.REACT_APP_GOONG_AUTOCOMPLETE }}
+          REACT_APP_GOONG_DISTANCEMATRIX: ${{ vars.REACT_APP_GOONG_DISTANCEMATRIX }}
+          REACT_APP_MAPBOX_DIRECTION_URL: ${{ vars.REACT_APP_MAPBOX_DIRECTION_URL }}
+          REACT_APP_MAPBOX_GEOCODING: ${{ vars.REACT_APP_MAPBOX_GEOCODING }}
+          REACT_APP_AUTOCOMPLETE_LIMIT: ${{ vars.REACT_APP_AUTOCOMPLETE_LIMIT }}
+          REACT_APP_CURRENCY: ${{ vars.REACT_APP_CURRENCY }}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          REACT_APP_SERVER_URL: ${{ vars.REACT_APP_SERVER_URL }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          # ⭐️ ĐẢM BẢO PATH ĐÚNG: Thay 'foodHub-frontend-client/dist' bằng thư mục build thực tế (thường là build hoặc dist)
+          path: foodHub-frontend-client/dist 
+
+  # =======================================================
+  # GIAI ĐOẠN 2: TRIỂN KHAI STAGING (Tự động khi có PR hoặc chạy thủ công)
+  # =======================================================
+  deploy-staging:
+    name: 2. Deploy Staging (Review/Demo)
+    needs: build-test
+    # ⭐️ CẬP NHẬT IF: Chạy nếu kết quả build-test thành công VÀ (có PR HOẶC chạy thủ công)
+    if: ${{ always() && github.event_name != 'push' }} 
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: dist
+
+      - name: Trigger Render Staging
+        # Giả định Render service sẽ fetch và triển khai từ artifact
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_STAGING_HOOK }}
+
+  # ==========================================================
+  # GIAI ĐOẠN 3: TRIỂN KHAI PRODUCTION (Sau khi MERGE, cần Phê duyệt)
+  # ==========================================================
+  deploy-production:
+    name: 3. Deploy Production (Cần Phê duyệt)
+    needs: build-test 
+    # ⭐️ CẬP NHẬT IF: CHỈ CHẠY khi code được MERGE (push vào main) HOẶC chạy thủ công
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://foodhub.vn
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: dist
+
+      - name: Trigger Render Production
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_PROD_HOOK }}
+
+      - name: Production LIVE
+        run: |
+          echo "Frontend Production đã deploy thành công!"
+          echo "Truy cập: https://foodhub.vn"

@@ -3,7 +3,9 @@ name: CI/CD - Staging tự động • Production cần duyệt
 on:
   pull_request:
     branches: [main]
-
+    paths:
+      - 'foodHub-backend-server/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
+      - '.github/workflows/backendCICD.yml'
 jobs:
 
   # ==================== 1. TEST ====================
@@ -53,7 +55,7 @@ jobs:
   # ==================== 2. STAGING TỰ ĐỘNG ====================
   deploy-staging:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: ${{ needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     environment: staging
 
@@ -84,7 +86,7 @@ jobs:
 # ==================== TẠO ISSUE + ASSIGN KHI TEST FAIL ====================
   create-issue-on-fail:
     needs: test
-    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: failure()
     runs-on: ubuntu-latest
     permissions:
       issues: write
