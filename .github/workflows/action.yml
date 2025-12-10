@@ -84,7 +84,7 @@ jobs:
 # ==================== TẠO ISSUE + ASSIGN KHI TEST FAIL ====================
   create-issue-on-fail:
     needs: test
-    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: failure()
     runs-on: ubuntu-latest
     permissions:
       issues: write
