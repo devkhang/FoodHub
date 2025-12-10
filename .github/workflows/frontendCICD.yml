@@ -2,12 +2,6 @@
 name: Frontend - Staging tự động • Production cần duyệt
 
 on:
-  push:
-    # ⭐️ THÊM: Kích hoạt triển khai Production sau khi code đã được merge vào main
-    branches: [ main ] 
-    paths:
-      - 'foodHub-frontend-client/**'
-      - '.github/workflows/frontendCICD.yml'
   pull_request:
     # Kích hoạt test và staging khi có PR nhắm vào main
     branches: [ main ]
@@ -47,6 +41,7 @@ jobs:
       - name: Build Frontend Build
         run: npm run build
         env:
+          CI: false
           REACT_APP_GOONG_API_KEY: ${{ secrets.REACT_APP_GOONG_API_KEY }}
           REACT_APP_MAPBOX_API_KEY: ${{ secrets.REACT_APP_MAPBOX_API_KEY }}
           REACT_APP_STRIPE_PUBLIC_KEY: ${{ secrets.REACT_APP_STRIPE_PUBLIC_KEY }}
@@ -66,7 +61,7 @@ jobs:
         with:
           name: frontend-build
           # ⭐️ ĐẢM BẢO PATH ĐÚNG: Thay 'foodHub-frontend-client/dist' bằng thư mục build thực tế (thường là build hoặc dist)
-          path: foodHub-frontend-client/dist 
+          path: foodHub-frontend-client/build 
 
   # =======================================================
   # GIAI ĐOẠN 2: TRIỂN KHAI STAGING (Tự động khi có PR hoặc chạy thủ công)
@@ -84,7 +79,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: frontend-build
-          path: dist
+          path: build
 
       - name: Trigger Render Staging
         # Giả định Render service sẽ fetch và triển khai từ artifact
@@ -95,10 +90,8 @@ jobs:
   # ==========================================================
   deploy-production:
     name: 3. Deploy Production (Cần Phê duyệt)
-    needs: build-test 
+    needs: deploy-staging 
     # ⭐️ CẬP NHẬT IF: CHỈ CHẠY khi code được MERGE (push vào main) HOẶC chạy thủ công
-    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -109,7 +102,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: frontend-build
-          path: dist
+          path: build
 
       - name: Trigger Render Production
         run: curl -X POST ${{ secrets.RENDER_FRONTEND_PROD_HOOK }}
@@ -118,3 +111,42 @@ jobs:
         run: |
           echo "Frontend Production đã deploy thành công!"
           echo "Truy cập: https://foodhub.vn"
+
+
+  create-issue-on-fail:
+    needs: build-test
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      # Bước 1: Tạo issue bằng action cũ (dacbd) – output tên là "issue"
+      - name: Tạo Issue khi test fail
+        id: create_issue
+        uses: dacbd/create-issue-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "TEST FAIL – Sửa gấp! (Commit: ${{ github.sha }})"
+          body: |
+            Test frontend fail khi merge vào main.
+            Commit: ${{ github.sha }}
+            Người push: @${{ github.actor }}
+            Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      # Bước 2: Assign bằng pozil – dùng đúng tên output là "issue" (không phải issue-number)
+      - name: Assign issue cho người gây lỗi
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNum = "${{ steps.create_issue.outputs.issue || steps.create_issue.outputs.number }}";
+            if (issueNum) {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNum),
+                assignees: ["${{ github.actor }}"]
+              });
+              console.log(`Đã assign issue #${issueNum} cho @${{ github.actor }}`);
+            }
