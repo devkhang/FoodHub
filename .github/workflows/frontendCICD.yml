@@ -63,12 +63,38 @@ jobs:
           # ⭐️ ĐẢM BẢO PATH ĐÚNG: Thay 'foodHub-frontend-client/dist' bằng thư mục build thực tế (thường là build hoặc dist)
           path: foodHub-frontend-client/build 
 
+  build-push-docker-simple:
+    needs: build-test
+    if: ${{ needs.build-test.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build the Docker image
+        run: |
+          docker build ./foodHub-frontend-client \
+            --file ./foodHub-frontend-client/Dockerfile \
+            --tag ${{ secrets.DOCKER_USERNAME }}/foodhub-frontend:latest
+
+      - name: Docker Push
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/foodhub-frontend:latest
+
+      - name: Docker Image Published
+        run: |
+          echo "✅ Đã push image backend thành công (tag: latest)"
   # =======================================================
   # GIAI ĐOẠN 2: TRIỂN KHAI STAGING (Tự động khi có PR hoặc chạy thủ công)
   # =======================================================
   deploy-staging:
     name: 2. Deploy Staging (Review/Demo)
-    needs: build-test
+    needs: [build-test,build-push-docker-simple]
     # ⭐️ CẬP NHẬT IF: Chạy nếu kết quả build-test thành công VÀ (có PR HOẶC chạy thủ công)
     if: ${{ always() && github.event_name != 'push' }} 
     runs-on: ubuntu-latest
@@ -90,7 +116,7 @@ jobs:
   # ==========================================================
   deploy-production:
     name: 3. Deploy Production (Cần Phê duyệt)
-    needs: deploy-staging 
+    needs: [build-test,build-push-docker-simple,deploy-staging] 
     # ⭐️ CẬP NHẬT IF: CHỈ CHẠY khi code được MERGE (push vào main) HOẶC chạy thủ công
     runs-on: ubuntu-latest
     environment:
