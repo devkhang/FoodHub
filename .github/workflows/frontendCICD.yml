@@ -84,7 +84,7 @@ jobs:
 
       - name: Docker Push
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/foodhub-backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/foodhub-frontend:latest
 
       - name: Docker Image Published
         run: |
