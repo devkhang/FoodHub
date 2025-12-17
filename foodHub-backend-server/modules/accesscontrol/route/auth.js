@@ -8,6 +8,7 @@ const authController = require("../controllers/authController");
 const multer = require("multer");
 const router = express.Router();
 const path = require("path");
+const isValid = require("../../../middleware/auth")
 
 const shipperUpload = multer({
   // Sử dụng cấu hình storage/fileFilter đã có từ server.js
@@ -98,7 +99,25 @@ router.post(
 
 router.get("/verify/:token", authController.verifyAccount);
 
-router.post("/login", authController.login);
+router.post(
+  "/login",
+  [
+    // 1. Kiểm tra Email có đúng định dạng không
+    body("email")
+      .isEmail()
+      .withMessage("Vui lòng nhập đúng định dạng email.")
+      .normalizeEmail(), // Chuyển chữ hoa thành thường, bỏ khoảng trắng thừa
+
+    // 2. Kiểm tra Password có bị rỗng không
+    body("password", "Mật khẩu không được để trống.")
+      .trim()
+      .not()
+      .isEmpty() 
+      // Lưu ý: Ở Login, ta KHÔNG check độ dài (min: 6) để tránh lộ thông tin policy cũ cho hacker
+  ],
+  isValid.isValid,
+  authController.login
+);
 
 router.post(
   "/signup-seller",

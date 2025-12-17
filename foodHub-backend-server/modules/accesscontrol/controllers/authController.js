@@ -263,7 +263,7 @@ exports.login = (req, res, next) => {
   const password = req.body.password;
   let loadedUser;
 
-  Account.findOne({ email: email })
+  return Account.findOne({ email: email })
     .then(async (account) => {
       if (!account) {
         const error = new Error("Invalid email/password combination.");
