@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const { validationResult } = require("express-validator");
 const Account = require("../modules/accesscontrol/models/account");
 
 const verifyToken = (req, res) => {
@@ -26,6 +26,17 @@ const verifyToken = (req, res) => {
   }
 
   return decodedToken.accountId;
+};
+
+exports.isValid = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error("Validation failed");
+        error.statusCode = 422;
+        error.errors = errors.array();
+        return next(error); // Chặn ngay tại đây
+    }
+    next(); // Nếu không lỗi, cho vào Controller
 };
 
 exports.verifySeller = (req, res, next) => {

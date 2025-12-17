@@ -347,6 +347,10 @@ exports.postOrder = (req, res, next) => {
 
       for (let [seller, cartItem] of Object.entries(sellers)) {
         Seller.findById(seller).then((seller) => {
+          if (!seller) {
+            console.warn(`Seller với ID ${sellerId} không tìm thấy. Bỏ qua tạo đơn.`);
+            return; 
+          }
           const items = cartItem.map((i) => {
             return { quantity: i.quantity, item: { ...i.itemId._doc } };
           });
@@ -367,16 +371,29 @@ exports.postOrder = (req, res, next) => {
             sessionId,
           });
 
-          order.save();
-          for (const clientId of Object.keys(app.clients)) {
-            // console.log(app.clients[clientId].socket);
-            if (clientId.toString() === seller._id.toString()) {
-              io.getIO().sockets.connected[app.clients[clientId].socket].emit(
-                "orders",
-                { action: "create", order: order }
-              );
-            }
-          }
+        order.save()
+          .then((savedOrder) => {
+              // Logic bắn Socket giữ nguyên trong này
+              for (const clientId of Object.keys(app.clients)) {
+                  if (clientId.toString() === seller._id.toString()) {
+                      if (io.getIO().sockets.connected[app.clients[clientId].socket]) {
+                          io.getIO().sockets.connected[app.clients[clientId].socket].emit(
+                              "orders",
+                              { action: "create", order: savedOrder }
+                          );
+                      }
+                  }
+              }
+          })
+          .catch((err) => {
+              // 👇 QUAN TRỌNG: Bắt lỗi và chuyển cho Express xử lý
+              console.error("Lỗi lưu đơn hàng:", err);
+              next(err); 
+          });
+        }).catch((err) => {
+            // Nếu Lưu DB lỗi (Mất mạng, sai schema...), code nhảy vào đây
+            console.error("Lỗi khi lưu Order:", err);
+            next(err); // Chuyền lỗi cho Express xử lý (Test Case 5 sẽ pass)
         });
       }
       return result;
