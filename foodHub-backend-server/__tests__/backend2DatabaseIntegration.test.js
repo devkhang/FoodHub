@@ -87,7 +87,7 @@ describe("Ordering business process", () => {
     await Seller.deleteMany();
   });
 
-  test('Module order thành công tìm được các quán ăn gần với vị trí tìm. Các quán này đều thực sự tồn tại trong database', async () => {
+  test('[BD2DB_INT_001]:Module order thành công tìm được các quán ăn gần với vị trí tìm. Các quán này đều thực sự tồn tại trong database', async () => {
     // --- STEP 1: ARRANGE
     const verifiedAccount = await Account.create({
       email: "test_owner@example.com",
@@ -154,7 +154,7 @@ describe("Ordering business process", () => {
     expect(sellerInDb._id.toString()).toEqual(createdSeller._id.toString());
   });
 
-  test('Module order trả về kết quả rỗng (hoặc lỗi trang) khi không có quán ăn nào trong phạm vi 20KM', async () => {
+  test('[BD2DB_INT_002]:Module order trả về kết quả rỗng (hoặc lỗi trang) khi không có quán ăn nào trong phạm vi 20KM', async () => {
     // --- A. ARRANGE (PREPARE DATA) ---
 
     // 1. Create a Verified Account
@@ -219,7 +219,7 @@ describe("Ordering business process", () => {
     expect(dbCheck.name).toBe("Phở Hà Nội Gốc");
   });
 
-  test('Giỏ hàng rỗng: Database lưu sản phẩm vào giỏ hàng của người dùng thành công', async () => {
+  test('[BD2DB_INT_003]:Giỏ hàng rỗng: Database lưu sản phẩm vào giỏ hàng của người dùng thành công', async () => {
     // --- A. ARRANGE (PREPARE DATA) ---
 
     // 1. Create a Seller (Required to create an Item)
@@ -286,7 +286,7 @@ describe("Ordering business process", () => {
     expect(updatedUser.cart.items[0].quantity).toBe(1);
   });
 
-  test('Module order từ chối lưu, trả về lỗi MIX_CART khi giỏ hàng có món từ quán khác', async () => {
+  test('[BD2DB_INT_004]:Module order từ chối lưu, trả về lỗi MIX_CART khi giỏ hàng có món từ quán khác', async () => {
     // --- STEP 1: ARRANGE (Setup Data) ---
 
     // 1. Create TWO different Sellers
@@ -378,7 +378,7 @@ describe("Ordering business process", () => {
     expect(userInDb.cart.items[0].itemId.toString()).toBe(itemFromSellerA._id.toString());
   });
 
-  test('Module order thành công trả về các sản phẩm có trong giỏ hàng và tổng tiền chính xác', async () => {
+  test('[BD2DB_INT_005]:Module order thành công trả về các sản phẩm có trong giỏ hàng và tổng tiền chính xác', async () => {
     // --- STEP 1: ARRANGE (Setup Data) ---
 
     // 1. Create a Seller (Needed for Items)
@@ -470,7 +470,7 @@ describe("Ordering business process", () => {
     expect(responseItemB.itemId.title).toBe("Keyboard");
   });
 
-  test('Module thành công tăng số lượng sản phẩm đã có và lưu thật vào Database', async () => {
+  test('[BD2DB_INT_006]:Module thành công tăng số lượng sản phẩm đã có và lưu thật vào Database', async () => {
     // --- STEP 1: ARRANGE (Setup Initial State) ---
 
     // 1. Create Seller & Item
@@ -542,7 +542,7 @@ describe("Ordering business process", () => {
     expect(updatedUser.cart.items[0].itemId.toString()).toBe(existingItem._id.toString());
   })
 
-  test('Module thành công giảm số lượng sản phẩm, lưu thật vào DB', async () => {
+  test('[BD2DB_INT_007]:Module thành công giảm số lượng sản phẩm, lưu thật vào DB', async () => {
     // --- STEP 1: ARRANGE (Setup Data) ---
 
     // 1. Create Seller & Item
@@ -612,7 +612,7 @@ describe("Ordering business process", () => {
     expect(cartItem.quantity).toBe(1);
   });
 
-  test('Module thành công loại bỏ sản phẩm, lưu thật vào DB', async () => {
+  test('[BD2DB_INT_008]:Module thành công loại bỏ sản phẩm, lưu thật vào DB', async () => {
     // --- STEP 1: ARRANGE (Setup Data) ---
 
     // 1. Create Seller & Item
@@ -678,7 +678,7 @@ describe("Ordering business process", () => {
 
   });
 
-  test.only("should update order status from 'Placed' to 'Cancelled' in the database", async () => {
+  test("[BD2DB_INT_009]:should update order status from 'Placed' to 'Cancelled' in the database", async () => {
     // 1. SETUP: Create necessary data in DB
     
     // Create an Account (Role User)
