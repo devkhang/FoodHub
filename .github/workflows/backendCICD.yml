@@ -93,8 +93,7 @@ jobs:
           postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
           
           # 4. Chạy Test
-          postman collection run '36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d' \
-          -e '36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab' \
+          postman collection run "36233358-33efe74d-b847-4cf6-a21f-49d68114219f" -e "36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab"\
           --env-var "url=http://localhost:3001"
         env:
           # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
