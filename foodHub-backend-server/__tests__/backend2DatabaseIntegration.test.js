@@ -40,6 +40,7 @@ process.env.MAX_RESTAURANT_ACCEPT_RANGE = "20"; // 10 km range
 app.get("/restaurants-location/:lat/:lng", userController.getRestaurantsByAddress);
 app.post("/cart", userController.postCart);
 app.get("/cart", userController.getCart);
+app.post("/remove-cart-item/:itemId", userController.postCartRemove);
 
 
 //TEST SUITE: Ordering
@@ -451,7 +452,7 @@ describe("Integration: Get Restaurants By Location", () => {
     expect(responseItemB.itemId.title).toBe("Keyboard");
   });
 
-  test.only('Module thành công tăng số lượng sản phẩm đã có và lưu thật vào Database', async () => {
+  test('Module thành công tăng số lượng sản phẩm đã có và lưu thật vào Database', async () => {
     // --- STEP 1: ARRANGE (Setup Initial State) ---
 
     // 1. Create Seller & Item
@@ -522,5 +523,75 @@ describe("Integration: Get Restaurants By Location", () => {
     // Verify it's still the correct item
     expect(updatedUser.cart.items[0].itemId.toString()).toBe(existingItem._id.toString());
   })
+
+  test('Module thành công giảm số lượng sản phẩm, lưu thật vào DB', async () => {
+    // --- STEP 1: ARRANGE (Setup Data) ---
+
+    // 1. Create Seller & Item
+    const seller = await Seller.create({
+      name: "Tea Shop",
+      tags: "tea",
+      formattedAddress: "Hue",
+      imageUrl: ["img.jpg"],
+      address: { lat: 15, lng: 107 },
+      account: new mongoose.Types.ObjectId(),
+      isActive: true
+    });
+
+    const item = await Item.create({
+      title: "Green Tea",
+      description: "Fresh",
+      imageUrl: "tea.jpg",
+      price: 20,
+      creator: seller._id
+    });
+
+    // 2. Create Account
+    const account = await Account.create({
+      email: "tea_lover@test.com",
+      password: "123",
+      role: "ROLE_USER",
+      isVerified: true
+    });
+    mockLoggedInUserId = account._id;
+
+    // 3. Create User with item quantity = 2
+    // We start with 2 so that reducing by 1 leaves 1 remaining (proving it didn't just delete the item)
+    const user = await User.create({
+      firstName: "Test",
+      lastName: "User",
+      account: account._id,
+      cart: {
+        items: [
+          {
+            itemId: item._id,
+            quantity: 2 // <--- Start with 2
+          }
+        ]
+      }
+    });
+
+    // --- STEP 2: ACT (Execute Request) ---
+    // Call the endpoint to reduce quantity by 1
+    const response = await request(app)
+      .post(`/remove-cart-item/${item._id}`);
+
+    // --- STEP 3: ASSERT (Verify Results) ---
+
+    // 1. Check HTTP Response
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Item successfully updated.");
+
+    // 2. Verify Database State
+    const updatedUser = await User.findById(user._id);
+
+    // The item should still exist in cart
+    expect(updatedUser.cart.items).toHaveLength(1);
+
+    // The quantity should be reduced from 2 to 1
+    const cartItem = updatedUser.cart.items[0];
+    expect(cartItem.itemId.toString()).toBe(item._id.toString());
+    expect(cartItem.quantity).toBe(1);
+  });
 
 });
