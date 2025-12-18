@@ -19,8 +19,9 @@
   "author": "Abhishek Yadav",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.4",
     "jest": "^29.7.0",
+    "mongodb-memory-server": "^11.0.0",
+    "nodemon": "^2.0.4",
     "supertest": "^7.0.0"
   },
   "dependencies": {
