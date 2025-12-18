@@ -41,10 +41,11 @@ app.get("/restaurants-location/:lat/:lng", userController.getRestaurantsByAddres
 app.post("/cart", userController.postCart);
 app.get("/cart", userController.getCart);
 app.post("/remove-cart-item/:itemId", userController.postCartRemove);
+app.post("/delete-cart-item", userController.postCartDelete);
 
 
 //TEST SUITE: Ordering
-describe("Integration: Get Restaurants By Location", () => {
+describe("Ordering business process", () => {
   let mongoServer;
 
   // Start In-Memory DB before tests
@@ -592,6 +593,72 @@ describe("Integration: Get Restaurants By Location", () => {
     const cartItem = updatedUser.cart.items[0];
     expect(cartItem.itemId.toString()).toBe(item._id.toString());
     expect(cartItem.quantity).toBe(1);
+  });
+
+  test('Module thành công loại bỏ sản phẩm, lưu thật vào DB', async () => {
+    // --- STEP 1: ARRANGE (Setup Data) ---
+
+    // 1. Create Seller & Item
+    const seller = await Seller.create({
+      name: "Book Store",
+      tags: "books",
+      formattedAddress: "Da Nang",
+      imageUrl: ["img.jpg"],
+      address: { lat: 16, lng: 108 },
+      account: new mongoose.Types.ObjectId(),
+      isActive: true
+    });
+
+    const itemToDelete = await Item.create({
+      title: "NodeJS Guide",
+      description: "Learn Node",
+      imageUrl: "node.jpg",
+      price: 25,
+      creator: seller._id
+    });
+
+    // 2. Create Account
+    const account = await Account.create({
+      email: "reader@test.com",
+      password: "123",
+      role: "ROLE_USER",
+      isVerified: true
+    });
+    mockLoggedInUserId = account._id;
+
+    // 3. Create User with the item IN the cart
+    const user = await User.create({
+      firstName: "Test",
+      lastName: "User",
+      account: account._id,
+      cart: {
+        items: [
+          {
+            itemId: itemToDelete._id,
+            quantity: 5 // Quantity doesn't matter for delete, it should remove all
+          }
+        ]
+      }
+    });
+
+    // --- STEP 2: ACT (Execute Request) ---
+    // Send POST request with itemId in body
+    const response = await request(app)
+      .post("/delete-cart-item")
+      .send({ itemId: itemToDelete._id });
+
+    // --- STEP 3: ASSERT (Verify Results) ---
+
+    // 1. Check HTTP Response
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Item successfully removed from cart.");
+
+    // 2. Verify Database State
+    const updatedUser = await User.findById(user._id);
+
+    // The cart should now be empty (length 0)
+    expect(updatedUser.cart.items).toHaveLength(0);
+
   });
 
 });
