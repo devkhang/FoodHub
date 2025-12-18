@@ -200,7 +200,7 @@ describe("Integration: Get Restaurants By Location", () => {
     expect(dbCheck.name).toBe("Phở Hà Nội Gốc");
   });
 
-  test.only('Giỏ hàng rỗng: Database lưu sản phẩm vào giỏ hàng của người dùng thành công', async () => {
+  test('Giỏ hàng rỗng: Database lưu sản phẩm vào giỏ hàng của người dùng thành công', async () => {
     // --- A. ARRANGE (PREPARE DATA) ---
 
     // 1. Create a Seller (Required to create an Item)
@@ -359,7 +359,7 @@ describe("Integration: Get Restaurants By Location", () => {
     expect(userInDb.cart.items[0].itemId.toString()).toBe(itemFromSellerA._id.toString());
   });
 
-  test.only('Module order thành công trả về các sản phẩm có trong giỏ hàng và tổng tiền chính xác', async () => {
+  test('Module order thành công trả về các sản phẩm có trong giỏ hàng và tổng tiền chính xác', async () => {
     // --- STEP 1: ARRANGE (Setup Data) ---
 
     // 1. Create a Seller (Needed for Items)
@@ -450,5 +450,77 @@ describe("Integration: Get Restaurants By Location", () => {
     expect(responseItemB.quantity).toBe(1);
     expect(responseItemB.itemId.title).toBe("Keyboard");
   });
+
+  test.only('Module thành công tăng số lượng sản phẩm đã có và lưu thật vào Database', async () => {
+    // --- STEP 1: ARRANGE (Setup Initial State) ---
+
+    // 1. Create Seller & Item
+    const seller = await Seller.create({
+      name: "Coffee Shop",
+      tags: "beverage",
+      formattedAddress: "Hanoi",
+      imageUrl: ["img.jpg"],
+      address: { lat: 10, lng: 10 },
+      account: new mongoose.Types.ObjectId(),
+      isActive: true
+    });
+
+    const existingItem = await Item.create({
+      title: "Espresso",
+      description: "Strong coffee",
+      imageUrl: "espresso.jpg",
+      price: 30,
+      creator: seller._id
+    });
+
+    // 2. Create User Account
+    const account = await Account.create({
+      email: "coffee_lover@test.com",
+      password: "123",
+      role: "ROLE_USER",
+      isVerified: true
+    });
+    mockLoggedInUserId = account._id;
+
+    // 3. Create User with the Item ALREADY in cart (Quantity: 1)
+    // This establishes the "Edit" context (modifying existing cart)
+    const user = await User.create({
+      firstName: "Test",
+      lastName: "User",
+      account: account._id,
+      cart: {
+        items: [
+          {
+            itemId: existingItem._id,
+            quantity: 1 // Start with 1
+          }
+        ]
+      }
+    });
+
+    // --- STEP 2: ACT (Execute Request) ---
+    // User clicks "Add to Cart" again for the same item
+    const response = await request(app)
+      .post("/cart")
+      .send({ itemId: existingItem._id });
+
+    // --- STEP 3: ASSERT (Verify Results) ---
+
+    // 1. Check HTTP Response
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Item successfully added to cart.");
+
+    // 2. Verify Database Persistence
+    const updatedUser = await User.findById(user._id);
+
+    // Cart size should NOT increase (still 1 unique product)
+    expect(updatedUser.cart.items).toHaveLength(1);
+
+    // Quantity should increase from 1 to 2
+    expect(updatedUser.cart.items[0].quantity).toBe(2);
+
+    // Verify it's still the correct item
+    expect(updatedUser.cart.items[0].itemId.toString()).toBe(existingItem._id.toString());
+  })
 
 });
