@@ -75,25 +75,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # ⭐️ BƯỚC MỚI: Cài wait-on để chờ server khởi động xong
-      - name: Install wait-on
-        run: npm install -g wait-on
+# ... (Các bước checkout, setup node, install dependencies giữ nguyên) ...
 
-      # ⭐️ BƯỚC QUAN TRỌNG NHẤT: Bật Server chạy nền (&)
-      - name: Start Server & Wait
+      - name: Run Server and Test with Postman
         run: |
-          # Chạy server ngầm
-          npm start & 
+          # Cài thư viện start-server-and-test
+          npm install -D start-server-and-test
           
-          # In thông báo để biết đang làm gì
-          echo "Server đang khởi động... Đang chờ cổng 3001 mở..."
-          
-          # ⚠️ QUAN TRỌNG: Sửa cứng thành 3001 để khớp với server
-          npx wait-on http://localhost:3001 --timeout 60000
+          # Cấu trúc: npx start-server-and-test [Lệnh Start Server] https://www.youtube.com/watch?v=SrTl-kg3BOA [Lệnh Test]
+          npx start-server-and-test "npm start" http://localhost:3001 "postman collection run '36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d' -e '36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab'"
         env:
-          # Vẫn giữ các biến môi trường để server chạy đúng
+          # Vẫn cần truyền đầy đủ biến môi trường
           NODE_ENV: ${{ vars.NODE_ENV }}
-          PORT: 3001  # Ép server dùng port 3001
+          PORT: ${{ vars.PORT }}
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
           PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
           DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
@@ -107,23 +101,12 @@ jobs:
           NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
           NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          # ... (Copy toàn bộ các biến env khác vào đây) ...
           MONGODH_URL: ${{ secrets.MONGODH_URL }} 
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-
-      - name: Install Postman CLI
-        run: |
-          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-          
-      - name: Login to Postman CLI
-        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-        
-      - name: Run API tests
-        # Thêm --reporters cli để xem log chi tiết
-        run: |
-          postman collection run "36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d" -e "36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab"
-
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }} # Cần thêm cái này để chạy postman
   # ==================== 3. BUILD & PUSH DOCKER IMAGE ====================
   build-push-docker-simple:
     needs: test
