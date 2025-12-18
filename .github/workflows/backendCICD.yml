@@ -94,7 +94,7 @@ jobs:
           
           # 4. Chạy Test
           postman collection run "49474878-b36daef1-4f60-4ca7-8b33-7e3f8150d770" -e "49474878-cd34ea39-b671-4af5-a4e6-b40da742085c" \
-          --env-var "login_seller_url=http://localhost:3001/auth/login"\
+          --env-var "login_seller_url=http://localhost:3001/auth/login" \
           --env-var "email=ducbao098@gmail.com" \
           --env-var "password=ducgiabao" \
           --env-var "itemId=694257a5f9670718ec7f744e"\
