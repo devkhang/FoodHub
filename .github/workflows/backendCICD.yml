@@ -53,15 +53,58 @@ jobs:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
-  # ==================== 2. AUTOMATED API TESTS (POSTMAN) ====================
   automated-api-tests:
     runs-on: ubuntu-latest
     needs: test
     if: ${{ needs.test.result == 'success' }}
-    environment: test
+    defaults:
+      run:
+        working-directory: foodHub-backend-server # 👈 Quan trọng: trỏ đúng thư mục code
+
     steps:
       - uses: actions/checkout@v4
-      
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: foodHub-backend-server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ⭐️ BƯỚC MỚI: Cài wait-on để chờ server khởi động xong
+      - name: Install wait-on
+        run: npm install -g wait-on
+
+      # ⭐️ BƯỚC QUAN TRỌNG NHẤT: Bật Server chạy nền (&)
+      - name: Start Server & Wait
+        run: |
+          npm start & 
+          npx wait-on http://localhost:${{ vars.PORT }} # Chờ đến khi port mở thì mới chạy bước tiếp
+        env:
+          # Phải copy toàn bộ biến môi trường xuống đây để Server chạy được
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: ${{ vars.PORT }}
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
+          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
+          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
+          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
+          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
+          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
+          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
+          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
+          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
+          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
+          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
+          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          MONGODH_URL: ${{ secrets.MONGODH_URL }} 
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+
       - name: Install Postman CLI
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
@@ -70,6 +113,7 @@ jobs:
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
         
       - name: Run API tests
+        # Thêm --reporters cli để xem log chi tiết
         run: |
           postman collection run "36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d" -e "36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab"
 
