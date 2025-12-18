@@ -2,6 +2,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const express = require("express");
+const jwt = require("jsonwebtoken");
 
 
 //important mocking
@@ -14,6 +15,7 @@ const Account = require("../modules/accesscontrol/models/account");
 const Seller = require("../modules/accesscontrol/models/seller"); 
 const User = require("../modules/accesscontrol/models/user"); 
 const Item = require("../modules/menu/models/item");
+const Order = require("../modules/order/models/order");
 const userController = require("../modules/order/controllers/userController");
 
 
@@ -31,10 +33,24 @@ app.use((err, req, res, next) => {
   const status = err.statusCode || 500;
   res.status(status).json({ message: err.message });
 });
+// Mock Socket.io to prevent "io.getIO is not a function" error
+jest.mock("../util/socket.js", () => ({
+  getIO: () => ({
+    emit: jest.fn(),
+    to: jest.fn().mockReturnThis(),
+  }),
+}));
+// Mock Stripe (Pass-through for this test since we aren't testing 'Completed')
+jest.mock("stripe", () => {
+  return jest.fn(() => ({
+    transfers: { create: jest.fn() },
+  }));
+});
 
 // Set Env vars required
 process.env.MAX_ITEM_PER_PAGE = "10";
 process.env.MAX_RESTAURANT_ACCEPT_RANGE = "20"; // 10 km range
+process.env.JWT_SECRET_KEY = "test_secret_key"; //for jwt authentication, authorization
 
 // Mount the specific route to avoid starting a real backend instance
 app.get("/restaurants-location/:lat/:lng", userController.getRestaurantsByAddress);
@@ -42,6 +58,7 @@ app.post("/cart", userController.postCart);
 app.get("/cart", userController.getCart);
 app.post("/remove-cart-item/:itemId", userController.postCartRemove);
 app.post("/delete-cart-item", userController.postCartDelete);
+app.post("/order-status/:orderId", userController.postOrderStatus);
 
 
 //TEST SUITE: Ordering
@@ -660,5 +677,76 @@ describe("Ordering business process", () => {
     expect(updatedUser.cart.items).toHaveLength(0);
 
   });
+
+  test.only("should update order status from 'Placed' to 'Cancelled' in the database", async () => {
+    // 1. SETUP: Create necessary data in DB
+    
+    // Create an Account (Role User)
+    const account = new Account({
+      email: "test@test.com",
+      password: "hashedpw",
+      role: "ROLE_USER",
+    });
+    await account.save();
+
+    // Create a User linked to Account
+    const user = new User({
+      firstName: "Test",
+      lastName: "User",
+      account: account._id,
+      address: { street: "123 Test St", phoneNo: 123456789 },
+      cart: { items: [] },
+    });
+    await user.save();
+
+    // Create a Dummy Seller ID (since we just need the ID for the Order schema)
+    const sellerId = new mongoose.Types.ObjectId();
+
+    // Create the Target Order with 'Placed' status
+    const order = new Order({
+      user: {
+        userId: user._id,
+        email: account.email,
+        address: user.address,
+        name: user.firstName,
+      },
+      seller: {
+        phone: 987654321,
+        name: "Test Seller",
+        sellerId: sellerId,
+      },
+      items: [
+        { item: { name: "Pizza", price: 100 }, quantity: 1 }
+      ],
+      status: "Placed", // <--- Initial Status
+      sessionId: "session_123_unique",
+    });
+    await order.save();
+
+    // 2. AUTH: Generate a valid JWT
+    const token = jwt.sign(
+      { email: account.email, userId: user._id.toString(), accountId: account._id.toString() },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    // 3. EXECUTE: Send Request
+    const res = await request(app)
+      .post(`/order-status/${order._id}`)
+      .set("Authorization", `Bearer ${token}`) // Attach Token
+      .send({
+        status: "Cancelled", // <--- The Action
+      });
+
+    // 4. ASSERT: Check Response
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.updatedOrder).toBeDefined();
+    expect(res.body.updatedOrder.status).toEqual("Cancelled");
+
+    // 5. VERIFY DB: Query database to ensure persistence
+    const savedOrder = await Order.findById(order._id);
+    expect(savedOrder.status).toEqual("Cancelled");
+  });
+
 
 });
