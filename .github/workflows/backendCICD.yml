@@ -75,29 +75,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Server and Test (Debug Mode)
+      # --- BƯỚC QUAN TRỌNG: Cài đặt Postman CLI ---
+      - name: Install Postman CLI
         run: |
-          # 1. Chạy server ngầm và ghi log ra file server.log để kiểm tra nếu kẹt
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+      - name: Run Server and Test
+        run: |
+          # 1. Chạy server ngầm
           npm start > server.log 2>&1 &
           
-          # 2. Đợi 15 giây để server và Database kết nối xong
+          # 2. Đợi server khởi động (15 giây như log trước cho thấy là đủ)
           echo "Waiting 15s for server to initialize..."
           sleep 15
           
-          # 3. Kiểm tra thử xem server có phản hồi không (in ra header)
-          echo "Checking server status..."
-          curl -I http://localhost:3001 || echo "Server is NOT responding"
+          # 3. Đăng nhập Postman CLI (Bắt buộc để dùng lệnh postman)
+          postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
           
-          # 4. Nếu server kẹt, in log ra để mình đọc lỗi
-          echo "--- Last 20 lines of server log ---"
-          tail -n 20 server.log
-          
-          # 5. Chạy lệnh Postman
-          # Lưu ý: Postman sẽ tự fail nếu server không phản hồi, không bị kẹt nữa
+          # 4. Chạy Test
           postman collection run '36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d' \
             -e '36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab'
         env:
-          # --- ĐẦY ĐỦ BIẾN ENV BẠN ĐÃ CUNG CẤP ---
+          # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
           NODE_ENV: ${{ vars.NODE_ENV }}
           PORT: 3001
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
@@ -114,7 +113,7 @@ jobs:
           NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
           
-          # Secrets (Kiểm tra kỹ chữ H trong MONGODH)
+          # Secrets
           MONGODH_URL: ${{ secrets.MONGODH_URL }} 
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
