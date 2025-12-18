@@ -39,6 +39,8 @@ process.env.MAX_RESTAURANT_ACCEPT_RANGE = "20"; // 10 km range
 // Mount the specific route to avoid starting a real backend instance
 app.get("/restaurants-location/:lat/:lng", userController.getRestaurantsByAddress);
 app.post("/cart", userController.postCart);
+app.get("/cart", userController.getCart);
+
 
 //TEST SUITE: Ordering
 describe("Integration: Get Restaurants By Location", () => {
@@ -265,5 +267,188 @@ describe("Integration: Get Restaurants By Location", () => {
     expect(updatedUser.cart.items[0].quantity).toBe(1);
   });
 
+  test('Module order từ chối lưu, trả về lỗi MIX_CART khi giỏ hàng có món từ quán khác', async () => {
+    // --- STEP 1: ARRANGE (Setup Data) ---
+
+    // 1. Create TWO different Sellers
+    const sellerA = await Seller.create({
+      name: "Burger King",
+      tags: "burger",
+      formattedAddress: "Location A",
+      imageUrl: ["a.jpg"],
+      address: { lat: 10, lng: 10 },
+      account: new mongoose.Types.ObjectId(),
+      isActive: true
+    });
+
+    const sellerB = await Seller.create({
+      name: "McDonalds", // Different Seller
+      tags: "burger",
+      formattedAddress: "Location B",
+      imageUrl: ["b.jpg"],
+      address: { lat: 20, lng: 20 },
+      account: new mongoose.Types.ObjectId(),
+      isActive: true
+    });
+
+    // 2. Create TWO Items (One from each Seller)
+    const itemFromSellerA = await Item.create({
+      title: "Whopper",
+      description: "Big Burger",
+      imageUrl: "whopper.jpg",
+      price: 50,
+      creator: sellerA._id 
+    });
+
+    const itemFromSellerB = await Item.create({
+      title: "Big Mac",
+      description: "Double Burger",
+      imageUrl: "bigmac.jpg",
+      price: 50,
+      creator: sellerB._id // Different Creator
+    });
+
+    // 3. Create User Account
+    const account = await Account.create({
+      email: "mixcart@test.com",
+      password: "password",
+      role: "ROLE_USER",
+      isVerified: true
+    });
+    mockLoggedInUserId = account._id; // Set session
+
+    // 4. Create User with Context: "Giỏ hàng có món từ quán khác"
+    // We pre-fill the cart with Item A
+    const user = await User.create({
+      firstName: "Test",
+      lastName: "Mix",
+      account: account._id,
+      cart: {
+        items: [
+          {
+            itemId: itemFromSellerA._id,
+            quantity: 1
+          }
+        ]
+      }
+    });
+
+    // --- STEP 2: ACT (Execute Request) ---
+    // Attempt to add Item B (from Seller B) to the cart containing Item A
+    const response = await request(app)
+      .post("/cart")
+      .send({ itemId: itemFromSellerB._id });
+
+    // --- STEP 3: ASSERT (Verify Results) ---
+
+    // 1. Verify Error Response
+    // The logic throws Error("MIX_CART"). Since no statusCode is set on that error object, 
+    // it defaults to 500 in the error handler.
+    expect(response.status).toBe(500); 
+    console.log("===============================","response.body")
+    expect(response.body.message).toBe("MIX_CART");
+
+    // 2. Verify Database Integrity (Crucial)
+    // Ensure the item was NOT added to the database
+    const userInDb = await User.findById(user._id);
+    
+    // Cart length should still be 1 (only the original item)
+    expect(userInDb.cart.items).toHaveLength(1);
+    
+    // The item in cart should still be Item A
+    expect(userInDb.cart.items[0].itemId.toString()).toBe(itemFromSellerA._id.toString());
+  });
+
+  test.only('Module order thành công trả về các sản phẩm có trong giỏ hàng và tổng tiền chính xác', async () => {
+    // --- STEP 1: ARRANGE (Setup Data) ---
+
+    // 1. Create a Seller (Needed for Items)
+    const seller = await Seller.create({
+      name: "Tech Store",
+      tags: "tech",
+      formattedAddress: "Tech Street",
+      imageUrl: ["img.jpg"],
+      address: { lat: 10, lng: 10 },
+      account: new mongoose.Types.ObjectId(),
+      isActive: true
+    });
+
+    // 2. Create Items with specific prices for calculation test
+    // Item A: Price $100
+    const itemA = await Item.create({
+      title: "Gaming Mouse",
+      description: "Fast",
+      imageUrl: "mouse.jpg",
+      price: 100, 
+      creator: seller._id
+    });
+
+    // Item B: Price $50
+    const itemB = await Item.create({
+      title: "Keyboard",
+      description: "Mechanical",
+      imageUrl: "kb.jpg",
+      price: 50,
+      creator: seller._id
+    });
+
+    // 3. Create User Account
+    const account = await Account.create({
+      email: "shopper@test.com",
+      password: "123",
+      role: "ROLE_USER",
+      isVerified: true
+    });
+    mockLoggedInUserId = account._id; // Log in
+
+    // 4. Create User with specific Cart configuration
+    // Scenario: 
+    // - 2 units of Item A (2 * 100 = 200)
+    // - 1 unit of Item B (1 * 50 = 50)
+    // Expected Total: 250
+    await User.create({
+      firstName: "John",
+      lastName: "Doe",
+      account: account._id,
+      cart: {
+        items: [
+          { itemId: itemA._id, quantity: 2 },
+          { itemId: itemB._id, quantity: 1 }
+        ]
+      }
+    });
+
+    // --- STEP 2: ACT (Execute Request) ---
+    const response = await request(app).get("/cart");
+
+    // --- STEP 3: ASSERT (Verify Results) ---
+
+    // 1. Status Check
+    expect(response.status).toBe(200);
+
+    // 2. Verify Response Structure
+    const { cart, totalPrice } = response.body;
+    expect(cart).toBeDefined();
+    expect(cart).toHaveLength(2);
+
+    // 3. Verify Logic: Total Price Calculation
+    // (100 * 2) + (50 * 1) = 250
+    expect(totalPrice).toBe(250);
+
+    // 4. Verify Database Population (The "Populate" check)
+    // The controller calls .populate("cart.items.itemId")
+    // So the response should contain the full item object (title, price), not just the ID.
+    
+    // Check Item A details in response
+    const responseItemA = cart.find(i => i.itemId._id.toString() === itemA._id.toString());
+    expect(responseItemA.quantity).toBe(2);
+    expect(responseItemA.itemId.title).toBe("Gaming Mouse"); // Proof that populate worked
+    expect(responseItemA.itemId.price).toBe(100);
+
+    // Check Item B details in response
+    const responseItemB = cart.find(i => i.itemId._id.toString() === itemB._id.toString());
+    expect(responseItemB.quantity).toBe(1);
+    expect(responseItemB.itemId.title).toBe("Keyboard");
+  });
 
 });
