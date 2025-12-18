@@ -60,7 +60,7 @@ jobs:
     if: ${{ needs.test.result == 'success' }}
     defaults:
       run:
-        working-directory: foodHub-backend-server # 👈 Quan trọng: trỏ đúng thư mục code
+        working-directory: foodHub-backend-server
 
     steps:
       - uses: actions/checkout@v4
@@ -75,19 +75,31 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-# ... (Các bước checkout, setup node, install dependencies giữ nguyên) ...
-
-      - name: Run Server and Test with Postman
+      - name: Run Server and Test (Debug Mode)
         run: |
-          # Cài thư viện start-server-and-test
-          npm install -D start-server-and-test
+          # 1. Chạy server ngầm và ghi log ra file server.log để kiểm tra nếu kẹt
+          npm start > server.log 2>&1 &
           
-          # Cấu trúc: npx start-server-and-test [Lệnh Start Server] https://www.youtube.com/watch?v=SrTl-kg3BOA [Lệnh Test]
-          npx start-server-and-test "npm start" http://localhost:3001 "postman collection run '36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d' -e '36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab'"
+          # 2. Đợi 15 giây để server và Database kết nối xong
+          echo "Waiting 15s for server to initialize..."
+          sleep 15
+          
+          # 3. Kiểm tra thử xem server có phản hồi không (in ra header)
+          echo "Checking server status..."
+          curl -I http://localhost:3001 || echo "Server is NOT responding"
+          
+          # 4. Nếu server kẹt, in log ra để mình đọc lỗi
+          echo "--- Last 20 lines of server log ---"
+          tail -n 20 server.log
+          
+          # 5. Chạy lệnh Postman
+          # Lưu ý: Postman sẽ tự fail nếu server không phản hồi, không bị kẹt nữa
+          postman collection run '36233358-b41bdabb-c961-4c77-9183-ff60f4b8f90d' \
+            -e '36233358-c98de25f-e0f1-45c4-8071-c8792952b0ab'
         env:
-          # Vẫn cần truyền đầy đủ biến môi trường
+          # --- ĐẦY ĐỦ BIẾN ENV BẠN ĐÃ CUNG CẤP ---
           NODE_ENV: ${{ vars.NODE_ENV }}
-          PORT: ${{ vars.PORT }}
+          PORT: 3001
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
           PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
           DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
@@ -101,12 +113,13 @@ jobs:
           NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
           NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
-          # ... (Copy toàn bộ các biến env khác vào đây) ...
+          
+          # Secrets (Kiểm tra kỹ chữ H trong MONGODH)
           MONGODH_URL: ${{ secrets.MONGODH_URL }} 
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }} # Cần thêm cái này để chạy postman
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
   # ==================== 3. BUILD & PUSH DOCKER IMAGE ====================
   build-push-docker-simple:
     needs: test
