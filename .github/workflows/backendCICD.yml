@@ -122,7 +122,7 @@ jobs:
           POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
   # ==================== 3. BUILD & PUSH DOCKER IMAGE ====================
   build-push-docker-simple:
-    needs: test
+    needs: [test,automated-api-tests]
     if: ${{ needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
@@ -149,7 +149,7 @@ jobs:
 
   # ==================== 4. STAGING DEPLOY ====================
   deploy-staging:
-    needs: [test, build-push-docker-simple] # Có thể thêm automated-api-tests vào đây nếu muốn test xong mới deploy
+    needs: [test, build-push-docker-simple, automated-api-tests] # Có thể thêm automated-api-tests vào đây nếu muốn test xong mới deploy
     if: ${{ needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     environment: staging
@@ -166,7 +166,7 @@ jobs:
 
   # ==================== 5. PRODUCTION DEPLOY ====================
   deploy-production:
-    needs: [test, build-push-docker-simple, deploy-staging]
+    needs: [test, build-push-docker-simple, deploy-staging,automated-api-tests] # Có thể thêm automated-api-tests vào đây nếu muốn test xong mới deploy
     runs-on: ubuntu-latest
     environment:
       name: production
