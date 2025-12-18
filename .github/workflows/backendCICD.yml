@@ -97,7 +97,8 @@ jobs:
           --env-var "login_seller_url=http://localhost:3001/auth/login"\
           --env-var "email=ducbao098@gmail.com" \
           --env-var "password=ducgiabao" \
-          --env-var "itemId=694257a5f9670718ec7f744e"
+          --env-var "itemId=694257a5f9670718ec7f744e"\
+          --env-var "base_url=http://localhost:3001"
         env:
           # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
           NODE_ENV: ${{ vars.NODE_ENV }}
