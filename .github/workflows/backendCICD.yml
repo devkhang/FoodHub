@@ -82,12 +82,18 @@ jobs:
       # ⭐️ BƯỚC QUAN TRỌNG NHẤT: Bật Server chạy nền (&)
       - name: Start Server & Wait
         run: |
+          # Chạy server ngầm
           npm start & 
-          npx wait-on http://localhost:${{ vars.PORT }} # Chờ đến khi port mở thì mới chạy bước tiếp
+          
+          # In thông báo để biết đang làm gì
+          echo "Server đang khởi động... Đang chờ cổng 3001 mở..."
+          
+          # ⚠️ QUAN TRỌNG: Sửa cứng thành 3001 để khớp với server
+          npx wait-on http://localhost:3001 --timeout 60000
         env:
-          # Phải copy toàn bộ biến môi trường xuống đây để Server chạy được
+          # Vẫn giữ các biến môi trường để server chạy đúng
           NODE_ENV: ${{ vars.NODE_ENV }}
-          PORT: ${{ vars.PORT }}
+          PORT: 3001  # Ép server dùng port 3001
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
           PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
           DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
