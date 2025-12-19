@@ -1,0 +1,10 @@
+seller1@gmail.com,12345678
+seller2@gmail.com,12345678
+seller3@gmail.com,12345678
+seller4@gmail.com,12345678
+seller5@gmail.com,12345678
+seller6@gmail.com,12345678
+seller7@gmail.com,12345678
+seller8@gmail.com,12345678
+seller9@gmail.com,12345678
+seller10@gmail.com,12345678
