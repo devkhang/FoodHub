@@ -78,30 +78,35 @@ exports.getRestaurants = (req, res, next) => {
 // };
 
 exports.postCart = (req, res, next) => {
+  //node1{
   const itemId = req.body.itemId;
   let targetItem;
-  if (!itemId) {
+  //node1}
+  if (!itemId) {//node2{}
+    //node3{
     const error = new Error("ItemId not provided");
     error.statusCode = 404;
     throw error;
+    //node3}
   }
-  Item.findById(itemId)
+  return Item.findById(itemId)//node4{}
     .then((item) => {
       targetItem = item;
-      return Account.findById(req.loggedInUserId);
+      return Account.findById(req.loggedInUserId);//node5{}
     })
     .then((account) => {
-      return User.findOne({ account: account._id });
+      return User.findOne({ account: account._id });//node6{}
     })
     .then((user) => {
-      return user.addToCart(targetItem);
+      return user.addToCart(targetItem);//node7{}
     })
     .then((result) => {
-      return res
+      console.log("node8: res", res.status())
+      return res //node8{}
         .status(200)
         .json({ message: "Item successfully added to cart." });
     })
-    .catch((err) => {
+    .catch((err) => {//node9{}
       if (!err.statusCode) err.statusCode = 500;
       next(err);
     });
@@ -769,49 +774,66 @@ exports.selectNextSuitableDeliveryPartner = selectNextSuitableDeliveryPartner;
 exports.selectNextSuitablDrone = selectNextSuitablDrone;
 
 exports.postOrderStatus = (req, res, next) => {
+  //node1{
   const authHeader = req.get("Authorization");
-  if (!authHeader) {
+  //node1}
+  if (!authHeader) {//node 2{}
+    //node3{
     const error = new Error("Not authenticated");
     error.statusCode = 401;
     throw error;
+    //node3}
   }
-  //[not done: postOrderStatus ko co quyen cap nhat status thanh complete]
 
+  //node 4{
   const token = authHeader.split(" ")[1];
   let decodedToken;
   try {
-    decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    //node 4}
+    decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);//node 5{}
   } catch (err) {
+    //node 6{
     err.statusCode = 500;
     throw err;
+    ////node 6}
   }
-  if (!decodedToken) {
+  if (!decodedToken) { //node 7{}
+    //node 8{
     const error = new Error("Not authenticated");
     error.statusCode = 401;
     throw error;
+    //node 8}
   }
-
+  //node 9{
   const accountId = decodedToken.accountId;
 
   const orderId = req.params.orderId;
-  if (!req.body.status) {
+  //node 9}
+  if (!req.body.status) {//node 10{}
+    //node 11{
     const error = new Error("Status Not Provided");
     error.statusCode = 404;
     throw error;
+    //node 11}
   }
+  //node 13{
   const status = req.body.status;
   Order.findById(orderId)
     .populate("seller.sellerId")
     .then((order) => {
-      if (!order) {
+      //node 13}
+      if (!order) {//node 14{}
+        //node 15{
         const error = new Error(
           "Could not find any Order with the given orderId"
         );
         error.statusCode = 404;
         throw error;
+        //node 15}
       }
       // Branch payout nếu status === 'Completed' (tích hợp từ changeOrderStatus, dùng .then() nested)
-      if (status === "Completed" && !order.transferId) {
+      if (status === "Completed" && !order.transferId) { //node16{}
+        //Node 17{
         const total = order.totalItemMoney * 100;
         const amountAfterminusStripeFee = total - total * 0.029 + 0.3;
         const commission = amountAfterminusStripeFee * 0.1;
@@ -863,8 +885,10 @@ exports.postOrderStatus = (req, res, next) => {
       res.status(200).json({ updatedOrder });
     })
     .catch((err) => {
+      //node12{
       if (!err.statusCode) err.statusCode = 500;
       next(err);
+      //node12}
     });
 };
 
@@ -878,8 +902,8 @@ exports.getRestaurantsByAddress = (req, res, next) => {
 
   let isFirst = req.query.first;
   let isLast = req.query.last;
-  let page = req.query.page * 1 || 1; //(1)
-  let limit = req.query.limit * 1 || parseInt(process.env.MAX_ITEM_PER_PAGE); //(2)
+  let page = req.query.page * 1 || 1;
+  let limit = req.query.limit * 1 || parseInt(process.env.MAX_ITEM_PER_PAGE); 
   let skip = (page - 1) * limit;
   let totalPage;
   let storeName = req.query.storeName;

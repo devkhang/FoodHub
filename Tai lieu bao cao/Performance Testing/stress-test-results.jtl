@@ -1,0 +1,941 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1766086445612,7410,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,770,598,9,9,https://foodhub-6342.onrender.com/auth/login,7409,0,87
+1766086445611,7410,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,770,598,9,9,null,7409,2,87
+1766086444715,8876,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,770,598,9,9,https://foodhub-6342.onrender.com/auth/login,8876,0,653
+1766086444627,8876,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,770,598,9,9,null,8876,89,653
+1766086446611,15194,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,774,598,10,10,https://foodhub-6342.onrender.com/auth/login,15194,0,92
+1766086446610,15194,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,774,598,10,10,null,15194,2,92
+1766086447612,16067,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,772,598,10,10,https://foodhub-6342.onrender.com/auth/login,16067,0,91
+1766086447611,16067,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,772,598,10,10,null,16067,1,91
+1766086448611,19092,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,772,598,10,10,https://foodhub-6342.onrender.com/auth/login,19092,0,103
+1766086448610,19092,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,772,598,10,10,null,19092,1,103
+1766086449611,19069,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,773,598,10,10,https://foodhub-6342.onrender.com/auth/login,19069,0,88
+1766086449610,19069,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,773,598,10,10,null,19069,3,88
+1766086450610,22086,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,769,598,10,10,https://foodhub-6342.onrender.com/auth/login,22086,0,92
+1766086450609,22086,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,769,598,10,10,null,22086,10,92
+1766086453025,20566,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,772,599,10,10,https://foodhub-6342.onrender.com/auth/login,20566,0,0
+1766086453025,20566,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,772,599,10,10,null,20566,1,0
+1766086453593,20787,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,775,599,10,10,https://foodhub-6342.onrender.com/auth/login,20786,0,0
+1766086453593,20787,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,775,599,10,10,null,20786,0,0
+1766086451609,22787,LoginAction,200,OK,Login User  Thread Group 1-8,text,true,,771,598,10,10,https://foodhub-6342.onrender.com/auth/login,22787,0,96
+1766086451608,22787,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-8,,true,,771,598,10,10,null,22787,1,96
+1766086452608,23277,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,769,598,10,10,https://foodhub-6342.onrender.com/auth/login,23277,0,88
+1766086452607,23277,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,769,598,10,10,null,23277,2,88
+1766086453619,22282,LoginAction,200,OK,Login User  Thread Group 1-10,text,true,,775,599,10,10,https://foodhub-6342.onrender.com/auth/login,22282,0,94
+1766086453618,22282,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-10,,true,,775,599,10,10,null,22282,1,94
+1766086461807,22190,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22190,0,0
+1766086461806,22190,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,770,599,10,10,null,22190,2,0
+1766086463680,22106,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,771,599,10,10,https://foodhub-6342.onrender.com/auth/login,22106,0,0
+1766086463680,22106,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,771,599,10,10,null,22106,0,0
+1766086467705,21079,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,775,599,10,10,https://foodhub-6342.onrender.com/auth/login,21079,0,0
+1766086467705,21079,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,775,599,10,10,null,21079,0,0
+1766086468682,22000,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,771,599,10,10,https://foodhub-6342.onrender.com/auth/login,22000,0,0
+1766086468682,22000,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,771,599,10,10,null,22000,1,0
+1766086472706,20999,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,771,599,10,10,https://foodhub-6342.onrender.com/auth/login,20999,0,0
+1766086472706,20999,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,771,599,10,10,null,20999,1,0
+1766086473592,21009,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,775,599,10,10,https://foodhub-6342.onrender.com/auth/login,21008,0,0
+1766086473592,21009,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,775,599,10,10,null,21008,0,0
+1766086474396,20893,LoginAction,200,OK,Login User  Thread Group 1-8,text,true,,771,599,10,10,https://foodhub-6342.onrender.com/auth/login,20893,0,0
+1766086474381,20908,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,773,599,10,10,https://foodhub-6342.onrender.com/auth/login,20908,0,0
+1766086474396,20893,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-8,,true,,771,599,10,10,null,20893,0,0
+1766086474380,20908,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,773,599,10,10,null,20908,1,0
+1766086475902,21900,LoginAction,200,OK,Login User  Thread Group 1-10,text,true,,773,599,10,10,https://foodhub-6342.onrender.com/auth/login,21900,0,0
+1766086475886,21916,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,774,599,10,10,https://foodhub-6342.onrender.com/auth/login,21916,0,0
+1766086475902,21900,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-10,,true,,773,599,10,10,null,21900,1,0
+1766086475886,21916,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,774,599,10,10,null,21916,1,0
+1766086483999,22097,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,769,599,10,10,https://foodhub-6342.onrender.com/auth/login,22097,0,0
+1766086483999,22097,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,769,599,10,10,null,22097,1,0
+1766086485788,22192,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22192,0,0
+1766086485788,22192,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,770,599,10,10,null,22192,1,0
+1766086488785,22202,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,769,599,10,10,https://foodhub-6342.onrender.com/auth/login,22202,0,0
+1766086488785,22202,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,769,599,10,10,null,22202,1,0
+1766086490685,22211,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22211,0,0
+1766086490684,22211,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,770,599,10,10,null,22211,1,0
+1766086493709,22113,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,775,599,10,10,https://foodhub-6342.onrender.com/auth/login,22113,0,0
+1766086493707,22113,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,775,599,10,10,null,22113,3,0
+1766086494603,22080,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22080,0,0
+1766086494602,22080,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,770,599,10,10,null,22080,3,0
+1766086495297,21485,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,769,599,10,10,https://foodhub-6342.onrender.com/auth/login,21485,0,0
+1766086495290,21485,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,769,599,10,10,null,21485,7,0
+1766086495290,23004,LoginAction,200,OK,Login User  Thread Group 1-8,text,true,,773,599,10,10,https://foodhub-6342.onrender.com/auth/login,23004,0,0
+1766086495290,23004,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-8,,true,,773,599,10,10,null,23004,0,0
+1766086497804,21480,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,769,599,10,10,https://foodhub-6342.onrender.com/auth/login,21480,0,0
+1766086497804,21480,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,769,599,10,10,null,21480,0,0
+1766086497804,22289,LoginAction,200,OK,Login User  Thread Group 1-10,text,true,,772,599,10,10,https://foodhub-6342.onrender.com/auth/login,22289,0,0
+1766086497804,22289,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-10,,true,,772,599,10,10,null,22289,0,0
+1766086506098,23179,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,772,599,10,10,https://foodhub-6342.onrender.com/auth/login,23179,0,0
+1766086506098,23179,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,772,599,10,10,null,23179,1,0
+1766086507981,21296,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,774,599,10,10,https://foodhub-6342.onrender.com/auth/login,21296,0,295
+1766086507981,21296,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,774,599,10,10,null,21296,1,295
+1766086510988,22109,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,773,599,10,10,https://foodhub-6342.onrender.com/auth/login,22109,0,85
+1766086510988,22109,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,773,599,10,10,null,22109,33,85
+1766086512895,22081,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22081,0,107
+1766086512895,22081,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,770,599,10,10,null,22081,1,107
+1766086515822,22061,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22061,0,102
+1766086515822,22061,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,770,599,10,10,null,22061,1,102
+1766086516783,21914,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,21914,0,89
+1766086516782,21914,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,770,599,10,10,null,21914,2,89
+1766086516684,22022,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,770,599,10,10,https://foodhub-6342.onrender.com/auth/login,22022,0,112
+1766086516684,22022,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,770,599,10,10,null,22022,1,112
+1766086518302,21888,LoginAction,200,OK,Login User  Thread Group 1-8,text,true,,769,599,10,10,https://foodhub-6342.onrender.com/auth/login,21888,0,122
+1766086518301,21888,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-8,,true,,769,599,10,10,null,21888,2,122
+1766086519355,21638,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,772,598,10,10,https://foodhub-6342.onrender.com/auth/login,21638,0,100
+1766086519354,21638,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,772,598,10,10,null,21638,1,100
+1766086520093,20918,LoginAction,200,OK,Login User  Thread Group 1-10,text,true,,773,598,10,10,https://foodhub-6342.onrender.com/auth/login,20917,0,130
+1766086520093,20918,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-10,,true,,773,598,10,10,null,20917,0,130
+1766086529278,21903,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,770,598,10,10,https://foodhub-6342.onrender.com/auth/login,21903,0,86
+1766086529278,21903,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,770,598,10,10,null,21903,1,86
+1766086529278,25100,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,770,598,10,10,https://foodhub-6342.onrender.com/auth/login,25100,0,0
+1766086529278,25100,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,770,598,10,10,null,25100,1,0
+1766086533130,23369,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,770,598,10,10,https://foodhub-6342.onrender.com/auth/login,23369,0,0
+1766086533130,23369,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,770,598,10,10,null,23369,3,0
+1766086534978,23619,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,773,598,10,10,https://foodhub-6342.onrender.com/auth/login,23619,0,0
+1766086534977,23619,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,773,598,10,10,null,23619,1,0
+1766086683623,10537,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-14,text,false,,6922,599,40,110,https://foodhub-6342.onrender.com/auth/login,10536,0,102
+1766086683622,10537,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-14,,false,,6922,599,40,110,null,10536,44,102
+1766086681377,22427,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Search Store User Thread Group Thread Group 2-5,text,false,,2107,0,40,110,https://foodhub-6342.onrender.com/auth/login,0,0,107
+1766086681376,22427,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-5,,false,,2107,0,40,110,null,0,8,107
+1766086689591,25858,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Search Store User Thread Group Thread Group 2-38,text,false,,2107,0,40,110,https://foodhub-6342.onrender.com/auth/login,0,0,109
+1766086689590,25858,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-38,,false,,2107,0,40,110,null,0,59,109
+1766086680883,42783,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,774,598,40,110,https://foodhub-6342.onrender.com/auth/login,42777,0,450
+1766086681173,42493,LoginAction,200,OK,Add Item To Cart User Thread Group 3-5,text,true,,771,599,50,110,https://foodhub-6342.onrender.com/auth/login,42487,0,160
+1766086681172,42493,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-5,,true,,771,599,50,110,null,42487,2,160
+1766086680881,42783,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-3,,true,,774,598,40,110,null,42777,2,450
+1766086681381,42294,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,774,599,10,110,https://foodhub-6342.onrender.com/auth/login,42294,0,97
+1766086681380,42294,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,774,599,10,110,null,42294,2,97
+1766086680548,43135,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,772,598,40,110,https://foodhub-6342.onrender.com/auth/login,43135,0,785
+1766086680585,43097,LoginAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,773,598,50,110,https://foodhub-6342.onrender.com/auth/login,43097,0,749
+1766086680548,43134,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-1,text,true,,770,595,4,110,https://foodhub-6342.onrender.com/auth/login,43134,0,785
+1766086680583,43097,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,773,598,50,110,null,43097,3,749
+1766086680407,43134,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-1,,true,,770,595,4,110,null,43134,142,785
+1766086680406,43135,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-1,,true,,772,598,40,110,null,43135,142,785
+1766086680548,43135,LoginAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,771,598,50,110,https://foodhub-6342.onrender.com/auth/login,43134,0,786
+1766086680406,43135,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-1,,true,,771,598,50,110,null,43134,143,786
+1766086680550,45229,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,774,598,10,110,https://foodhub-6342.onrender.com/auth/login,45229,0,783
+1766086680407,45229,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,774,598,10,110,null,45229,144,783
+1766086680977,44803,LoginAction,200,OK,Add Item To Cart User Thread Group 3-4,text,true,,773,599,50,110,https://foodhub-6342.onrender.com/auth/login,44803,0,356
+1766086680781,45000,LoginAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,771,598,50,110,https://foodhub-6342.onrender.com/auth/login,45000,0,552
+1766086680976,44803,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-4,,true,,773,599,50,110,null,44803,2,356
+1766086680780,45000,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-3,,true,,771,598,50,110,null,45000,1,552
+1766086680655,45126,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,770,598,40,110,https://foodhub-6342.onrender.com/auth/login,45126,0,678
+1766086680650,45126,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-2,,true,,770,598,40,110,null,45126,8,678
+1766086680548,47337,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-1,text,true,,771,595,6,110,https://foodhub-6342.onrender.com/auth/login,47337,0,786
+1766086680407,47337,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-1,,true,,771,595,6,110,null,47337,143,786
+1766086723668,6408,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-5,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6408,0,0
+1766086727890,2191,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-1,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,2191,0,0
+1766086727887,2191,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-1,,false,,624,677,6,110,null,2191,4,0
+1766086723668,6429,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6429,0,0
+1766086725782,6518,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-4,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6518,0,0
+1766086681133,51183,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,773,599,40,110,https://foodhub-6342.onrender.com/auth/login,51183,0,199
+1766086681131,51183,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,773,599,40,110,null,51183,3,199
+1766086681371,53132,LoginAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,772,599,50,110,https://foodhub-6342.onrender.com/auth/login,53131,0,91
+1766086681370,53132,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-6,,true,,772,599,50,110,null,53131,2,91
+1766086730080,9100,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-5,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9100,0,0
+1766086732319,6861,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6861,0,0
+1766086723667,15508,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-5,,true,,2590,1405,50,110,null,15508,6,0
+1766086730099,9084,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9084,0,0
+1766086723667,15513,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-3,,true,,2590,1405,40,110,null,15513,4,0
+1766086793228,343,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-18,text,false,,6922,599,18,56,https://foodhub-6342.onrender.com/auth/login,342,0,86
+1766086793227,343,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-18,,false,,6922,599,18,56,null,342,87,86
+1766086779254,16139,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-4,text,false,,6922,599,20,60,https://foodhub-6342.onrender.com/auth/login,16139,0,93
+1766086779254,16139,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-4,,false,,6922,599,20,60,null,16139,0,93
+1766086782253,27939,LoginAction,502,Bad Gateway,Login User  Thread Group 1-7,text,false,,6922,599,10,88,https://foodhub-6342.onrender.com/auth/login,27939,0,92
+1766086782251,27939,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Login User  Thread Group 1-7,,false,,6922,599,10,88,null,27939,2,92
+1766086803234,115605,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-28,text,false,,340,599,40,110,https://foodhub-6342.onrender.com/auth/login,115597,0,92
+1766086803234,115605,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-28,,false,,340,599,40,110,null,115597,47,92
+1766086970567,4492,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-11,text,false,,6922,598,15,50,https://foodhub-6342.onrender.com/auth/login,4492,0,107
+1766086970566,4492,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-11,,false,,6922,598,15,50,null,4492,255,107
+1766086980547,1613,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Add Item To Cart User Thread Group 3-21,text,false,,2107,0,22,64,https://foodhub-6342.onrender.com/auth/login,0,0,124
+1766086980544,1613,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-21,,false,,2107,0,22,64,null,0,36,124
+1766086967572,22646,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Login User  Thread Group 1-8,text,false,,2107,0,10,80,https://foodhub-6342.onrender.com/auth/login,0,0,92
+1766086967571,22646,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Login User  Thread Group 1-8,,false,,2107,0,10,80,null,0,2,92
+1766086969585,25587,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Login User  Thread Group 1-10,text,false,,2107,0,10,90,https://foodhub-6342.onrender.com/auth/login,0,0,97
+1766086969582,25587,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Login User  Thread Group 1-10,,false,,2107,0,10,90,null,0,5,97
+1766086962577,64692,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Search Store User Thread Group Thread Group 2-3,text,false,,2107,0,40,110,https://foodhub-6342.onrender.com/auth/login,0,0,92
+1766086962577,64692,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-3,,false,,2107,0,40,110,null,0,1,92
+1766087112011,5869,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Search Store User Thread Group Thread Group 2-12,text,false,,2107,0,13,46,https://foodhub-6342.onrender.com/auth/login,0,0,97
+1766087112010,5869,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-12,,false,,2107,0,13,46,null,0,100,97
+1766087111964,7535,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-12,text,false,,6922,598,14,48,https://foodhub-6342.onrender.com/auth/login,7533,0,108
+1766087111963,7535,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-12,,false,,6922,598,14,48,null,7533,5,108
+1766087124015,28729,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-16,text,false,,6922,599,25,70,https://foodhub-6342.onrender.com/auth/login,28717,0,91
+1766087124014,28729,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-16,,false,,6922,599,25,70,null,28717,36,91
+1766087177980,20849,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-34,text,false,,6922,598,40,100,https://foodhub-6342.onrender.com/auth/login,20846,0,87
+1766087177979,20849,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-34,,false,,6922,598,40,100,null,20846,18,87
+1766087144912,207384,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Add Item To Cart User Thread Group 3-23,text,false,,2107,0,50,110,https://foodhub-6342.onrender.com/auth/login,0,0,92
+1766087144910,207384,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-23,,false,,2107,0,50,110,null,0,70,92
+1766087086043,270078,LoginAction,502,Bad Gateway,Login User  Thread Group 1-8,text,false,,340,599,10,110,https://foodhub-6342.onrender.com/auth/login,270077,0,98
+1766087086042,270078,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Login User  Thread Group 1-8,,false,,340,599,10,110,null,270077,5,98
+1766087210940,145599,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-45,text,false,,340,599,50,110,https://foodhub-6342.onrender.com/auth/login,145599,0,93
+1766087210940,145599,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-45,,false,,340,599,50,110,null,145599,1,93
+1766087079226,389249,LoginAction,502,Bad Gateway,Login Seller Ultimate Thread Group 4-1,text,false,,340,595,4,110,https://foodhub-6342.onrender.com/auth/login,389242,0,2115
+1766087079064,389249,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Login Seller Ultimate Thread Group 4-1,,false,,340,595,4,110,null,389242,181,2115
+1766087079226,394265,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,772,598,10,110,https://foodhub-6342.onrender.com/auth/login,394247,0,2121
+1766087079064,394265,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,772,598,10,110,null,394247,164,2121
+1766087084043,392942,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,772,599,10,110,https://foodhub-6342.onrender.com/auth/login,392942,0,115
+1766087088036,388950,LoginAction,200,OK,Add Item To Cart User Thread Group 3-4,text,true,,770,599,50,110,https://foodhub-6342.onrender.com/auth/login,388950,0,92
+1766087080052,396933,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,775,598,10,110,https://foodhub-6342.onrender.com/auth/login,396933,0,1306
+1766087080048,396933,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,775,598,10,110,null,396933,4,1306
+1766087081057,395928,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,769,599,10,110,https://foodhub-6342.onrender.com/auth/login,395928,0,267
+1766087088032,388950,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-4,,true,,770,599,50,110,null,388950,5,92
+1766087082070,394915,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,769,599,10,110,https://foodhub-6342.onrender.com/auth/login,394914,0,118
+1766087082065,394915,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,769,599,10,110,null,394914,7,118
+1766087084042,392942,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,772,599,10,110,null,392942,3,115
+1766087088048,388939,LoginAction,200,OK,Login User  Thread Group 1-10,text,true,,773,599,10,110,https://foodhub-6342.onrender.com/auth/login,388939,0,90
+1766087081053,395928,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,769,599,10,110,null,395928,5,267
+1766087088046,388939,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-10,,true,,773,599,10,110,null,388939,3,90
+1766087085037,391958,LoginAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,773,599,50,110,https://foodhub-6342.onrender.com/auth/login,391958,0,100
+1766087082077,394917,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,770,599,40,110,https://foodhub-6342.onrender.com/auth/login,394917,0,141
+1766087082075,394917,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-2,,true,,770,599,40,110,null,394917,3,141
+1766087085035,391958,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-3,,true,,773,599,50,110,null,391958,3,100
+1766087085051,391950,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,391950,0,90
+1766087085050,391950,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-3,,true,,772,599,40,110,null,391950,2,90
+1766087085037,391967,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,770,599,10,110,https://foodhub-6342.onrender.com/auth/login,391967,0,100
+1766087085035,391967,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,770,599,10,110,null,391967,3,100
+1766087079226,397777,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,769,598,40,110,https://foodhub-6342.onrender.com/auth/login,397777,0,2100
+1766087079064,397777,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-1,,true,,769,598,40,110,null,397777,163,2100
+1766087082062,394942,LoginAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,769,599,50,110,https://foodhub-6342.onrender.com/auth/login,394942,0,129
+1766087082047,394942,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,769,599,50,110,null,394942,17,129
+1766087087048,389964,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,773,599,10,110,https://foodhub-6342.onrender.com/auth/login,389964,0,95
+1766087087047,389964,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,773,599,10,110,null,389964,2,95
+1766087083044,396548,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,768,599,10,110,https://foodhub-6342.onrender.com/auth/login,396548,0,95
+1766087083042,396548,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,768,599,10,110,null,396548,4,95
+1766087080067,399526,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-2,text,true,,769,595,6,110,https://foodhub-6342.onrender.com/auth/login,399526,0,1258
+1766087080062,399526,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-2,,true,,769,595,6,110,null,399526,7,1258
+1766087079226,400370,LoginAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,773,598,50,110,https://foodhub-6342.onrender.com/auth/login,400370,0,2099
+1766087079064,400370,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-1,,true,,773,598,50,110,null,400370,165,2099
+1766087088047,391555,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,774,599,40,110,https://foodhub-6342.onrender.com/auth/login,391555,0,97
+1766087088045,391555,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,774,599,40,110,null,391555,8,97
+1766087479596,2380,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-2,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,2380,0,91
+1766087079226,402752,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-1,text,true,,769,595,6,110,https://foodhub-6342.onrender.com/auth/login,402752,0,2102
+1766087079064,402752,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-1,,true,,769,595,6,110,null,402752,163,2102
+1766087479595,2380,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-2,,false,,624,677,6,110,null,2380,5,91
+1766087082081,400000,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-4,text,true,,769,595,6,110,https://foodhub-6342.onrender.com/auth/login,400000,0,145
+1766087082078,400000,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-4,,true,,769,595,6,110,null,400000,3,145
+1766087080078,402098,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,769,595,4,110,https://foodhub-6342.onrender.com/auth/login,402098,0,1248
+1766087080066,402098,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,769,595,4,110,null,402098,12,1248
+1766087084059,398134,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-6,text,true,,769,595,6,110,https://foodhub-6342.onrender.com/auth/login,398134,0,99
+1766087084058,398134,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-6,,true,,769,595,6,110,null,398134,1,99
+1766087082078,400117,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-4,text,true,,769,595,4,110,https://foodhub-6342.onrender.com/auth/login,400117,0,154
+1766087082076,400117,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-4,,true,,769,595,4,110,null,400117,2,154
+1766087482081,2009,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-4,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,2009,0,95
+1766087482081,2009,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-4,,false,,624,677,6,110,null,2009,0,95
+1766087476995,7182,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7182,0,85
+1766087081058,403136,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-3,text,true,,772,595,4,110,https://foodhub-6342.onrender.com/auth/login,403136,0,267
+1766087081055,403136,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-3,,true,,772,595,4,110,null,403136,3,267
+1766087083058,401136,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-5,text,true,,772,595,6,110,https://foodhub-6342.onrender.com/auth/login,401136,0,97
+1766087083057,401136,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-5,,true,,772,595,6,110,null,401136,2,97
+1766087484195,1794,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-5,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,1794,0,86
+1766087484195,1794,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-5,,false,,624,677,6,110,null,1794,1,86
+1766087479608,6382,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6382,0,84
+1766087081058,405018,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-3,text,true,,771,595,6,110,https://foodhub-6342.onrender.com/auth/login,405018,0,268
+1766087081053,405018,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-3,,true,,771,595,6,110,null,405018,6,268
+1766087091052,395026,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-5,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,395026,0,93
+1766087091051,395026,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-5,,true,,772,599,40,110,null,395026,1,93
+1766087091022,395073,LoginAction,200,OK,Add Item To Cart User Thread Group 3-5,text,true,,774,599,50,110,https://foodhub-6342.onrender.com/auth/login,395073,0,101
+1766087091021,395073,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-5,,true,,774,599,50,110,null,395073,3,101
+1766087486078,1407,SearchStoreAction,Non HTTP response code: java.net.SocketException,Non HTTP response message: Connection reset,Search Store User Thread Group Thread Group 2-5,text,false,,3253,0,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,0,0,1404
+1766087094042,393951,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,773,599,40,110,https://foodhub-6342.onrender.com/auth/login,393951,0,88
+1766087094042,393951,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,773,599,40,110,null,393951,1,88
+1766087094027,395650,LoginAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,771,599,50,110,https://foodhub-6342.onrender.com/auth/login,395650,0,101
+1766087094026,395650,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-6,,true,,771,599,50,110,null,395650,2,101
+1766087096994,396587,LoginAction,200,OK,Add Item To Cart User Thread Group 3-7,text,true,,775,599,50,110,https://foodhub-6342.onrender.com/auth/login,396587,0,101
+1766087487994,5599,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5599,0,89
+1766087485999,7599,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7599,0,0
+1766087479607,13981,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,2590,1405,40,110,null,13981,11,84
+1766087096994,396587,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-7,,true,,775,599,50,110,null,396587,104,101
+1766087489679,5910,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5910,0,94
+1766087097039,398638,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,398638,0,90
+1766087097038,398638,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-7,,true,,772,599,40,110,null,398638,2,90
+1766087117980,377709,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-12,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,377709,0,90
+1766087099986,399806,LoginAction,200,OK,Add Item To Cart User Thread Group 3-8,text,true,,769,599,50,110,https://foodhub-6342.onrender.com/auth/login,399806,0,88
+1766087099985,399806,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-8,,true,,769,599,50,110,null,399806,2,88
+1766087100032,399761,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-8,text,true,,770,599,40,110,https://foodhub-6342.onrender.com/auth/login,399761,0,100
+1766087100031,399761,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-8,,true,,770,599,40,110,null,399761,2,100
+1766087119504,380300,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-12,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,380299,0,0
+1766087495679,6197,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6197,0,87
+1766087493600,8307,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8307,0,0
+1766087487994,13906,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,2590,1405,40,110,null,13906,7,89
+1766087495590,8291,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8291,0,0
+1766087489678,14201,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-6,,true,,2590,1405,50,110,null,14201,3,94
+1766087102979,400998,LoginAction,200,OK,Add Item To Cart User Thread Group 3-9,text,true,,775,599,50,110,https://foodhub-6342.onrender.com/auth/login,400998,0,88
+1766087102978,400998,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-9,,true,,775,599,50,110,null,400998,1,88
+1766087103026,402963,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-9,text,true,,771,599,40,110,https://foodhub-6342.onrender.com/auth/login,402963,0,87
+1766087103025,402963,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-9,,true,,771,599,40,110,null,402963,3,87
+1766087499794,6191,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-8,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6189,0,117
+1766087503883,2127,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-6,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2127,0,0
+1766087499795,6217,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-8,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6217,0,91
+1766087105973,402207,LoginAction,200,OK,Add Item To Cart User Thread Group 3-10,text,true,,773,599,50,110,https://foodhub-6342.onrender.com/auth/login,402207,0,89
+1766087105971,402207,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-10,,true,,773,599,50,110,null,402207,3,89
+1766087503977,6305,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-9,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6305,0,84
+1766087501877,8409,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8409,0,0
+1766087495678,14606,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-7,,true,,2590,1405,40,110,null,14606,3,87
+1766087106022,406358,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-10,text,true,,774,599,40,110,https://foodhub-6342.onrender.com/auth/login,406358,0,91
+1766087106021,406358,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-10,,true,,774,599,40,110,null,406358,2,91
+1766087506016,8463,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-8,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8463,0,0
+1766087499794,14680,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-8,,true,,2590,1405,40,110,null,14680,10,91
+1766087505999,8484,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-8,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8481,0,0
+1766087499793,14675,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-8,,true,,2590,1405,50,110,null,14670,21,117
+1766087109001,405495,LoginAction,200,OK,Add Item To Cart User Thread Group 3-11,text,true,,771,598,50,110,https://foodhub-6342.onrender.com/auth/login,405495,0,84
+1766087108999,405495,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-11,,true,,771,598,50,110,null,405495,8,84
+1766087508183,6322,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-10,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6322,0,90
+1766087514490,2283,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-8,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2282,0,0
+1766087510286,8791,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-9,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8791,0,0
+1766087503977,15096,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-9,,true,,2590,1405,50,110,null,15096,5,84
+1766087512381,6697,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-10,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6697,0,86
+1766087109017,410063,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-11,text,true,,774,598,40,110,https://foodhub-6342.onrender.com/auth/login,410063,0,120
+1766087109016,410063,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-11,,true,,774,598,40,110,null,410063,1,120
+1766087516774,2313,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-8,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2313,0,0
+1766087514489,4596,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-8,,false,,1248,1439,50,110,null,4595,3,0
+1766087519090,2500,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-8,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2500,0,0
+1766087473494,50384,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,772,599,10,110,https://foodhub-6342.onrender.com/auth/login,50384,0,95
+1766087473494,50384,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,772,599,10,110,null,50384,1,95
+1766087476988,46895,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,774,599,10,110,https://foodhub-6342.onrender.com/auth/login,46895,0,86
+1766087476987,46895,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,774,599,10,110,null,46895,2,86
+1766087521599,2290,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-8,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2290,0,0
+1766087519089,4790,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-8,,false,,1248,1439,50,110,null,4790,10,0
+1766087114963,411133,LoginAction,200,OK,Add Item To Cart User Thread Group 3-13,text,true,,769,598,50,110,https://foodhub-6342.onrender.com/auth/login,411133,0,93
+1766087114962,411133,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-13,,true,,769,598,50,110,null,411133,1,93
+1766087519079,9119,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-10,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9119,0,0
+1766087512381,15816,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-10,,true,,2590,1405,40,110,null,15816,2,86
+1766087482177,48518,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,771,595,4,110,https://foodhub-6342.onrender.com/auth/login,48518,0,85
+1766087482177,48518,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,771,595,4,110,null,48518,1,85
+1766087115023,415674,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-13,text,true,,771,598,40,110,https://foodhub-6342.onrender.com/auth/login,415674,0,98
+1766087115022,415674,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-13,,true,,771,598,40,110,null,415674,2,98
+1766087526097,6789,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-13,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6789,0,87
+1766087484091,51309,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-4,text,true,,773,595,6,110,https://foodhub-6342.onrender.com/auth/login,51308,0,0
+1766087484091,51309,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-4,,true,,773,595,6,110,null,51308,0,0
+1766087117941,419838,LoginAction,200,OK,Add Item To Cart User Thread Group 3-14,text,true,,769,598,50,110,https://foodhub-6342.onrender.com/auth/login,419838,0,85
+1766087117940,419838,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-14,,true,,769,598,50,110,null,419838,3,85
+1766087535401,2392,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-4,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,2392,0,0
+1766087530698,7095,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-13,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7095,0,106
+1766087535400,2392,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-4,,false,,624,677,6,110,null,2392,2,0
+1766087485990,54203,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-5,text,true,,769,595,6,110,https://foodhub-6342.onrender.com/auth/login,54203,0,0
+1766087485990,54203,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-5,,true,,769,595,6,110,null,54203,1,0
+1766087118020,422177,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-14,text,true,,773,598,40,110,https://foodhub-6342.onrender.com/auth/login,422177,0,88
+1766087118019,422177,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-14,,true,,773,598,40,110,null,422177,2,88
+1766087532890,9594,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-13,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9594,0,0
+1766087526096,16383,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-13,,true,,2590,1405,50,110,null,16383,6,87
+1766087540194,2392,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-5,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,2392,0,0
+1766087540194,2392,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-5,,false,,624,677,6,110,null,2392,1,0
+1766087542486,2388,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2388,0,0
+1766087493600,51275,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,770,598,40,110,https://foodhub-6342.onrender.com/auth/login,51275,0,0
+1766087493599,51275,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,770,598,40,110,null,51275,1,0
+1766087544876,2299,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2298,0,0
+1766087537794,9381,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-13,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9381,0,0
+1766087530698,16476,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-13,,true,,2590,1405,40,110,null,16476,2,106
+1766087540198,6978,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-14,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6977,0,90
+1766087542485,4687,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-13,,false,,1248,1439,50,110,null,4686,4,0
+1766087120950,426236,LoginAction,200,OK,Add Item To Cart User Thread Group 3-15,text,true,,771,598,50,110,https://foodhub-6342.onrender.com/auth/login,426236,0,107
+1766087120949,426236,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-15,,true,,771,598,50,110,null,426236,1,107
+1766087547177,2405,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2405,0,0
+1766087121015,428660,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-15,text,true,,770,599,40,110,https://foodhub-6342.onrender.com/auth/login,428660,0,84
+1766087121010,428660,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-15,,true,,770,599,40,110,null,428660,6,84
+1766087549582,2589,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2589,0,0
+1766087547176,4994,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-13,,false,,1248,1439,50,110,null,4994,5,0
+1766087544875,7314,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7313,0,87
+1766087552176,2810,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2810,0,0
+1766087501907,53185,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,772,598,40,110,https://foodhub-6342.onrender.com/auth/login,53184,0,0
+1766087501907,53185,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,772,598,40,110,null,53184,0,0
+1766087549677,8294,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-15,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,8294,0,90
+1766087554987,2985,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2985,0,0
+1766087552175,5795,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-13,,false,,1248,1439,50,110,null,5795,2,0
+1766087123940,436547,LoginAction,200,OK,Add Item To Cart User Thread Group 3-16,text,true,,773,599,50,110,https://foodhub-6342.onrender.com/auth/login,436547,0,93
+1766087123938,436547,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-16,,true,,773,599,50,110,null,436547,3,93
+1766087126929,433644,LoginAction,200,OK,Add Item To Cart User Thread Group 3-17,text,true,,770,599,50,110,https://foodhub-6342.onrender.com/auth/login,433644,0,97
+1766087126927,433644,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-17,,true,,770,599,50,110,null,433644,2,97
+1766087552189,10909,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10908,0,0
+1766087544875,18223,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,2590,1405,40,110,null,18221,0,87
+1766087555093,8011,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,8011,0,83
+1766087129918,435772,LoginAction,200,OK,Add Item To Cart User Thread Group 3-18,text,true,,773,599,50,110,https://foodhub-6342.onrender.com/auth/login,435771,0,99
+1766087129916,435772,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-18,,true,,773,599,50,110,null,435771,3,99
+1766087510287,55404,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,771,599,40,110,https://foodhub-6342.onrender.com/auth/login,55404,0,0
+1766087510287,55404,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-7,,true,,771,599,40,110,null,55404,0,0
+1766087127005,438696,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-17,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,438696,0,103
+1766087127003,438696,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-17,,true,,772,599,40,110,null,438696,3,103
+1766087560489,7682,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-16,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7682,0,96
+1766087557972,10201,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-15,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10200,0,0
+1766087549676,18495,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-15,,true,,2590,1405,40,110,null,18494,2,90
+1766087130011,438167,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-18,text,true,,775,599,40,110,https://foodhub-6342.onrender.com/auth/login,438167,0,91
+1766087130009,438167,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-18,,true,,775,599,40,110,null,438167,2,91
+1766087560574,7616,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-17,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7616,0,90
+1766087514485,53708,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-8,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,53708,0,0
+1766087514484,53708,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-8,,true,,772,599,40,110,null,53708,1,0
+1766087189965,379899,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-38,text,false,,340,599,40,110,https://foodhub-6342.onrender.com/auth/login,379899,0,102
+1766087189964,379899,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-38,,false,,340,599,40,110,null,379899,1,102
+1766087563105,10080,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10080,0,0
+1766087555092,18091,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,2590,1405,40,110,null,18091,3,83
+1766087565690,7497,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7496,0,96
+1766087565701,7506,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-17,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7505,0,109
+1766087152784,420426,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-16,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,420426,0,0
+1766087132919,442788,LoginAction,200,OK,Add Item To Cart User Thread Group 3-19,text,true,,771,599,50,110,https://foodhub-6342.onrender.com/auth/login,442788,0,123
+1766087132916,442788,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-19,,true,,771,599,50,110,null,442788,7,123
+1766087568190,8845,ChooseStoreAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-17,text,false,,6922,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8845,0,0
+1766087560573,16461,Search Store,,"Number of samples in transaction : 2, number of failing samples : 1",Add Item To Cart User Thread Group 3-17,,false,,8272,1405,50,110,null,16461,3,90
+1766087568171,10003,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-16,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10003,0,0
+1766087560488,17685,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-16,,true,,2590,1405,50,110,null,17685,2,96
+1766087133011,445173,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,775,599,40,110,https://foodhub-6342.onrender.com/auth/login,445173,0,113
+1766087133009,445173,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-19,,true,,775,599,40,110,null,445173,2,113
+1766087523880,54304,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,770,599,10,110,https://foodhub-6342.onrender.com/auth/login,54304,0,0
+1766087523880,54304,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,770,599,10,110,null,54304,1,0
+1766087523885,56689,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,770,599,10,110,https://foodhub-6342.onrender.com/auth/login,56689,0,0
+1766087523885,56689,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,770,599,10,110,null,56689,3,0
+1766087135918,444661,LoginAction,200,OK,Add Item To Cart User Thread Group 3-20,text,true,,771,599,50,110,https://foodhub-6342.onrender.com/auth/login,444661,0,89
+1766087135916,444661,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-20,,true,,771,599,50,110,null,444661,2,89
+1766087575710,7081,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-19,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7080,0,92
+1766087573193,9684,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9684,0,0
+1766087565690,17181,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-7,,true,,2590,1405,40,110,null,17180,6,96
+1766087528199,54701,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-10,text,true,,769,599,40,110,https://foodhub-6342.onrender.com/auth/login,54701,0,0
+1766087135996,446904,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-20,text,true,,770,599,40,110,https://foodhub-6342.onrender.com/auth/login,446904,0,86
+1766087135993,446904,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-20,,true,,770,599,40,110,null,446904,3,86
+1766087528199,54701,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-10,,true,,769,599,40,110,null,54701,0,0
+1766087519081,66058,SearchStoreAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-11,text,false,,340,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,66058,0,83
+1766087578184,7089,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7089,0,100
+1766087138906,446376,LoginAction,200,OK,Add Item To Cart User Thread Group 3-21,text,true,,770,599,50,110,https://foodhub-6342.onrender.com/auth/login,446376,0,94
+1766087138904,446376,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-21,,true,,770,599,50,110,null,446376,4,94
+1766087580580,7144,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-20,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7142,0,87
+1766087138997,448729,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-21,text,true,,773,599,40,110,https://foodhub-6342.onrender.com/auth/login,448729,0,88
+1766087138996,448729,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-21,,true,,773,599,40,110,null,448729,2,88
+1766087530697,59490,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,773,595,4,110,https://foodhub-6342.onrender.com/auth/login,59489,0,0
+1766087530697,59490,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,773,595,4,110,null,59489,1,0
+1766087582793,9931,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-19,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9931,0,0
+1766087575710,17012,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-19,,true,,2590,1405,50,110,null,17011,2,92
+1766087585274,10004,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10004,0,0
+1766087578184,17093,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-19,,true,,2590,1405,40,110,null,17093,1,100
+1766087592727,2568,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2568,0,0
+1766087587727,7572,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-21,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7572,0,98
+1766087585140,10162,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-11,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10161,0,110
+1766087519081,76220,Search Store,,"Number of samples in transaction : 2, number of failing samples : 1",Search Store User Thread Group Thread Group 2-11,,false,,1580,1405,40,110,null,76219,2,193
+1766087141910,453393,LoginAction,200,OK,Add Item To Cart User Thread Group 3-22,text,true,,770,599,50,110,https://foodhub-6342.onrender.com/auth/login,453393,0,107
+1766087141908,453393,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-22,,true,,770,599,50,110,null,453393,5,107
+1766087587724,10176,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-20,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10176,0,0
+1766087580580,17320,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-20,,true,,2590,1405,50,110,null,17318,0,87
+1766087142010,455906,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-22,text,true,,770,599,40,110,https://foodhub-6342.onrender.com/auth/login,455906,0,125
+1766087142007,455906,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-22,,true,,770,599,40,110,null,455906,4,125
+1766087597907,2275,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-20,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2275,0,0
+1766087537794,62498,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-4,text,true,,772,595,6,110,https://foodhub-6342.onrender.com/auth/login,62497,0,0
+1766087537794,62498,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-4,,true,,772,595,6,110,null,62497,1,0
+1766087600294,2391,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-4,text,false,,624,677,6,110,https://foodhub-6342.onrender.com/orders,2391,0,96
+1766087600294,2391,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-4,,false,,624,677,6,110,null,2391,2,96
+1766087600184,2585,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-20,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2585,0,0
+1766087597901,4860,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-20,,false,,1248,1439,50,110,null,4860,8,0
+1766087542587,60200,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-5,text,true,,769,595,6,110,https://foodhub-6342.onrender.com/auth/login,60200,0,0
+1766087547176,55612,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-13,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,55612,0,0
+1766087547176,55612,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-13,,true,,772,599,40,110,null,55612,0,0
+1766087542587,60200,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-5,,true,,769,595,6,110,null,60200,1,0
+1766087144989,457803,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-23,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,457803,0,90
+1766087144988,457803,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-23,,true,,772,599,40,110,null,457803,2,90
+1766087602771,2308,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-20,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2308,0,0
+1766087595300,9798,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-21,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9798,0,0
+1766087587727,17370,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-21,,true,,2590,1405,40,110,null,17370,1,98
+1766087597917,7256,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-22,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7255,0,97
+1766087605079,2592,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-20,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2592,0,0
+1766087602770,4900,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-20,,false,,1248,1439,50,110,null,4900,3,0
+1766087148019,462067,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-24,text,true,,768,599,40,110,https://foodhub-6342.onrender.com/auth/login,462067,0,85
+1766087148008,462067,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-24,,true,,768,599,40,110,null,462067,14,85
+1766087607673,2427,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-20,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2427,0,0
+1766087147943,462161,LoginAction,200,OK,Add Item To Cart User Thread Group 3-24,text,true,,768,599,50,110,https://foodhub-6342.onrender.com/auth/login,462161,0,125
+1766087147942,462161,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-24,,true,,768,599,50,110,null,462161,1,125
+1766087610101,2487,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-20,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2486,0,0
+1766087607672,4914,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-20,,false,,1248,1439,50,110,null,4913,2,0
+1766087557973,54616,LoginAction,200,OK,Add Item To Cart User Thread Group 3-13,text,true,,771,599,50,110,https://foodhub-6342.onrender.com/auth/login,54616,0,0
+1766087557973,54616,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-13,,true,,771,599,50,110,null,54616,0,0
+1766087150903,464096,LoginAction,200,OK,Add Item To Cart User Thread Group 3-25,text,true,,775,599,50,110,https://foodhub-6342.onrender.com/auth/login,464096,0,94
+1766087150899,464096,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-25,,true,,775,599,50,110,null,464096,5,94
+1766087151001,464101,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-25,text,true,,775,599,40,110,https://foodhub-6342.onrender.com/auth/login,464101,0,92
+1766087151000,464101,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-25,,true,,775,599,40,110,null,464101,4,92
+1766087610088,7283,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-24,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7282,0,97
+1766087605098,13143,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-21,text,false,,6922,599,40,110,https://foodhub-6342.onrender.com/auth/login,13143,0,0
+1766087605098,13143,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-21,,false,,6922,599,40,110,null,13143,2,0
+1766087612591,7304,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-13,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7304,0,100
+1766087563098,56892,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,769,599,40,110,https://foodhub-6342.onrender.com/auth/login,56892,0,0
+1766087563098,56892,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,769,599,40,110,null,56892,1,0
+1766087615105,7467,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-25,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7467,0,83
+1766087614998,7594,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-25,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7594,0,88
+1766087153888,471297,LoginAction,200,OK,Add Item To Cart User Thread Group 3-26,text,true,,769,599,50,110,https://foodhub-6342.onrender.com/auth/login,471297,0,91
+1766087153887,471297,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-26,,true,,769,599,50,110,null,471297,2,91
+1766087153977,471226,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-26,text,true,,774,599,40,110,https://foodhub-6342.onrender.com/auth/login,471226,0,87
+1766087153976,471226,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-26,,true,,774,599,40,110,null,471226,1,87
+1766087622574,4463,ChooseStoreAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Search Store User Thread Group Thread Group 2-25,text,false,,2107,0,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,0,0,0
+1766087615104,11930,Search Store,,"Number of samples in transaction : 2, number of failing samples : 1",Search Store User Thread Group Thread Group 2-25,,false,,3457,714,40,110,null,7467,10,83
+1766087619990,7684,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7684,0,87
+1766087617371,10322,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-24,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10322,0,0
+1766087610088,17605,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-24,,true,,2590,1405,40,110,null,17604,1,97
+1766087619894,10204,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-13,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10204,0,0
+1766087612589,17508,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-13,,true,,2590,1405,50,110,null,17508,3,100
+1766087156887,473287,LoginAction,200,OK,Add Item To Cart User Thread Group 3-27,text,true,,769,599,50,110,https://foodhub-6342.onrender.com/auth/login,473287,0,87
+1766087156887,473287,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-27,,true,,769,599,50,110,null,473287,1,87
+1766087573187,56999,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,56999,0,0
+1766087573186,56999,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,772,599,40,110,null,56999,2,0
+1766087625202,7370,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-26,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7370,0,86
+1766087630100,2474,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-13,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2474,0,0
+1766087578185,54393,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,773,599,10,110,https://foodhub-6342.onrender.com/auth/login,54393,0,100
+1766087578185,54393,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,773,599,10,110,null,54393,1,100
+1766087156977,475602,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-27,text,true,,774,599,40,110,https://foodhub-6342.onrender.com/auth/login,475602,0,89
+1766087156976,475602,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-27,,true,,774,599,40,110,null,475602,2,89
+1766087625185,7402,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-26,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7402,0,90
+1766087622594,9996,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-25,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9996,0,0
+1766087614998,17590,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-25,,true,,2590,1405,50,110,null,17590,2,88
+1766087632591,2484,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-25,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2484,0,0
+1766087580577,54515,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,770,599,10,110,https://foodhub-6342.onrender.com/auth/login,54515,0,90
+1766087580577,54515,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,770,599,10,110,null,54515,1,90
+1766087627674,9602,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9602,0,0
+1766087619990,17286,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,2590,1405,40,110,null,17286,0,87
+1766087159886,477393,LoginAction,200,OK,Add Item To Cart User Thread Group 3-28,text,true,,774,599,50,110,https://foodhub-6342.onrender.com/auth/login,477392,0,90
+1766087159979,477300,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-28,text,true,,771,599,40,110,https://foodhub-6342.onrender.com/auth/login,477300,0,89
+1766087159977,477300,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-28,,true,,771,599,40,110,null,477300,2,89
+1766087159885,477393,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-28,,true,,774,599,50,110,null,477392,1,90
+1766087582878,54403,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,769,599,40,110,https://foodhub-6342.onrender.com/auth/login,54403,0,0
+1766087582878,54403,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-7,,true,,769,599,40,110,null,54403,2,0
+1766087635076,2219,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-25,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2219,0,0
+1766087632591,4703,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-25,,false,,1248,1439,50,110,null,4703,2,0
+1766087630175,7119,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-27,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7119,0,129
+1766087637296,2199,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-25,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2199,0,0
+1766087632574,9295,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-26,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9295,0,0
+1766087639496,2392,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-25,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2392,0,0
+1766087637296,4591,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-25,,false,,1248,1439,50,110,null,4591,1,0
+1766087625202,16665,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-26,,true,,2590,1405,40,110,null,16665,48,86
+1766087641889,2394,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-25,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2393,0,0
+1766087162883,481399,LoginAction,200,OK,Add Item To Cart User Thread Group 3-29,text,true,,772,599,50,110,https://foodhub-6342.onrender.com/auth/login,481399,0,90
+1766087162882,481399,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-29,,true,,772,599,50,110,null,481399,3,90
+1766087162975,481328,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-29,text,true,,768,599,40,110,https://foodhub-6342.onrender.com/auth/login,481328,0,95
+1766087162973,481328,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-29,,true,,768,599,40,110,null,481328,4,95
+1766087644285,2418,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-25,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2418,0,0
+1766087641888,4812,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-25,,false,,1248,1439,50,110,null,4811,3,0
+1766087166028,483244,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-30,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,483244,0,138
+1766087166027,483244,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-30,,true,,772,599,40,110,null,483244,3,138
+1766087590188,59100,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,773,595,4,110,https://foodhub-6342.onrender.com/auth/login,59100,0,92
+1766087590188,59100,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,773,595,4,110,null,59100,1,92
+1766087644286,7210,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-29,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7210,0,92
+1766087595279,56221,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,771,599,40,110,https://foodhub-6342.onrender.com/auth/login,56221,0,0
+1766087595278,56221,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-19,,true,,771,599,40,110,null,56221,2,0
+1766087165881,485708,LoginAction,200,OK,Add Item To Cart User Thread Group 3-30,text,true,,772,599,50,110,https://foodhub-6342.onrender.com/auth/login,485708,0,143
+1766087165877,485708,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-30,,true,,772,599,50,110,null,485708,6,143
+1766087168901,485097,LoginAction,200,OK,Add Item To Cart User Thread Group 3-31,text,true,,772,598,50,110,https://foodhub-6342.onrender.com/auth/login,485097,0,93
+1766087168897,485097,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-31,,true,,772,598,50,110,null,485097,5,93
+1766087649275,7198,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-30,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7198,0,95
+1766087168982,487508,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-31,text,true,,773,598,40,110,https://foodhub-6342.onrender.com/auth/login,487508,0,100
+1766087168980,487508,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-31,,true,,773,598,40,110,null,487508,3,100
+1766087651501,7274,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7273,0,98
+1766087654000,7176,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-31,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7176,0,83
+1766087602688,58493,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-4,text,true,,771,595,6,110,https://foodhub-6342.onrender.com/auth/login,58493,0,0
+1766087602687,58493,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-4,,true,,771,595,6,110,null,58493,2,0
+1766087651497,9697,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-29,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9697,0,0
+1766087644285,16907,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-29,,true,,2590,1405,50,110,null,16907,4,92
+1766087656493,7083,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-31,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7083,0,86
+1766087171887,491783,LoginAction,200,OK,Add Item To Cart User Thread Group 3-32,text,true,,773,598,50,110,https://foodhub-6342.onrender.com/auth/login,491783,0,108
+1766087171885,491783,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-32,,true,,773,598,50,110,null,491783,3,108
+1766087661198,2483,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-29,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2483,0,0
+1766087663681,2314,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-29,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2314,0,0
+1766087661196,4797,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-29,,false,,1248,1439,50,110,null,4797,2,0
+1766087656476,9521,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-30,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9520,0,0
+1766087612588,53408,LoginAction,200,OK,Add Item To Cart User Thread Group 3-20,text,true,,775,599,50,110,https://foodhub-6342.onrender.com/auth/login,53408,0,0
+1766087649274,16719,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-30,,true,,2590,1405,40,110,null,16718,4,95
+1766087612588,53408,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-20,,true,,775,599,50,110,null,53408,1,0
+1766087658775,9524,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9524,0,0
+1766087651501,16798,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-19,,true,,2590,1405,40,110,null,16797,0,98
+1766087665996,2317,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-29,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2317,0,0
+1766087171975,496412,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-32,text,true,,774,598,40,110,https://foodhub-6342.onrender.com/auth/login,496412,0,100
+1766087171974,496412,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-32,,true,,774,598,40,110,null,496412,1,100
+1766087661178,9398,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-31,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9398,0,0
+1766087653999,16574,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-31,,true,,2590,1405,50,110,null,16574,7,83
+1766087668313,2279,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-29,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2279,0,0
+1766087665995,4596,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-29,,false,,1248,1439,50,110,null,4596,1,0
+1766087174984,495613,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-33,text,true,,769,598,40,110,https://foodhub-6342.onrender.com/auth/login,495613,0,92
+1766087174983,495613,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-33,,true,,769,598,40,110,null,495613,1,92
+1766087174878,495720,LoginAction,200,OK,Add Item To Cart User Thread Group 3-33,text,true,,773,598,50,110,https://foodhub-6342.onrender.com/auth/login,495720,0,109
+1766087174877,495720,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-33,,true,,773,598,50,110,null,495720,2,109
+1766087670593,2281,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-29,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2281,0,0
+1766087670581,2293,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-31,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,2292,0,0
+1766087663576,9298,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-31,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9298,0,0
+1766087656492,16381,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-31,,true,,2590,1405,40,110,null,16381,1,86
+1766087198846,474049,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-34,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,474049,0,0
+1766087672875,2498,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-29,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2498,0,0
+1766087670592,4779,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-29,,false,,1248,1439,50,110,null,4779,3,0
+1766087177873,499832,LoginAction,200,OK,Add Item To Cart User Thread Group 3-34,text,true,,772,598,50,110,https://foodhub-6342.onrender.com/auth/login,499832,0,92
+1766087177872,499832,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-34,,true,,772,598,50,110,null,499832,3,92
+1766087627694,52290,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-24,text,true,,770,599,40,110,https://foodhub-6342.onrender.com/auth/login,52290,0,0
+1766087627693,52290,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-24,,true,,770,599,40,110,null,52290,2,0
+1766087180864,499123,LoginAction,200,OK,Add Item To Cart User Thread Group 3-35,text,true,,772,598,50,110,https://foodhub-6342.onrender.com/auth/login,499123,0,98
+1766087180863,499123,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-35,,true,,772,598,50,110,null,499123,2,98
+1766087677709,7192,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-34,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7192,0,85
+1766087180972,503999,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-35,text,true,,773,599,40,110,https://foodhub-6342.onrender.com/auth/login,503999,0,97
+1766087180970,503999,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-35,,true,,773,599,40,110,null,503999,2,97
+1766087679988,7196,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-35,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7195,0,83
+1766087679986,7304,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-24,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7304,0,87
+1766087635093,52219,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,772,599,10,110,https://foodhub-6342.onrender.com/auth/login,52219,0,0
+1766087635093,52219,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,772,599,10,110,null,52219,1,0
+1766087183974,505602,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-36,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,505602,0,87
+1766087183973,505602,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-36,,true,,772,599,40,110,null,505602,2,87
+1766087684971,6802,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-35,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6802,0,88
+1766087637278,54514,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,769,599,40,110,https://foodhub-6342.onrender.com/auth/login,54514,0,0
+1766087183859,507935,LoginAction,200,OK,Add Item To Cart User Thread Group 3-36,text,true,,771,599,50,110,https://foodhub-6342.onrender.com/auth/login,507935,0,94
+1766087637278,54514,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,769,599,40,110,null,54514,1,0
+1766087183857,507935,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-36,,true,,771,599,50,110,null,507935,3,94
+1766087186977,506901,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-37,text,true,,774,599,40,110,https://foodhub-6342.onrender.com/auth/login,506901,0,135
+1766087186976,506901,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-37,,true,,774,599,40,110,null,506901,3,135
+1766087684902,8988,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-34,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8987,0,0
+1766087677708,16180,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-34,,true,,2590,1405,50,110,null,16179,3,85
+1766087186903,506996,LoginAction,200,OK,Add Item To Cart User Thread Group 3-37,text,true,,772,599,50,110,https://foodhub-6342.onrender.com/auth/login,506996,0,116
+1766087186899,506996,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-37,,true,,772,599,50,110,null,506996,5,116
+1766087689578,6205,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-36,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6205,0,87
+1766087687184,8687,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-35,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8687,0,0
+1766087679987,15883,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-35,,true,,2590,1405,50,110,null,15882,2,83
+1766087687291,8581,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-24,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8581,0,0
+1766087679986,15885,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-24,,true,,2590,1405,40,110,null,15885,2,87
+1766087693891,1982,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-34,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,1982,0,0
+1766087641916,53960,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-26,text,true,,772,599,40,110,https://foodhub-6342.onrender.com/auth/login,53960,0,0
+1766087641916,53960,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-26,,true,,772,599,40,110,null,53960,0,0
+1766087646703,49272,LoginAction,200,OK,Add Item To Cart User Thread Group 3-25,text,true,,772,599,50,110,https://foodhub-6342.onrender.com/auth/login,49272,0,0
+1766087646703,49272,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-25,,true,,772,599,50,110,null,49272,1,0
+1766087691793,5889,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5889,0,89
+1766087189858,507918,LoginAction,200,OK,Add Item To Cart User Thread Group 3-38,text,true,,773,599,50,110,https://foodhub-6342.onrender.com/auth/login,507918,0,97
+1766087189857,507918,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-38,,true,,773,599,50,110,null,507918,4,97
+1766087691774,7803,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-35,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7803,0,0
+1766087684971,14605,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-35,,true,,2590,1405,40,110,null,14605,1,88
+1766087693881,5698,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-37,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5698,0,86
+1766087697779,5795,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-38,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5795,0,92
+1766087695784,7793,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-36,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7793,0,0
+1766087192854,510725,LoginAction,200,OK,Add Item To Cart User Thread Group 3-39,text,true,,770,599,50,110,https://foodhub-6342.onrender.com/auth/login,510725,0,92
+1766087689577,13998,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-36,,true,,2590,1405,40,110,null,13998,14,87
+1766087192852,510725,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-39,,true,,770,599,50,110,null,510725,12,92
+1766087697683,7816,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7815,0,0
+1766087691793,13705,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,2590,1405,40,110,null,13704,2,89
+1766087649290,56210,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,769,595,4,110,https://foodhub-6342.onrender.com/auth/login,56210,0,0
+1766087649290,56210,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,769,595,4,110,null,56210,2,0
+1766087192963,512611,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-39,text,true,,773,599,40,110,https://foodhub-6342.onrender.com/auth/login,512611,0,88
+1766087192962,512611,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-39,,true,,773,599,40,110,null,512611,5,88
+1766087699580,7893,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-37,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7893,0,0
+1766087693880,13591,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-37,,true,,2590,1405,40,110,null,13591,2,86
+1766087195883,513712,LoginAction,200,OK,Add Item To Cart User Thread Group 3-40,text,true,,769,599,50,110,https://foodhub-6342.onrender.com/auth/login,513712,0,149
+1766087195869,513712,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-40,,true,,769,599,50,110,null,513712,16,149
+1766087195980,515506,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-40,text,true,,769,599,40,110,https://foodhub-6342.onrender.com/auth/login,515506,0,119
+1766087195980,515506,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-40,,true,,769,599,40,110,null,515506,3,119
+1766087703611,7882,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-38,text,true,,1240,691,50,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7882,0,0
+1766087697779,13677,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-38,,true,,2590,1405,50,110,null,13677,38,92
+1766087705579,5918,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-39,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5917,0,85
+1766087711495,1990,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-38,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,1990,0,0
+1766087666006,47480,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-30,text,true,,773,599,40,110,https://foodhub-6342.onrender.com/auth/login,47480,0,0
+1766087666006,47480,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-30,,true,,773,599,40,110,null,47480,0,0
+1766087709598,5871,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-40,text,true,,1350,714,50,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5871,0,109
+1766087668328,47142,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-19,text,true,,769,598,40,110,https://foodhub-6342.onrender.com/auth/login,47142,0,0
+1766087668327,47142,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-19,,true,,769,598,40,110,null,47142,2,0
+1766087713486,2000,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-38,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,2000,0,0
+1766087711494,3990,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-38,,false,,1248,1439,50,110,null,3990,2,0
+1766087715488,1700,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-38,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,1700,0,0
+1766087198857,518340,LoginAction,200,OK,Add Item To Cart User Thread Group 3-41,text,true,,770,599,50,110,https://foodhub-6342.onrender.com/auth/login,518340,0,125
+1766087198856,518340,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-41,,true,,770,599,50,110,null,518340,2,125
+1766087717188,1689,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-38,text,false,,624,660,50,110,https://foodhub-6342.onrender.com/cart,1689,0,0
+1766087715486,3389,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-38,,false,,1248,1439,50,110,null,3389,3,0
+1766087711498,7397,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-39,text,true,,1240,691,40,110,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,7397,0,0
+1766087705578,13315,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-39,,true,,2590,1405,40,110,null,13314,2,85
+1766087713487,5409,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-30,text,true,,1350,714,40,110,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5409,0,87
+1766087672875,46092,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-31,text,true,,769,598,40,110,https://foodhub-6342.onrender.com/auth/login,46092,0,0
+1766087672874,46092,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-31,,true,,769,598,40,110,null,46092,1,0
+1766087718878,1615,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-38,text,false,,624,779,50,110,https://foodhub-6342.onrender.com/cart,1615,0,0
+1766087675376,45215,LoginAction,200,OK,Add Item To Cart User Thread Group 3-29,text,true,,772,598,50,110,https://foodhub-6342.onrender.com/auth/login,45215,0,0
+1766087675375,45215,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-29,,true,,772,598,50,110,null,45215,2,0
+1766088128876,8551,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-1,text,false,,6922,598,3,25,https://foodhub-6342.onrender.com/auth/login,8550,0,970
+1766088128732,8551,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-1,,false,,6922,598,3,25,null,8550,194,970
+1766088128877,22129,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,769,598,10,36,https://foodhub-6342.onrender.com/auth/login,22128,0,969
+1766088128733,22129,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,769,598,10,36,null,22128,151,969
+1766088129709,23055,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,773,598,10,38,https://foodhub-6342.onrender.com/auth/login,23055,0,136
+1766088129707,23055,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,773,598,10,38,null,23055,3,136
+1766088128877,25690,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-1,text,true,,769,595,6,38,https://foodhub-6342.onrender.com/auth/login,25690,0,968
+1766088128732,25690,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-1,,true,,769,595,6,38,null,25690,145,968
+1766088154567,2023,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-1,text,false,,624,677,6,40,https://foodhub-6342.onrender.com/orders,2023,0,0
+1766088154567,2023,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-1,,false,,624,677,6,40,null,2023,1,0
+1766088146701,13541,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-7,text,false,,6922,599,11,42,https://foodhub-6342.onrender.com/auth/login,13540,0,85
+1766088146701,13541,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-7,,false,,6922,599,11,42,null,13540,1,85
+1766088129714,31478,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,773,595,4,42,https://foodhub-6342.onrender.com/auth/login,31478,0,131
+1766088129711,31478,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,773,595,4,42,null,31478,4,131
+1766088128876,34627,LoginAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,773,598,12,44,https://foodhub-6342.onrender.com/auth/login,34627,0,972
+1766088128732,34627,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-1,,true,,773,598,12,44,null,34627,145,972
+1766088130711,34956,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,772,599,10,46,https://foodhub-6342.onrender.com/auth/login,34956,0,96
+1766088130709,34956,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,772,599,10,46,null,34956,2,96
+1766088129712,35972,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-2,text,true,,772,595,6,46,https://foodhub-6342.onrender.com/auth/login,35972,0,133
+1766088129711,35972,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-2,,true,,772,595,6,46,null,35972,2,133
+1766088165685,2089,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-2,text,false,,624,677,6,48,https://foodhub-6342.onrender.com/orders,2089,0,0
+1766088137477,30298,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,1350,714,14,48,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,30298,0,0
+1766088165685,2089,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-2,,false,,624,677,6,48,null,2089,1,0
+1766088128876,38918,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-1,text,true,,773,595,4,48,https://foodhub-6342.onrender.com/auth/login,38918,0,974
+1766088128732,38918,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-1,,true,,773,595,4,48,null,38918,144,974
+1766088163505,6463,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,1350,714,14,48,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6463,0,0
+1766088167776,9794,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,1240,691,17,54,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9794,0,0
+1766088137477,40092,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-1,,true,,2590,1405,17,54,null,40092,2,0
+1766088131709,45863,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,770,599,17,54,https://foodhub-6342.onrender.com/auth/login,45863,0,85
+1766088130712,46860,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-3,text,true,,771,595,6,54,https://foodhub-6342.onrender.com/auth/login,46860,0,95
+1766088131708,45863,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-2,,true,,770,599,17,54,null,45863,2,85
+1766088130711,46860,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-3,,true,,771,595,6,54,null,46860,2,95
+1766088169969,10126,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,1240,691,18,56,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10126,0,0
+1766088163504,16589,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-1,,true,,2590,1405,18,56,null,16589,4,0
+1766088130709,49475,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-3,text,true,,770,595,4,56,https://foodhub-6342.onrender.com/auth/login,49475,0,91
+1766088130707,49475,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-3,,true,,770,595,4,56,null,49475,3,91
+1766088180098,2579,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,779,19,57,https://foodhub-6342.onrender.com/cart,2579,0,0
+1766088182678,2786,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,660,19,58,https://foodhub-6342.onrender.com/cart,2786,0,0
+1766088180097,5365,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-1,,false,,1248,1439,19,58,null,5365,3,0
+1766088177573,7894,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,1350,714,19,58,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7894,0,0
+1766088131722,53752,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,771,599,10,58,https://foodhub-6342.onrender.com/auth/login,53752,0,91
+1766088131705,53769,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-4,text,true,,775,595,4,58,https://foodhub-6342.onrender.com/auth/login,53769,0,90
+1766088131704,53769,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-4,,true,,775,595,4,58,null,53769,1,90
+1766088131721,53752,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,771,599,10,58,null,53752,1,91
+1766088185465,2702,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,779,20,60,https://foodhub-6342.onrender.com/cart,2702,0,0
+1766088188168,2603,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,660,21,62,https://foodhub-6342.onrender.com/cart,2603,0,0
+1766088185465,5305,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-1,,false,,1248,1439,21,62,null,5305,2,0
+1766088131712,59076,LoginAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,771,599,21,62,https://foodhub-6342.onrender.com/auth/login,59076,0,87
+1766088131712,59076,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,771,599,21,62,null,59076,0,87
+1766088131704,59084,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-4,text,true,,773,595,6,62,https://foodhub-6342.onrender.com/auth/login,59084,0,87
+1766088131704,59084,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-4,,true,,773,595,6,62,null,59084,1,87
+1766088132702,60771,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,769,599,10,64,https://foodhub-6342.onrender.com/auth/login,60771,0,87
+1766088132700,60771,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,769,599,10,64,null,60771,3,87
+1766088190790,2699,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-4,text,false,,624,677,6,64,https://foodhub-6342.onrender.com/orders,2699,0,0
+1766088190789,2699,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-4,,false,,624,677,6,64,null,2699,2,0
+1766088133717,62468,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,773,599,10,66,https://foodhub-6342.onrender.com/auth/login,62468,0,84
+1766088133716,62468,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,773,599,10,66,null,62468,2,84
+1766088190789,8200,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,1350,714,24,68,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,8200,0,0
+1766088134719,67178,LoginAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,772,599,25,70,https://foodhub-6342.onrender.com/auth/login,67178,0,89
+1766088132707,69190,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-5,text,true,,770,595,6,70,https://foodhub-6342.onrender.com/auth/login,69190,0,92
+1766088132706,69190,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-5,,true,,770,595,6,70,null,69190,2,92
+1766088134718,67178,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-3,,true,,772,599,25,70,null,67178,2,89
+1766088201898,2774,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-5,text,false,,624,677,6,72,https://foodhub-6342.onrender.com/orders,2774,0,89
+1766088201898,2774,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-5,,false,,624,677,6,72,null,2774,1,89
+1766088133708,70987,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-6,text,true,,773,595,6,72,https://foodhub-6342.onrender.com/auth/login,70987,0,91
+1766088133707,70987,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-6,,true,,773,595,6,72,null,70987,2,91
+1766088204697,2675,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-6,text,false,,624,677,6,74,https://foodhub-6342.onrender.com/orders,2675,0,88
+1766088204696,2675,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-6,,false,,624,677,6,74,null,2675,1,88
+1766088134711,72682,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,768,599,10,74,https://foodhub-6342.onrender.com/auth/login,72682,0,88
+1766088134709,72682,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,768,599,10,74,null,72682,3,88
+1766088134725,72671,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,773,599,27,74,https://foodhub-6342.onrender.com/auth/login,72671,0,90
+1766088134725,72672,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-3,,true,,773,599,27,74,null,72671,1,90
+1766088151014,56395,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,771,599,10,74,https://foodhub-6342.onrender.com/auth/login,56394,0,0
+1766088151014,56395,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,771,599,10,74,null,56394,0,0
+1766088201900,8176,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,1350,714,28,76,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,8176,0,88
+1766088152766,57315,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,775,599,10,76,https://foodhub-6342.onrender.com/auth/login,57314,0,0
+1766088152765,57315,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,775,599,10,76,null,57314,1,0
+1766088198991,11103,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,1240,691,28,76,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,11103,0,88
+1766088190788,19303,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,2590,1405,28,76,null,19303,4,88
+1766088210097,2674,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,779,29,78,https://foodhub-6342.onrender.com/cart,2674,0,0
+1766088135717,77058,LoginAction,200,OK,Login User  Thread Group 1-8,text,true,,771,599,10,78,https://foodhub-6342.onrender.com/auth/login,77058,0,90
+1766088135716,77058,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-8,,true,,771,599,10,78,null,77058,1,90
+1766088212774,2602,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,660,29,78,https://foodhub-6342.onrender.com/cart,2602,0,0
+1766088210095,5276,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-2,,false,,1248,1439,29,78,null,5276,6,0
+1766088207398,7987,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,1350,714,29,78,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7987,0,88
+1766088136716,78763,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,771,599,10,78,https://foodhub-6342.onrender.com/auth/login,78763,0,85
+1766088136715,78763,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,771,599,10,78,null,78763,1,85
+1766088215378,2906,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,779,30,80,https://foodhub-6342.onrender.com/cart,2906,0,0
+1766088302965,31079,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-5,text,false,,6922,599,11,42,https://foodhub-6342.onrender.com/auth/login,31073,0,306
+1766088302866,31079,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-5,,false,,6922,599,11,42,null,31073,538,306
+1766088282869,89809,LoginAction,200,OK,Login User  Thread Group 1-1,text,true,,773,598,10,56,https://foodhub-6342.onrender.com/auth/login,89801,0,812
+1766088282766,89809,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-1,,true,,773,598,10,56,null,89801,105,812
+1766088282869,91402,LoginAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,769,598,19,58,https://foodhub-6342.onrender.com/auth/login,91402,0,812
+1766088282766,91402,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-1,,true,,769,598,19,58,null,91402,105,812
+1766088282869,93318,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,772,598,19,58,https://foodhub-6342.onrender.com/auth/login,93318,0,812
+1766088282766,93318,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-1,,true,,772,598,19,58,null,93318,104,812
+1766088282869,95224,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-1,text,true,,774,595,4,60,https://foodhub-6342.onrender.com/auth/login,95224,0,812
+1766088282766,95224,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-1,,true,,774,595,4,60,null,95224,104,812
+1766088374275,5688,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,1350,714,20,60,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5688,0,89
+1766088376190,5684,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,1350,714,20,60,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5683,0,85
+1766088282869,99031,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-1,text,true,,770,595,6,60,https://foodhub-6342.onrender.com/auth/login,99031,0,812
+1766088282766,99031,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-1,,true,,770,595,6,60,null,99031,105,812
+1766088381904,2184,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-1,text,false,,624,677,6,62,https://foodhub-6342.onrender.com/orders,2184,0,90
+1766088381903,2184,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-1,,false,,624,677,6,62,null,2184,2,90
+1766088287748,98559,LoginAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,772,598,21,62,https://foodhub-6342.onrender.com/auth/login,98559,0,95
+1766088287747,98559,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,772,598,21,62,null,98559,2,95
+1766088379965,8309,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-1,text,true,,1240,691,22,64,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8309,0,0
+1766088374274,13997,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-1,,true,,2590,1405,22,64,null,13997,4,89
+1766088287752,100537,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-2,text,true,,773,595,4,64,https://foodhub-6342.onrender.com/auth/login,100537,0,96
+1766088287751,100537,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-2,,true,,773,595,4,64,null,100537,2,96
+1766088287747,100552,LoginAction,200,OK,Login User  Thread Group 1-2,text,true,,773,598,10,64,https://foodhub-6342.onrender.com/auth/login,100552,0,94
+1766088287745,100552,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-2,,true,,773,598,10,64,null,100552,3,94
+1766088287751,100549,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,771,598,22,64,https://foodhub-6342.onrender.com/auth/login,100549,0,90
+1766088287750,100549,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-2,,true,,771,598,22,64,null,100549,2,90
+1766088388277,1991,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,779,22,64,https://foodhub-6342.onrender.com/cart,1991,0,0
+1766088381874,8398,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,1240,691,22,64,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8398,0,0
+1766088376189,14082,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-1,,true,,2590,1405,22,64,null,14081,2,85
+1766088390287,1983,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,660,22,64,https://foodhub-6342.onrender.com/cart,1983,0,0
+1766088388275,3974,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-1,,false,,1248,1439,22,64,null,3974,22,0
+1766088386309,5976,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,1350,714,22,64,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,5976,0,89
+1766088388301,6165,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,1350,714,23,66,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6165,0,94
+1766088392272,2195,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,779,23,66,https://foodhub-6342.onrender.com/cart,2195,0,0
+1766088292751,101731,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-3,text,true,,770,599,23,66,https://foodhub-6342.onrender.com/auth/login,101731,0,97
+1766088292750,101731,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-3,,true,,770,599,23,66,null,101731,2,97
+1766088394469,2298,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,660,23,66,https://foodhub-6342.onrender.com/cart,2298,0,0
+1766088392271,4493,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-1,,false,,1248,1439,23,66,null,4493,3,0
+1766088287751,109039,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-2,text,true,,769,595,6,66,https://foodhub-6342.onrender.com/auth/login,109039,0,92
+1766088287751,109039,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-2,,true,,769,595,6,66,null,109039,0,92
+1766088396791,2176,WatchOrderAction,500,Internal Server Error,Watch Order Seller Ultimate Thread Group 5-2,text,false,,624,677,6,68,https://foodhub-6342.onrender.com/orders,2176,0,83
+1766088396769,2199,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-1,text,false,,624,779,24,68,https://foodhub-6342.onrender.com/cart,2199,0,0
+1766088396791,2176,Watch order,,"Number of samples in transaction : 1, number of failing samples : 1",Watch Order Seller Ultimate Thread Group 5-2,,false,,624,677,6,68,null,2176,1,83
+1766088292748,106227,LoginAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,770,599,24,68,https://foodhub-6342.onrender.com/auth/login,106227,0,94
+1766088292746,106227,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-3,,true,,770,599,24,68,null,106227,6,94
+1766088392286,8810,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,1240,691,24,68,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8810,0,0
+1766088386308,14786,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,2590,1405,24,68,null,14786,2,89
+1766088372744,29934,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-19,text,false,,6922,599,24,68,https://foodhub-6342.onrender.com/auth/login,29933,0,104
+1766088372743,29934,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-19,,false,,6922,599,24,68,null,29933,4,104
+1766088394468,8802,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-2,text,true,,1240,691,25,70,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8802,0,0
+1766088388301,14967,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-2,,true,,2590,1405,25,70,null,14967,2,94
+1766088401097,2192,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,779,25,70,https://foodhub-6342.onrender.com/cart,2192,0,0
+1766088292748,110550,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,770,599,10,70,https://foodhub-6342.onrender.com/auth/login,110550,0,94
+1766088292746,110550,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,770,599,10,70,null,110550,2,94
+1766088292751,110549,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-3,text,true,,769,595,6,70,https://foodhub-6342.onrender.com/auth/login,110549,0,98
+1766088292750,110549,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-3,,true,,769,595,6,70,null,110549,1,98
+1766088403290,2177,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,660,25,70,https://foodhub-6342.onrender.com/cart,2177,0,0
+1766088401096,4369,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-2,,false,,1248,1439,25,70,null,4369,2,0
+1766088398979,6493,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,1350,714,25,70,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6493,0,86
+1766088405470,2319,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,779,26,72,https://foodhub-6342.onrender.com/cart,2319,0,0
+1766088407791,2278,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,660,26,72,https://foodhub-6342.onrender.com/cart,2278,0,0
+1766088405467,4597,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-2,,false,,1248,1439,26,72,null,4597,6,0
+1766088297749,112330,LoginAction,200,OK,Add Item To Cart User Thread Group 3-4,text,true,,771,599,26,72,https://foodhub-6342.onrender.com/auth/login,112330,0,97
+1766088297748,112330,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-4,,true,,771,599,26,72,null,112330,3,97
+1766088292754,117338,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-3,text,true,,770,595,4,72,https://foodhub-6342.onrender.com/auth/login,117338,0,94
+1766088292753,117338,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-3,,true,,770,595,4,72,null,117338,2,94
+1766088410071,2324,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,779,26,72,https://foodhub-6342.onrender.com/cart,2324,0,0
+1766088297750,114721,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-4,text,true,,769,595,4,72,https://foodhub-6342.onrender.com/auth/login,114721,0,93
+1766088297748,114721,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-4,,true,,769,595,4,72,null,114721,2,93
+1766088412397,2379,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-2,text,false,,624,660,27,74,https://foodhub-6342.onrender.com/cart,2379,0,0
+1766088410071,4703,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-2,,false,,1248,1439,27,74,null,4703,3,0
+1766088405475,9322,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,1240,691,27,74,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9322,0,0
+1766088398979,15815,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-3,,true,,2590,1405,27,74,null,15815,4,86
+1766088297749,119426,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,770,599,10,74,https://foodhub-6342.onrender.com/auth/login,119426,0,97
+1766088297747,119426,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,770,599,10,74,null,119426,4,97
+1766088414799,2386,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-3,text,false,,624,779,27,74,https://foodhub-6342.onrender.com/cart,2386,0,0
+1766088297750,119523,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-4,text,true,,772,595,6,74,https://foodhub-6342.onrender.com/auth/login,119523,0,97
+1766088297749,119523,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-4,,true,,772,595,6,74,null,119523,1,97
+1766088417186,2298,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-3,text,false,,624,660,28,76,https://foodhub-6342.onrender.com/cart,2298,0,0
+1766088414798,4684,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-3,,false,,1248,1439,28,76,null,4684,3,0
+1766088297749,121762,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,769,599,28,76,https://foodhub-6342.onrender.com/auth/login,121761,0,94
+1766088297748,121762,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,769,599,28,76,null,121761,2,94
+1766088419487,2476,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-3,text,false,,624,779,28,76,https://foodhub-6342.onrender.com/cart,2476,0,0
+1766088372727,49239,LoginAction,200,OK,Add Item To Cart User Thread Group 3-19,text,true,,773,599,28,76,https://foodhub-6342.onrender.com/auth/login,49239,0,121
+1766088372727,49239,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-19,,true,,773,599,28,76,null,49239,0,121
+1766088392740,29854,LoginAction,Non HTTP response code: org.apache.http.NoHttpResponseException,Non HTTP response message: foodhub-6342.onrender.com:443 failed to respond,Search Store User Thread Group Thread Group 2-23,text,false,,2107,0,28,76,https://foodhub-6342.onrender.com/auth/login,0,0,98
+1766088392739,29854,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-23,,false,,2107,0,28,76,null,0,19,98
+1766088407805,15436,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-26,text,false,,6922,598,29,78,https://foodhub-6342.onrender.com/auth/login,15435,0,121
+1766088407804,15436,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-26,,false,,6922,598,29,78,null,15435,2,121
+1766088421966,2820,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-3,text,false,,624,660,29,78,https://foodhub-6342.onrender.com/cart,2820,0,0
+1766088419485,5296,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-3,,false,,1248,1439,29,78,null,5296,5,0
+1766088419513,7777,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1350,714,29,78,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7776,0,91
+1766088424788,2514,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-3,text,false,,624,779,29,78,https://foodhub-6342.onrender.com/cart,2514,0,0
+1766088377742,49642,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-20,text,true,,774,599,29,78,https://foodhub-6342.onrender.com/auth/login,49642,0,89
+1766088377740,49642,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-20,,true,,774,599,29,78,null,49642,3,89
+1766088302779,124703,LoginAction,200,OK,Login User  Thread Group 1-5,text,true,,772,599,10,78,https://foodhub-6342.onrender.com/auth/login,124607,0,215
+1766088302755,124703,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-5,,true,,772,599,10,78,null,124607,25,215
+1766088302768,124715,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-5,text,true,,769,595,6,78,https://foodhub-6342.onrender.com/auth/login,124715,0,220
+1766088302755,124715,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-5,,true,,769,595,6,78,null,124715,14,220
+1766088427302,2371,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-3,text,false,,624,660,30,80,https://foodhub-6342.onrender.com/cart,2371,0,0
+1766088424786,4885,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-3,,false,,1248,1439,30,80,null,4885,2,0
+1766088421967,7818,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-19,text,true,,1350,714,30,80,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7818,0,0
+1766088302887,129300,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-5,text,true,,770,599,30,80,https://foodhub-6342.onrender.com/auth/login,129300,0,398
+1766088302842,129300,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-5,,true,,770,599,30,80,null,129300,45,398
+1766088307757,129516,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,771,599,31,82,https://foodhub-6342.onrender.com/auth/login,129515,0,118
+1766088307755,129516,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,771,599,31,82,null,129515,4,118
+1766088427292,9993,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,1240,691,31,82,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9993,0,0
+1766088419512,17770,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,2590,1405,31,82,null,17769,4,91
+1766088429785,10079,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-19,text,true,,1240,691,32,84,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,10079,0,0
+1766088421966,17897,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-19,,true,,2590,1405,32,84,null,17897,2,0
+1766088432188,7679,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-5,text,true,,1350,714,32,84,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7679,0,82
+1766088439865,2528,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,779,32,84,https://foodhub-6342.onrender.com/cart,2528,0,84
+1766088307757,134640,LoginAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,775,599,32,84,https://foodhub-6342.onrender.com/auth/login,134640,0,116
+1766088307755,134640,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-6,,true,,775,599,32,84,null,134640,2,116
+1766088384089,58393,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-1,text,true,,770,595,6,84,https://foodhub-6342.onrender.com/auth/login,58393,0,0
+1766088307757,134724,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-6,text,true,,770,595,6,84,https://foodhub-6342.onrender.com/auth/login,134724,0,122
+1766088307755,134724,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-6,,true,,770,595,6,84,null,134724,3,122
+1766088384089,58393,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-1,,true,,770,595,6,84,null,58393,0,0
+1766088390273,54605,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-1,text,true,,773,599,33,86,https://foodhub-6342.onrender.com/auth/login,54605,0,0
+1766088390273,54605,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-1,,true,,773,599,33,86,null,54605,1,0
+1766088442395,2496,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,660,33,86,https://foodhub-6342.onrender.com/cart,2496,0,0
+1766088439865,5024,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-19,,false,,1248,1439,33,86,null,5024,3,84
+1766088437276,7616,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,1350,714,33,86,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7616,0,94
+1766088307757,137138,LoginAction,200,OK,Login User  Thread Group 1-6,text,true,,774,599,10,86,https://foodhub-6342.onrender.com/auth/login,137138,0,120
+1766088307755,137138,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-6,,true,,774,599,10,86,null,137138,3,120
+1766088444892,2377,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,779,33,86,https://foodhub-6342.onrender.com/cart,2377,0,0
+1766088334490,112788,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-5,text,true,,1350,714,33,86,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,112788,0,0
+1766088439868,9801,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-5,text,true,,1240,691,34,88,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9801,0,0
+1766088432187,17480,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-5,,true,,2590,1405,34,88,null,17480,3,82
+1766088442397,7275,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,1350,714,34,88,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,7275,0,141
+1766088447271,2417,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,660,34,88,https://foodhub-6342.onrender.com/cart,2417,0,0
+1766088444892,4794,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-19,,false,,1248,1439,34,88,null,4794,3,0
+1766088449688,2379,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,779,34,88,https://foodhub-6342.onrender.com/cart,2379,0,0
+1766088312755,139332,LoginAction,200,OK,Login User  Thread Group 1-7,text,true,,769,599,10,88,https://foodhub-6342.onrender.com/auth/login,139332,0,94
+1766088312753,139332,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-7,,true,,769,599,10,88,null,139332,3,94
+1766088312755,139334,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-7,text,true,,768,599,34,88,https://foodhub-6342.onrender.com/auth/login,139334,0,94
+1766088312753,139334,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-7,,true,,768,599,34,88,null,139334,2,94
+1766088444894,9589,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-6,text,true,,1240,691,35,90,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9589,0,0
+1766088437275,17205,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-6,,true,,2590,1405,35,90,null,17205,4,94
+1766088452086,2398,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-19,text,false,,624,660,35,90,https://foodhub-6342.onrender.com/cart,2398,0,0
+1766088449688,4777,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-19,,false,,1248,1439,35,90,null,4777,19,0
+1766088447280,9398,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-5,text,true,,1240,691,35,90,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9398,0,92
+1766088334486,122186,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-5,,true,,2590,1405,35,90,null,122186,6,92
+1766088312755,144029,LoginAction,200,OK,Add Item To Cart User Thread Group 3-7,text,true,,771,599,35,90,https://foodhub-6342.onrender.com/auth/login,144029,0,109
+1766088312753,144029,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-7,,true,,771,599,35,90,null,144029,3,109
+1766088432734,25402,LoginAction,502,Bad Gateway,Search Store User Thread Group Thread Group 2-31,text,false,,6922,599,36,92,https://foodhub-6342.onrender.com/auth/login,25401,0,85
+1766088432734,25402,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Search Store User Thread Group Thread Group 2-31,,false,,6922,599,36,92,null,25401,0,85
+1766088449672,9297,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-6,text,true,,1240,691,36,92,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,9296,0,0
+1766088442397,16572,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-6,,true,,2590,1405,36,92,null,16571,1,141
+1766088403298,55676,LoginAction,200,OK,Login User  Thread Group 1-3,text,true,,773,599,10,92,https://foodhub-6342.onrender.com/auth/login,55676,0,90
+1766088403298,55676,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-3,,true,,773,599,10,92,null,55676,1,90
+1766088398968,60007,LoginAction,200,OK,Watch Order Seller Ultimate Thread Group 5-2,text,true,,771,595,6,92,https://foodhub-6342.onrender.com/auth/login,60007,0,0
+1766088398968,60007,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Watch Order Seller Ultimate Thread Group 5-2,,true,,771,595,6,92,null,60007,0,0
+1766088456680,2307,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-5,text,false,,624,779,36,92,https://foodhub-6342.onrender.com/cart,2307,0,0
+1766088317756,141316,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-8,text,true,,769,599,36,92,https://foodhub-6342.onrender.com/auth/login,141316,0,92
+1766088317755,141316,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-8,,true,,769,599,36,92,null,141316,1,92
+1766088458972,2391,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-6,text,false,,624,779,36,92,https://foodhub-6342.onrender.com/cart,2391,0,0
+1766088458986,2381,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-5,text,false,,624,660,36,92,https://foodhub-6342.onrender.com/cart,2380,0,0
+1766088456679,4688,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-5,,false,,1248,1439,36,92,null,4687,1,0
+1766088447716,14950,LoginAction,502,Bad Gateway,Add Item To Cart User Thread Group 3-34,text,false,,6922,599,36,92,https://foodhub-6342.onrender.com/auth/login,14945,0,92
+1766088447714,14950,Login,,"Number of samples in transaction : 1, number of failing samples : 1",Add Item To Cart User Thread Group 3-34,,false,,6922,599,36,92,null,14945,2,92
+1766088456786,6885,SearchStoreAction,200,OK,Add Item To Cart User Thread Group 3-7,text,true,,1350,714,37,94,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6885,0,88
+1766088461367,2316,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-5,text,false,,624,779,37,94,https://foodhub-6342.onrender.com/cart,2316,0,0
+1766088461364,2324,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-6,text,false,,624,660,37,94,https://foodhub-6342.onrender.com/cart,2323,0,0
+1766088458970,4715,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-6,,false,,1248,1439,37,94,null,4714,3,0
+1766088317742,146025,LoginAction,200,OK,Add Item To Cart User Thread Group 3-8,text,true,,773,599,37,94,https://foodhub-6342.onrender.com/auth/login,146025,0,96
+1766088317740,146025,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-8,,true,,773,599,37,94,null,146025,2,96
+1766088317756,146029,LoginAction,200,OK,Login User  Thread Group 1-8,text,true,,774,599,10,94,https://foodhub-6342.onrender.com/auth/login,146029,0,91
+1766088317755,146029,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-8,,true,,774,599,10,94,null,146029,1,91
+1766088463683,2288,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-5,text,false,,624,660,37,94,https://foodhub-6342.onrender.com/cart,2288,0,0
+1766088461367,4604,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-5,,false,,1248,1439,37,94,null,4604,1,0
+1766088465973,2306,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-5,text,false,,624,779,38,96,https://foodhub-6342.onrender.com/cart,2306,0,0
+1766088414777,53504,LoginAction,200,OK,Add Item To Cart User Thread Group 3-2,text,true,,769,598,38,96,https://foodhub-6342.onrender.com/auth/login,53504,0,0
+1766088414777,53504,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-2,,true,,769,598,38,96,null,53504,1,0
+1766088322767,145518,LoginAction,200,OK,Login User  Thread Group 1-9,text,true,,769,599,10,96,https://foodhub-6342.onrender.com/auth/login,145518,0,167
+1766088322756,145518,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-9,,true,,769,599,10,96,null,145518,13,167
+1766088410093,58216,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-3,text,true,,772,595,4,96,https://foodhub-6342.onrender.com/auth/login,58216,0,112
+1766088410092,58216,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-3,,true,,772,595,4,96,null,58216,3,112
+1766088468279,2087,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-5,text,false,,624,660,38,96,https://foodhub-6342.onrender.com/cart,2087,0,0
+1766088465972,4393,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-5,,false,,1248,1439,38,96,null,4393,3,0
+1766088412472,57900,LoginAction,200,OK,Login Seller Ultimate Thread Group 4-4,text,true,,769,595,4,96,https://foodhub-6342.onrender.com/auth/login,57900,0,92
+1766088412472,57900,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login Seller Ultimate Thread Group 4-4,,true,,769,595,4,96,null,57900,1,92
+1766088322778,147594,LoginAction,200,OK,Add Item To Cart User Thread Group 3-9,text,true,,770,599,38,96,https://foodhub-6342.onrender.com/auth/login,147594,0,160
+1766088322773,147594,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-9,,true,,770,599,38,96,null,147594,7,160
+1766088417177,53213,LoginAction,200,OK,Login User  Thread Group 1-4,text,true,,770,598,10,96,https://foodhub-6342.onrender.com/auth/login,53213,0,90
+1766088417177,53213,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-4,,true,,770,598,10,96,null,53213,0,90
+1766088463671,8504,ChooseStoreAction,200,OK,Add Item To Cart User Thread Group 3-7,text,true,,1240,691,38,96,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8504,0,0
+1766088456786,15389,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Add Item To Cart User Thread Group 3-7,,true,,2590,1405,38,96,null,15389,2,88
+1766088322774,149436,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-9,text,true,,772,599,38,96,https://foodhub-6342.onrender.com/auth/login,149435,0,163
+1766088322762,149436,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-9,,true,,772,599,38,96,null,149435,12,163
+1766088472175,2003,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-7,text,false,,624,779,39,98,https://foodhub-6342.onrender.com/cart,2003,0,0
+1766088474180,2088,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-7,text,false,,624,660,39,98,https://foodhub-6342.onrender.com/cart,2088,0,0
+1766088472175,4091,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-7,,false,,1248,1439,39,98,null,4091,6,0
+1766088327820,148452,LoginAction,200,OK,Login User  Thread Group 1-10,text,true,,772,599,10,98,https://foodhub-6342.onrender.com/auth/login,148452,0,132
+1766088327805,148452,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Login User  Thread Group 1-10,,true,,772,599,10,98,null,148452,16,132
+1766088472209,6087,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-9,text,true,,1350,714,40,100,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6087,0,103
+1766088476273,2090,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-7,text,false,,624,779,40,100,https://foodhub-6342.onrender.com/cart,2090,0,0
+1766088327892,150476,LoginAction,200,OK,Add Item To Cart User Thread Group 3-10,text,true,,773,599,40,100,https://foodhub-6342.onrender.com/auth/login,150475,0,137
+1766088327834,150476,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-10,,true,,773,599,40,100,null,150475,58,137
+1766088478363,2105,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-7,text,false,,624,660,40,100,https://foodhub-6342.onrender.com/cart,2105,0,0
+1766088429673,50803,LoginAction,200,OK,Add Item To Cart User Thread Group 3-3,text,true,,770,599,40,100,https://foodhub-6342.onrender.com/auth/login,50802,0,0
+1766088429673,50803,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-3,,true,,770,599,40,100,null,50802,1,0
+1766088476273,4195,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-7,,false,,1248,1439,40,100,null,4195,12,0
+1766088327820,152667,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-10,text,true,,772,599,40,100,https://foodhub-6342.onrender.com/auth/login,152667,0,150
+1766088327811,152667,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-10,,true,,772,599,40,100,null,152667,10,150
+1766088480481,2108,AddItemAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-7,text,false,,624,779,40,100,https://foodhub-6342.onrender.com/cart,2108,0,0
+1766088482590,2175,WatchCartAction,500,Internal Server Error,Add Item To Cart User Thread Group 3-7,text,false,,624,660,41,101,https://foodhub-6342.onrender.com/cart,2175,0,0
+1766088480480,4283,Add Item,,"Number of samples in transaction : 2, number of failing samples : 2",Add Item To Cart User Thread Group 3-7,,false,,1248,1439,41,101,null,4283,3,0
+1766088478298,8669,ChooseStoreAction,200,OK,Search Store User Thread Group Thread Group 2-9,text,true,,1240,691,40,101,https://foodhub-6342.onrender.com/restaurant/69306dfef1b5d2004e12a4c0,8669,0,0
+1766088472209,14756,Search Store,200,"Number of samples in transaction : 2, number of failing samples : 0",Search Store User Thread Group Thread Group 2-9,,true,,2590,1405,40,101,null,14756,1,103
+1766088480488,6485,SearchStoreAction,200,OK,Search Store User Thread Group Thread Group 2-10,text,true,,1350,714,40,101,https://foodhub-6342.onrender.com/restaurants-location/10.766842089346248/106.57228648025705,6485,0,84
+1766088334024,152949,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-11,text,true,,773,598,40,101,https://foodhub-6342.onrender.com/auth/login,152949,0,105
+1766088334020,152949,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-11,,true,,773,598,40,101,null,152949,4,105
+1766088334023,152950,LoginAction,200,OK,Add Item To Cart User Thread Group 3-11,text,true,,770,598,41,101,https://foodhub-6342.onrender.com/auth/login,152950,0,106
+1766088334020,152950,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Add Item To Cart User Thread Group 3-11,,true,,770,598,41,101,null,152950,4,106
+1766088437286,51803,LoginAction,200,OK,Search Store User Thread Group Thread Group 2-4,text,true,,773,599,40,102,https://foodhub-6342.onrender.com/auth/login,51803,0,0
+1766088437286,51803,Login,200,"Number of samples in transaction : 1, number of failing samples : 0",Search Store User Thread Group Thread Group 2-4,,true,,773,599,40,102,null,51803,1,0
