@@ -87,8 +87,8 @@ jobs:
           
           # 2. Đợi server khởi động (15 giây như log trước cho thấy là đủ)
           echo "Waiting 15s for server to initialize..."
-          sleep 6
-          
+          sleep 5
+
           # 3. Đăng nhập Postman CLI (Bắt buộc để dùng lệnh postman)
           postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
           
