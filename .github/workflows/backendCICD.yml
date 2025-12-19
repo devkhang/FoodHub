@@ -93,12 +93,11 @@ jobs:
           postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
           
           # 4. Chạy Test
-          postman collection run "49474878-b36daef1-4f60-4ca7-8b33-7e3f8150d770" -e "49474878-cd34ea39-b671-4af5-a4e6-b40da742085c" \
+          postman collection run "49474878-dcf54071-5c5b-4461-beed-e644cf2e1bce" -e "49474878-cd34ea39-b671-4af5-a4e6-b40da742085c" \
           --env-var "login_seller_url=http://localhost:3001/auth/login" \
           --env-var "email=ducbao098@gmail.com" \
           --env-var "password=ducgiabao" \
           --env-var "itemId=694257a5f9670718ec7f744e"\
-          --env-var "base_url=http://localhost:3001"
         env:
           # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
           NODE_ENV: ${{ vars.NODE_ENV }}
