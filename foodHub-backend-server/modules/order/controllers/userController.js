@@ -409,6 +409,9 @@ exports.postOrder = (req, res, next) => {
     .then((result) => {
       return userObj.clearCart();
     })
+    .then((result) => {
+      res.status(200).json({ result });
+    })
     .catch((err) => {
       if (!err.statusCode) err.statusCode = 500;
       next(err);
