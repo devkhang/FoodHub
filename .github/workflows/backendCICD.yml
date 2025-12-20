@@ -87,7 +87,7 @@ jobs:
           
           # 2. Đợi server khởi động (15 giây như log trước cho thấy là đủ)
           echo "Waiting 15s for server to initialize..."
-          sleep 5
+          sleep 6
 
           # 3. Đăng nhập Postman CLI (Bắt buộc để dùng lệnh postman)
           postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
@@ -98,7 +98,6 @@ jobs:
           --env-var "email=ducbao098@gmail.com" \
           --env-var "password=ducgiabao" \
           --env-var "itemId=694257a5f9670718ec7f744e"\
-          --working-dir "./images"
         env:
           # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
           NODE_ENV: ${{ vars.NODE_ENV }}
