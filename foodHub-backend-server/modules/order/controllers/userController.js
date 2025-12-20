@@ -346,63 +346,68 @@ exports.postOrder = (req, res, next) => {
       }, {});
 
       for (let [seller, cartItem] of Object.entries(sellers)) {
-        Seller.findById(seller).then((seller) => {
-          if (!seller) {
-            console.warn(`Seller với ID ${sellerId} không tìm thấy. Bỏ qua tạo đơn.`);
-            return; 
-          }
-          const items = cartItem.map((i) => {
-            return { quantity: i.quantity, item: { ...i.itemId._doc } };
-          });
-          const order = new Order({
-            user: {
-              email: accountObj.email,
-              name: result.firstName,
-              address: result.address,
-              userId: result,
-            },
-            items: items,
-            status: "Placed",
-            seller: {
-              name: seller.name,
-              phone: seller.address.phoneNo,
-              sellerId: seller,
-            },
-            sessionId,
-          });
+        Seller.findById(seller)
+          .then((seller) => {
+            if (!seller) {
+              console.warn(
+                `Seller với ID ${sellerId} không tìm thấy. Bỏ qua tạo đơn.`
+              );
+              return;
+            }
+            const items = cartItem.map((i) => {
+              return { quantity: i.quantity, item: { ...i.itemId._doc } };
+            });
+            const order = new Order({
+              user: {
+                email: accountObj.email,
+                name: result.firstName,
+                address: result.address,
+                userId: result,
+              },
+              items: items,
+              status: "Placed",
+              seller: {
+                name: seller.name,
+                phone: seller.address.phoneNo,
+                sellerId: seller,
+              },
+              sessionId,
+            });
+            res.status(200).json({ result: result, data: order });
 
-        order.save()
-          .then((savedOrder) => {
-              // Logic bắn Socket giữ nguyên trong này
-              for (const clientId of Object.keys(app.clients)) {
+            order
+              .save()
+              .then((savedOrder) => {
+                // Logic bắn Socket giữ nguyên trong này
+                for (const clientId of Object.keys(app.clients)) {
                   if (clientId.toString() === seller._id.toString()) {
-                      if (io.getIO().sockets.connected[app.clients[clientId].socket]) {
-                          io.getIO().sockets.connected[app.clients[clientId].socket].emit(
-                              "orders",
-                              { action: "create", order: savedOrder }
-                          );
-                      }
+                    if (
+                      io.getIO().sockets.connected[app.clients[clientId].socket]
+                    ) {
+                      io.getIO().sockets.connected[
+                        app.clients[clientId].socket
+                      ].emit("orders", { action: "create", order: savedOrder });
+                    }
                   }
-              }
+                }
+              })
+              .catch((err) => {
+                // 👇 QUAN TRỌNG: Bắt lỗi và chuyển cho Express xử lý
+                console.error("Lỗi lưu đơn hàng:", err);
+                next(err);
+              });
           })
           .catch((err) => {
-              // 👇 QUAN TRỌNG: Bắt lỗi và chuyển cho Express xử lý
-              console.error("Lỗi lưu đơn hàng:", err);
-              next(err); 
-          });
-        }).catch((err) => {
             // Nếu Lưu DB lỗi (Mất mạng, sai schema...), code nhảy vào đây
             console.error("Lỗi khi lưu Order:", err);
             next(err); // Chuyền lỗi cho Express xử lý (Test Case 5 sẽ pass)
-        });
+          });
+
       }
       return result;
     })
     .then((result) => {
       return userObj.clearCart();
-    })
-    .then((result) => {
-      res.status(200).json({ result });
     })
     .catch((err) => {
       if (!err.statusCode) err.statusCode = 500;
@@ -883,8 +888,9 @@ exports.getRestaurantsByAddress = (req, res, next) => {
   let skip = (page - 1) * limit;
   let totalPage;
   let storeName = req.query.storeName;
-  let queryObj = {//exclude inactive seller
-    isActive:true
+  let queryObj = {
+    //exclude inactive seller
+    isActive: true,
   };
   if (storeName) {
     queryObj.name = {
