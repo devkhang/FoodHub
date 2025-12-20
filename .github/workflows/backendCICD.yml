@@ -98,6 +98,7 @@ jobs:
           --env-var "email=ducbao098@gmail.com" \
           --env-var "password=ducgiabao" \
           --env-var "itemId=694257a5f9670718ec7f744e"\
+          --working-dir "./images"
         env:
           # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
           NODE_ENV: ${{ vars.NODE_ENV }}
