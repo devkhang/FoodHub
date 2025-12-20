@@ -4,11 +4,11 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'foodHub-backend-server/**'          # Chỉ chạy khi thay đổi trong thư mục frontend
+      - 'foodHub-backend-server/**'          # Chỉ chạy khi thay đổi trong thư mục backend
       - '.github/workflows/backendCICD.yml'
-jobs:
 
-  # ==================== 1. TEST ====================
+jobs:
+  # ==================== 1. UNIT TEST ====================
   test:
     runs-on: ubuntu-latest
     environment: test
@@ -31,7 +31,7 @@ jobs:
 
       - name: Run Tests
         run: npm run test
-        env: # ⭐️ BƯỚC QUAN TRỌNG: Buộc tiêm các Secret vào process.env của lệnh test
+        env: 
           NODE_ENV: ${{ vars.NODE_ENV }}
           PORT: ${{ vars.PORT }}
           PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
@@ -47,14 +47,84 @@ jobs:
           NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
           NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
           FRONT_END_URL: ${{ vars.FRONT_END_URL }}
-          MONGODH_URL: ${{ secrets.MONGODH_URL }}
+          # Lưu ý: Kiểm tra kỹ tên Secret bên dưới (MONGODB hay MONGODH)
+          MONGODH_URL: ${{ secrets.MONGODH_URL }} 
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
-  # ==================== BUILD & PUSH DOCKER IMAGE (kiểu đơn giản) ====================
-  build-push-docker-simple:
+  automated-api-tests:
+    runs-on: ubuntu-latest
+    environment: test
     needs: test
+    if: ${{ needs.test.result == 'success' }}
+    defaults:
+      run:
+        working-directory: foodHub-backend-server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: foodHub-backend-server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # --- BƯỚC QUAN TRỌNG: Cài đặt Postman CLI ---
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+      - name: Run Server and Test
+        run: |
+          # 1. Chạy server ngầm
+          npm start > server.log 2>&1 &
+          
+          # 2. Đợi server khởi động (15 giây như log trước cho thấy là đủ)
+          echo "Waiting 15s for server to initialize..."
+          sleep 5
+
+          # 3. Đăng nhập Postman CLI (Bắt buộc để dùng lệnh postman)
+          postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+          
+          # 4. Chạy Test
+          postman collection run "49474878-dcf54071-5c5b-4461-beed-e644cf2e1bce" -e "49474878-cd34ea39-b671-4af5-a4e6-b40da742085c" \
+          --env-var "login_seller_url=http://localhost:3001/auth/login" \
+          --env-var "email=ducbao098@gmail.com" \
+          --env-var "password=ducgiabao" \
+          --env-var "itemId=694257a5f9670718ec7f744e"\
+        env:
+          # --- ĐẦY ĐỦ BIẾN ENV THEO YÊU CẦU ---
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          PORT: 3001
+          PING_TIMEOUT: ${{ vars.PING_TIMEOUT }}
+          PINT_INTERVAL: ${{ vars.PINT_INTERVAL }}
+          DELIVERY_CHARGE_BASE: ${{ vars.DELIVERY_CHARGE_BASE }}
+          DELIVERY_CHARGE_RATE_PER_KM: ${{ vars.DELIVERY_CHARGE_RATE_PER_KM }}
+          DELIVERY_JOB_ACCEPT_TIMEOUT: ${{ vars.DELIVERY_JOB_ACCEPT_TIMEOUT }}
+          DISTANCE_ACCEPTED_RANGE: ${{ vars.DISTANCE_ACCEPTED_RANGE }}
+          MAX_DISTANCE_ACCEPTED_RANGE: ${{ vars.MAX_DISTANCE_ACCEPTED_RANGE }}
+          MAX_ASSIGNMENT_ATTEMP: ${{ vars.MAX_ASSIGNMENT_ATTEMP }}
+          MAX_ITEM_PER_PAGE: ${{ vars.MAX_ITEM_PER_PAGE }}
+          MAX_RESTAURANT_ACCEPT_RANGE: ${{ vars.MAX_RESTAURANT_ACCEPT_RANGE }}
+          NETWORK_DELAY: ${{ vars.NETWORK_DELAY }}
+          NO_SUITABLE_DRONE_RETRY: ${{ vars.NO_SUITABLE_DRONE_RETRY }}
+          FRONT_END_URL: ${{ vars.FRONT_END_URL }}
+          
+          # Secrets
+          MONGODH_URL: ${{ secrets.MONGODH_URL }} 
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+  # ==================== 3. BUILD & PUSH DOCKER IMAGE ====================
+  build-push-docker-simple:
+    needs: [test,automated-api-tests]
     if: ${{ needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
@@ -77,28 +147,28 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/foodhub-backend:latest
 
       - name: Docker Image Published
-        run: |
-          echo "✅ Đã push image backend thành công (tag: latest)"
-        
-  # ==================== 2. STAGING TỰ ĐỘNG ====================
+        run: echo "✅ Đã push image backend thành công (latest)"
+
+  # ==================== 4. STAGING DEPLOY ====================
   deploy-staging:
-    needs: [test, build-push-docker-simple]
+    needs: [test, build-push-docker-simple, automated-api-tests] # Có thể thêm automated-api-tests vào đây nếu muốn test xong mới deploy
     if: ${{ needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     environment: staging
 
     steps:
-      - name: hiện tại biến secrets
-        run : echo "RENDER_STAGING_DEPLOY_HOOK :${{secrets.RENDER_BACKEND_DEPLOY_HOOK_URL}}"
+      - name: Kiểm tra biến secrets (Debug)
+        run : echo "RENDER_STAGING_DEPLOY_HOOK exist check..." # Không nên echo trực tiếp secret ra log
+      
       - name: Deploy to Staging
         run: curl -X POST ${{ secrets.RENDER_BACKEND_DEPLOY_HOOK_URL }}
 
       - name: Staging Live
         run: echo "Staging đã lên sóng → https://foodhub-3.onrender.com"
 
-  # ==================== 3. PRODUCTION CẦN DUYỆT ====================
+  # ==================== 5. PRODUCTION DEPLOY ====================
   deploy-production:
-    needs: [test, build-push-docker-simple, deploy-staging]
+    needs: [test, build-push-docker-simple, deploy-staging,automated-api-tests] # Có thể thêm automated-api-tests vào đây nếu muốn test xong mới deploy
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -111,7 +181,7 @@ jobs:
       - name: Production Live
         run: echo "PRODUCTION ĐÃ LÊN SÓNG THÀNH CÔNG!"
 
-# ==================== TẠO ISSUE + ASSIGN KHI TEST FAIL ====================
+  # ==================== 6. ERROR HANDLING (ISSUE) ====================
   create-issue-on-fail:
     needs: test
     if: failure()
@@ -121,7 +191,6 @@ jobs:
       contents: read
 
     steps:
-      # Bước 1: Tạo issue bằng action cũ (dacbd) – output tên là "issue"
       - name: Tạo Issue khi test fail
         id: create_issue
         uses: dacbd/create-issue-action@v1
@@ -134,7 +203,6 @@ jobs:
             Người push: @${{ github.actor }}
             Log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      # Bước 2: Assign bằng pozil – dùng đúng tên output là "issue" (không phải issue-number)
       - name: Assign issue cho người gây lỗi
         uses: actions/github-script@v7
         with:
@@ -148,4 +216,6 @@ jobs:
                 assignees: ["${{ github.actor }}"]
               });
               console.log(`Đã assign issue #${issueNum} cho @${{ github.actor }}`);
+            } else {
+              console.log("Không tìm thấy số issue để assign.");
             }

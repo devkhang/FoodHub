@@ -51,5 +51,10 @@
   "description": "Front-end for food delivery application created using reactjs along with redux and Material-UI",
   "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^13.5.0"
+  }
 }
