@@ -72,7 +72,7 @@ describe('Auth Controller - Login (Jest Only)', () => {
         expect(Account.findOne).toHaveBeenCalledWith({ email: 'user1@gmail.com' });
 
         // Kiểm tra xem bcrypt có được gọi để so sánh không
-        expect(bcrypt.compare).toHaveBeenCalledWith('1234567', mockUser.password);
+        expect(bcrypt.compare).toHaveBeenCalledWith('123456', mockUser.password);
 
         // Kiểm tra xem jwt.sign có được gọi không
         expect(jwt.sign).toHaveBeenCalledWith(
